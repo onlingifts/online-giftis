@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>أونلاين للهدايا | Online Gifts</title>
+<meta name="description" content="أونلاين للهدايا - هدايا مخصصة، طباعة 3D، ذكريات وهدايا مميزة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#d8b45a;
+  --gold2:#f5d98a;
+  --black:#080808;
+  --bg:#efe9dc;
+  --cream:#f8f2e8;
+  --red:#e6232e;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:radial-gradient(circle at 50% 0%,#2a241a 0,#0b0b0b 44%,#060606 100%);
+  color:#fff;
+  font-family:"Cairo",Arial,sans-serif;
+}
+button,a{font:inherit}
+a{text-decoration:none;color:inherit}
+.page{
+  width:min(100%,980px);
+  margin:auto;
+  background:var(--cream);
+  min-height:100vh;
+  overflow:hidden;
+  box-shadow:0 0 60px rgba(0,0,0,.35);
+}
+/* ---------- INTRO ---------- */
+.intro{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(216,180,90,.18),transparent 28%),
+    radial-gradient(circle at 50% 60%,rgba(230,35,46,.08),transparent 26%),
+    linear-gradient(145deg,#111,#030303 65%,#0a0a0a);
+  transition:opacity .55s ease,visibility .55s ease;
+}
+.intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+.intro-scene{position:relative;width:min(86vw,420px);aspect-ratio:1/1;display:grid;place-items:center}
+.intro-shadow{
+  position:absolute;bottom:9%;width:62%;height:10%;
+  background:rgba(0,0,0,.7);filter:blur(18px);border-radius:50%;
+}
+.coin{
+  position:relative;
+  width:68%;
+  aspect-ratio:1;
+  transform-style:preserve-3d;
+  animation:coinSpin 1.8s cubic-bezier(.55,.02,.38,.99) 1 forwards;
+  filter:drop-shadow(0 22px 30px rgba(0,0,0,.55));
+}
+.face{
+  position:absolute;inset:0;border-radius:50%;
+  display:grid;place-items:center;
+  backface-visibility:hidden;
+  border:7px solid var(--gold);
+  box-shadow:
+    inset 0 0 0 4px rgba(255,255,255,.12),
+    inset 0 0 34px rgba(0,0,0,.38),
+    0 0 0 2px #2f291e;
+  overflow:hidden;
+  background:radial-gradient(circle,#202020,#050505 68%);
+}
+.face img{width:95%;height:95%;object-fit:contain}
+.face.back{transform:rotateY(180deg);background:radial-gradient(circle,#151515,#030303)}
+.coin-rim{
+  position:absolute;inset:-6%;border-radius:50%;
+  border:3px solid rgba(255,255,255,.12);
+  box-shadow:0 0 30px rgba(216,180,90,.28);
+  pointer-events:none;
+}
+.intro-gift{
+  position:absolute;bottom:12%;width:42%;aspect-ratio:1.15/1;
+  border-radius:14px;
+  background:linear-gradient(145deg,#161616,#050505);
+  border:2px solid #3e3320;
+  transform:translateY(55px) scale(.72);
+  opacity:0;
+  animation:giftReveal .9s ease 1.35s forwards;
+  box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 0 1px rgba(216,180,90,.2);
+  z-index:-1;
+}
+.intro-gift:before{
+  content:"";position:absolute;left:50%;top:0;bottom:0;width:8%;
+  transform:translateX(-50%);background:linear-gradient(#e9cb7c,#8c6723);
+}
+.intro-gift:after{
+  content:"";position:absolute;left:8%;right:8%;top:16%;height:16%;
+  border-radius:8px;background:linear-gradient(90deg,#bb171f,#f04c52,#bb171f);
+}
+.intro-title{
+  position:absolute;bottom:4%;text-align:center;opacity:0;
+  animation:introText .5s ease 2.25s forwards;
+}
+.intro-title strong{display:block;font-size:clamp(22px,5vw,30px);color:var(--gold2)}
+.intro-title small{display:block;color:#d8d8d8;margin-top:4px}
+.intro-skip{
+  position:absolute;bottom:24px;right:24px;
+  border:1px solid rgba(216,180,90,.5);background:rgba(255,255,255,.05);
+  color:#fff;border-radius:999px;padding:8px 14px;cursor:pointer
+}
+@keyframes coinSpin{
+  0%{transform:rotateY(0) rotateZ(-2deg) scale(.76)}
+  18%{transform:rotateY(70deg) rotateZ(2deg) scale(.94)}
+  50%{transform:rotateY(180deg) rotateZ(-1deg) scale(1)}
+  82%{transform:rotateY(300deg) rotateZ(1deg) scale(.96)}
+  100%{transform:rotateY(360deg) rotateZ(0) scale(1)}
+}
+@keyframes giftReveal{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes introText{to{opacity:1;transform:translateY(0)}}
+
+/* ---------- MAIN HERO ---------- */
+.hero{
+  position:relative;overflow:hidden;text-align:center;
+  padding:28px 20px 34px;
+  background:
+    radial-gradient(circle at 50% 8%,rgba(216,180,90,.22),transparent 28%),
+    linear-gradient(145deg,#17130e,#090909 68%,#16110b);
+  border-bottom:4px solid var(--gold);
+}
+.gold-lines{position:absolute;inset:0;pointer-events:none;opacity:.55}
+.gold-lines:before,.gold-lines:after{
+  content:"";position:absolute;height:2px;width:120%;
+  background:linear-gradient(90deg,transparent,#d8b45a,transparent);
+  transform:rotate(-7deg);left:-10%;
+}
+.gold-lines:before{top:55%}
+.gold-lines:after{top:73%;transform:rotate(6deg);opacity:.45}
+.hero-top{display:flex;justify-content:flex-end;position:relative;z-index:2}
+.lang{
+  display:inline-flex;gap:4px;padding:4px;border:1px solid var(--gold);
+  border-radius:999px;background:rgba(0,0,0,.25)
+}
+.lang button{
+  border:0;background:transparent;color:#fff;padding:6px 12px;border-radius:999px;cursor:pointer
+}
+.lang button.active{background:var(--gold);color:#111}
+.hero-logo{
+  position:relative;z-index:2;width:min(210px,46vw);aspect-ratio:1;
+  margin:8px auto 10px;border-radius:50%;object-fit:cover;
+  border:7px solid var(--gold);
+  box-shadow:0 0 0 5px rgba(255,255,255,.08),0 20px 38px rgba(0,0,0,.35);
+  animation:logoFloat 4s ease-in-out infinite;
+}
+@keyframes logoFloat{50%{transform:translateY(-6px) rotate(.8deg)}}
+.hero h1{position:relative;z-index:2;margin:0;color:#fff;font-size:clamp(28px,5vw,44px);font-weight:800}
+.hero p{position:relative;z-index:2;max-width:760px;margin:10px auto 0;color:#f0eadb;line-height:2;font-size:15px}
+.gold-line{width:70px;height:3px;background:var(--gold);border-radius:99px;margin:15px auto 0}
+
+/* ---------- BUTTONS ---------- */
+.content{padding:26px 18px;background:linear-gradient(180deg,#f8f2e8,#efe5d0)}
+.links{display:grid;gap:12px}
+.link{
+  position:relative;display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:18px;color:#fff;
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 10px 22px rgba(0,0,0,.12);
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.link:hover{transform:translateY(-2px);box-shadow:0 14px 26px rgba(0,0,0,.18);filter:saturate(1.06)}
+.link .icon{
+  width:46px;height:46px;flex:0 0 46px;border-radius:50%;
+  background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:21px
+}
+.link .text{flex:1;text-align:right}
+.link b{display:block;font-size:16px}
+.link small{display:block;font-size:11px;opacity:.88;margin-top:2px}
+.link .arr{font-size:26px}
+.whatsapp{background:linear-gradient(135deg,#52d76a,#2aa94a)}
+.instagram{background:linear-gradient(110deg,#6c37d9,#ea3e8d,#ff9a37)}
+.tiktok{background:linear-gradient(135deg,#111,#242424)}
+.facebook{background:linear-gradient(135deg,#3f72d2,#2856a7)}
+.maps{background:linear-gradient(135deg,#d8b04c,#a47a16);color:#111}
+.channel{background:linear-gradient(135deg,#1b6047,#0c3d2d)}
+.contact{background:linear-gradient(135deg,#1c1c1c,#0c0c0c);border-color:rgba(216,180,90,.45)}
+.contact .icon{background:rgba(216,180,90,.18);color:var(--gold2)}
+
+/* ---------- PORTFOLIO ---------- */
+.portfolio{margin-top:28px}
+.section-title{display:flex;gap:14px;align-items:center;justify-content:center;margin-bottom:18px}
+.section-title span{height:2px;width:66px;background:linear-gradient(90deg,transparent,var(--gold))}
+.section-title span:last-child{background:linear-gradient(90deg,var(--gold),transparent)}
+.section-title h2{margin:0;color:#171717;font-size:27px}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{
+  border-radius:18px;background:linear-gradient(145deg,#1a1a1a,#090909);
+  overflow:hidden;border:1px solid rgba(216,180,90,.6);
+  box-shadow:0 10px 20px rgba(0,0,0,.13);
+}
+.card .visual{
+  aspect-ratio:1/1;display:grid;place-items:center;
+  color:#fff;font-size:54px;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(216,180,90,.18),transparent 35%),
+    linear-gradient(160deg,#26221b,#0f0f0f);
+}
+.card strong{display:block;text-align:center;padding:10px;color:#fff;font-size:13px}
+
+/* ---------- GAME ---------- */
+.luck{
+  position:fixed;left:18px;bottom:18px;z-index:2000;
+  width:74px;height:74px;border-radius:50%;
+  border:2px solid var(--gold);
+  background:radial-gradient(circle at 35% 30%,#f5d98a,#9f761c);
+  color:#111;font-weight:800;cursor:pointer;
+  box-shadow:0 12px 28px rgba(0,0,0,.28),0 0 0 7px rgba(216,180,90,.08);
+  animation:luckPulse 2.2s ease-in-out infinite;
+}
+@keyframes luckPulse{50%{transform:scale(1.05);box-shadow:0 14px 32px rgba(0,0,0,.3),0 0 0 12px rgba(216,180,90,.02)}}
+.game{
+  position:fixed;inset:0;z-index:4000;display:none;place-items:center;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(6px);padding:20px
+}
+.game.show{display:grid}
+.game-card{
+  width:min(92vw,430px);border-radius:24px;padding:22px;text-align:center;
+  background:linear-gradient(145deg,#201b12,#090909);
+  border:1px solid rgba(216,180,90,.7);box-shadow:0 24px 70px rgba(0,0,0,.45)
+}
+.game-card h3{margin:0;color:var(--gold2);font-size:24px}
+.coin-row{display:flex;justify-content:center;gap:16px;margin:22px 0}
+.play-coin{
+  width:76px;height:76px;border-radius:50%;border:3px solid var(--gold);
+  display:grid;place-items:center;background:#171717;color:var(--gold2);font-size:30px;
+  transition:.25s
+}
+.play-coin.spin{animation:playCoin .8s ease 2}
+@keyframes playCoin{50%{transform:rotateY(720deg) scale(1.08)}}
+.game-result{min-height:44px;margin-bottom:14px;font-size:16px}
+.game-actions{display:flex;gap:8px;justify-content:center}
+.game-actions button{border:0;border-radius:12px;padding:10px 16px;cursor:pointer}
+.play-btn{background:var(--gold);color:#111}
+.close-btn{background:#2a2a2a;color:#fff}
+
+/* ---------- FOOTER ---------- */
+footer{background:#111;color:#fff;text-align:center;padding:24px 16px}
+footer strong{color:var(--gold)}
+.footer-icons{display:flex;justify-content:center;gap:12px;margin-top:10px}
+.footer-icons a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--gold);background:#1b1b1b}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:760px){
+  .content{padding:20px 12px}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:430px){
+  .link{padding:12px}
+  .link .icon{width:42px;height:42px;flex-basis:42px}
+  .link b{font-size:14px}
+  .gallery{gap:9px}
+}
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="intro-scene">
+    <div class="intro-shadow"></div>
+    <div class="coin" id="introCoin">
+      <div class="face front"><img src="assets/logo-red.png" alt="Online Gifts"></div>
+      <div class="face back"><img src="assets/logo-gold.png" alt="Online Gifts"></div>
+      <div class="coin-rim"></div>
+    </div>
+    <div class="intro-gift"></div>
+    <div class="intro-title">
+      <strong>افتح هديتك ✨</strong>
+      <small>ONLINE GIFTS</small>
+    </div>
+  </div>
+  <button class="intro-skip" id="introSkip">تخطي</button>
+</div>
+
+<main class="page">
+  <section class="hero">
+    <div class="gold-lines"></div>
+    <div class="hero-top">
+      <div class="lang">
+        <button class="active" data-lang="ar" type="button">العربية</button>
+        <button data-lang="tr" type="button">Türkçe</button>
+      </div>
+    </div>
+    <img class="hero-logo" src="assets/logo-main.png" alt="أونلاين للهدايا">
+    <h1 id="brandTitle">أونلاين للهدايا</h1>
+    <p id="brandBio">عالم الهدايا المطبوعة والمخصصة والهدايا المميزة 🎁</p>
+    <div class="gold-line"></div>
+  </section>
+
+  <section class="content">
+    <div class="links">
+      <a class="link contact sound-link" href="contact.vcf" download="Online-Gifts.vcf">
+        <span class="icon">👤</span><span class="text"><b>إضافة لجهات الاتصال</b><small>احفظ بيانات أونلاين للهدايا</small></span><span class="arr">‹</span>
+      </a>
+      <a class="link whatsapp sound-link" href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">
+        <span class="icon">◔</span><span class="text"><b>واتساب</b><small>تواصل معنا مباشرة</small></span><span class="arr">‹</span>
+      </a>
+      <a class="link instagram sound-link" href="https://www.instagram.com/telef98/?hl=ar" target="_blank" rel="noopener">
+        <span class="icon">◎</span><span class="text"><b>Instagram</b><small>تابعنا على إنستغرام</small></span><span class="arr">‹</span>
+      </a>
+      <a class="link tiktok sound-link" href="https://www.tiktok.com/@on_gift" target="_blank" rel="noopener">
+        <span class="icon">♪</span><span class="text"><b>TikTok</b><small>شاهد أعمالنا على تيك توك</small></span><span class="arr">‹</span>
+      </a>
+      <a class="link facebook sound-link" href="https://www.facebook.com/onlayinn" target="_blank" rel="noopener">
+        <span class="icon">f</span><span class="text"><b>Facebook</b><small>تابعنا على فيسبوك</small></span><span class="arr">‹</span>
+      </a>
+      <a class="link maps sound-link" href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener">
+        <span class="icon">📍</span><span class="text"><b>Google Maps</b><small>قيّمنا هنا</small></span><span class="arr">‹</span>
+      </a>
+      <a class="link channel sound-link" href="https://whatsapp.com/channel/0029VaaNlxi2UPBBkc38612Z" target="_blank" rel="noopener">
+        <span class="icon">◉</span><span class="text"><b>قناتنا على واتساب</b><small>تابع أحدث العروض والمنتجات</small></span><span class="arr">‹</span>
+      </a>
+    </div>
+
+    <section class="portfolio">
+      <div class="section-title"><span></span><h2>أعمالنا</h2><span></span></div>
+      <div class="gallery">
+        <div class="card"><div class="visual">🎁</div><strong>بكجات هدايا</strong></div>
+        <div class="card"><div class="visual">🖨️</div><strong>طباعة 3D</strong></div>
+        <div class="card"><div class="visual">💡</div><strong>هدايا مضيئة</strong></div>
+        <div class="card"><div class="visual">🔑</div><strong>ميداليات مخصصة</strong></div>
+        <div class="card"><div class="visual">❤️</div><strong>هدايا للذكريات</strong></div>
+        <div class="card"><div class="visual">☕</div><strong>طباعة مخصصة</strong></div>
+      </div>
+    </section>
+  </section>
+
+  <footer>
+    <div>🎁 &nbsp; Powered by <strong>Online Gifts</strong></div>
+    <div class="footer-icons">
+      <a href="https://www.facebook.com/onlayinn" target="_blank" rel="noopener">f</a>
+      <a href="https://www.instagram.com/telef98/?hl=ar" target="_blank" rel="noopener">◎</a>
+      <a href="https://www.tiktok.com/@on_gift" target="_blank" rel="noopener">♪</a>
+      <a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">◔</a>
+    </div>
+  </footer>
+</main>
+
+<button class="luck" id="luckBtn" type="button">🎁<br><small>جرب حظك</small></button>
+
+<div class="game" id="game">
+  <div class="game-card">
+    <h3>🎁 جرب حظك</h3>
+    <div class="coin-row">
+      <div class="play-coin" id="playCoin">OG</div>
+    </div>
+    <div class="game-result" id="gameResult">اضغط جرّب وشوف حظك اليوم ✨</div>
+    <div class="game-actions">
+      <button class="play-btn" id="playBtn" type="button">جرّب حظك</button>
+      <button class="close-btn" id="closeGame" type="button">إغلاق</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const intro = document.getElementById("intro");
+  const skip = document.getElementById("introSkip");
+
+  function closeIntro(){
+    intro.classList.add("hide");
+    setTimeout(() => intro.remove(), 650);
+  }
+  const introTimer = setTimeout(closeIntro, 3200);
+  skip.addEventListener("click", () => {
+    clearTimeout(introTimer);
+    closeIntro();
+  });
+
+  // Soft click sounds generated in-browser; audio only starts after user interaction.
+  let audioCtx = null;
+  function clickSound(freq=520, duration=.045, type="sine"){
+    try{
+      audioCtx ||= new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === "suspended") audioCtx.resume();
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.type=type; o.frequency.value=freq;
+      g.gain.setValueAtTime(.0001,audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.055,audioCtx.currentTime+.008);
+      g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+duration);
+      o.connect(g).connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+duration+.01);
+    }catch{}
+  }
+
+  document.querySelectorAll(".sound-link").forEach(a => {
+    a.addEventListener("click", () => clickSound());
+  });
+
+  // Language toggle
+  document.querySelectorAll(".lang button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".lang button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if(btn.dataset.lang === "tr"){
+        document.documentElement.lang="tr";
+        document.documentElement.dir="ltr";
+        document.getElementById("brandTitle").textContent="Online Hediyeler";
+        document.getElementById("brandBio").textContent="Kişiye özel ve baskılı hediyeler dünyası 🎁";
+      } else {
+        document.documentElement.lang="ar";
+        document.documentElement.dir="rtl";
+        document.getElementById("brandTitle").textContent="أونلاين للهدايا";
+        document.getElementById("brandBio").textContent="عالم الهدايا المطبوعة والمخصصة والهدايا المميزة 🎁";
+      }
+      clickSound(700);
+    });
+  });
+
+  // Luck game: once per 24 hours per browser.
+  const luckBtn=document.getElementById("luckBtn");
+  const game=document.getElementById("game");
+  const playBtn=document.getElementById("playBtn");
+  const closeGame=document.getElementById("closeGame");
+  const playCoin=document.getElementById("playCoin");
+  const result=document.getElementById("gameResult");
+
+  luckBtn.addEventListener("click", () => {game.classList.add("show"); clickSound(620,.06)});
+  closeGame.addEventListener("click", () => game.classList.remove("show"));
+
+  function canPlay(){
+    const last=Number(localStorage.getItem("onlineGiftsLuckLast")||0);
+    return Date.now()-last >= 24*60*60*1000;
+  }
+
+  playBtn.addEventListener("click", () => {
+    if(!canPlay()){
+      result.textContent="حظك اليوم انلعب 😄 جرّب بكرا!";
+      clickSound(320,.06,"triangle");
+      return;
+    }
+    playBtn.disabled=true;
+    playCoin.classList.add("spin");
+    clickSound(760,.08);
+    setTimeout(() => {
+      localStorage.setItem("onlineGiftsLuckLast", String(Date.now()));
+      playCoin.classList.remove("spin");
+      const outcomes=[
+        "🎉 مبروك! ربحت خصم 10%",
+        "🚚 ربحت شحن مجاني",
+        "✨ مبروك! ربحت خصم 5%",
+        "🎁 اليوم ما ربحت... جرّب بكرا ❤️"
+      ];
+      const pick=Math.random();
+      const text=pick<.22?outcomes[0]:pick<.42?outcomes[1]:pick<.72?outcomes[2]:outcomes[3];
+      result.textContent=text;
+      clickSound(text.includes("مبروك")||text.includes("ربحت")?880:260,.12,text.includes("مبروك")||text.includes("ربحت")?"triangle":"sawtooth");
+      playBtn.disabled=false;
+    },1500);
+  });
+})();
+</script>
+</body>
+</html>
