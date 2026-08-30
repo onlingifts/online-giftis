@@ -1,247 +1,73 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#7c1822">
-  <title>أونلاين للهدايا | Online Gifts</title>
-  <meta name="description" content="أونلاين للهدايا - هدايا مخصصة وطباعة وحفر ومنتجات مميزة حسب الطلب في تركيا.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <style>
-    :root{
-      --wine:#7c1822;
-      --wine-dark:#4e0e15;
-      --wine-soft:#a93a45;
-      --gold:#caa45d;
-      --gold-light:#e8cf9d;
-      --ink:#211b1b;
-      --muted:#726868;
-      --paper:#fffaf3;
-      --paper-2:#f7efe4;
-      --white:#fff;
-      --line:rgba(124,24,34,.12);
-      --shadow:0 18px 55px rgba(76,32,27,.14);
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family:"Cairo",Arial,sans-serif;
-      color:var(--ink);
-      background:
-        radial-gradient(circle at 15% 8%,rgba(202,164,93,.20),transparent 25%),
-        radial-gradient(circle at 86% 12%,rgba(124,24,34,.13),transparent 28%),
-        linear-gradient(180deg,#f2e8dc,#eee2d4);
-    }
-    a{text-decoration:none;color:inherit}
-    button{font:inherit}
-    .shell{width:min(100%,720px);margin:0 auto;min-height:100vh;background:rgba(255,250,243,.94);box-shadow:var(--shadow);overflow:hidden;position:relative}
-    .topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 6px;position:relative;z-index:5}
-    .brand-mini{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;color:var(--wine)}
-    .brand-mini .nfc-dot{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:var(--wine);color:white;box-shadow:0 8px 18px rgba(124,24,34,.18)}
-    .lang-switch{display:flex;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;box-shadow:0 7px 18px rgba(70,40,35,.06)}
-    .lang-switch button{border:0;background:transparent;color:var(--muted);padding:6px 11px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer}
-    .lang-switch button.active{background:var(--wine);color:#fff}
-
-    .hero{position:relative;padding:20px 18px 28px;text-align:center;overflow:hidden}
-    .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
-    .hero:before{width:230px;height:230px;right:-105px;top:20px;background:radial-gradient(circle,rgba(124,24,34,.12),rgba(124,24,34,0) 70%)}
-    .hero:after{width:210px;height:210px;left:-110px;bottom:-60px;background:radial-gradient(circle,rgba(202,164,93,.20),rgba(202,164,93,0) 70%)}
-    .profile-card{position:relative;z-index:2;background:linear-gradient(145deg,#fffdfa,#fff7ec);border:1px solid rgba(202,164,93,.35);border-radius:30px;padding:28px 20px 22px;box-shadow:0 20px 50px rgba(84,44,35,.12)}
-    .profile-card:before{content:"";position:absolute;top:0;left:17%;right:17%;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:999px}
-    .avatar-wrap{width:126px;height:126px;margin:0 auto 14px;position:relative}
-    .avatar{width:126px;height:126px;border-radius:50%;object-fit:cover;background:#fff;border:4px solid #fff;box-shadow:0 0 0 2px var(--gold),0 14px 30px rgba(87,42,35,.18)}
-    .verified{position:absolute;left:3px;bottom:8px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--wine);color:#fff;border:3px solid #fff;font-size:12px}
-    h1{margin:4px 0 2px;font-size:clamp(27px,7vw,38px);line-height:1.35;color:var(--wine-dark);font-weight:800}
-    .en-name{font-size:13px;letter-spacing:1.8px;color:var(--gold);font-weight:800;text-transform:uppercase}
-    .bio{max-width:520px;margin:12px auto 0;color:var(--muted);font-size:13px;line-height:1.95}
-    .status{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:7px 12px;border-radius:999px;background:#f4eadb;color:#62513d;font-size:11px;font-weight:700}
-    .status i{color:#28a65a;font-size:9px}
-
-    .quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
-    .quick button,.quick a{border:0;cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:18px;min-height:78px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--wine-dark);font-size:11px;font-weight:700;box-shadow:0 8px 20px rgba(93,50,42,.06);transition:.2s}
-    .quick button:hover,.quick a:hover{transform:translateY(-2px);border-color:rgba(202,164,93,.7)}
-    .quick i{font-size:20px;color:var(--wine)}
-
-    .content{padding:2px 18px 26px}
-    .section-label{display:flex;align-items:center;gap:10px;margin:8px 0 13px;color:var(--wine-dark);font-weight:800;font-size:15px}
-    .section-label:before,.section-label:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(124,24,34,.22))}
-    .section-label:after{background:linear-gradient(90deg,rgba(124,24,34,.22),transparent)}
-    .links{display:grid;gap:11px}
-    .link-card{position:relative;display:flex;align-items:center;gap:13px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:13px 14px;box-shadow:0 9px 24px rgba(80,43,37,.07);overflow:hidden;transition:.2s}
-    .link-card:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(80,43,37,.10)}
-    .link-card:after{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:var(--accent,var(--wine));opacity:.85}
-    .link-icon{width:48px;height:48px;flex:0 0 48px;border-radius:16px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent,var(--wine)) 12%,white);color:var(--accent,var(--wine));font-size:22px}
-    .link-copy{flex:1;min-width:0}
-    .link-copy b{display:block;color:#2b2323;font-size:14px}
-    .link-copy small{display:block;margin-top:2px;color:var(--muted);font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .arrow{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#faf4ed;color:#8a7772;font-size:12px}
-    .wa{--accent:#25b95a}.ig{--accent:#d83b82}.tt{--accent:#181818}.fb{--accent:#2e66c5}.map{--accent:#c4902c}.channel{--accent:#177b57}
-
-    .services{margin-top:25px}
-    .service-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .service{min-height:105px;background:linear-gradient(145deg,#fff,#fbf3e9);border:1px solid rgba(202,164,93,.25);border-radius:20px;padding:15px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 22px rgba(85,48,42,.05)}
-    .service i{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:#f3e5d3;color:var(--wine);font-size:16px}
-    .service strong{font-size:12.5px;color:#3b2d2d;margin-top:10px}
-    .service small{font-size:9.5px;color:var(--muted);margin-top:3px;line-height:1.5}
-
-    .cta{margin-top:24px;background:linear-gradient(135deg,var(--wine-dark),var(--wine));border-radius:24px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 17px 35px rgba(124,24,34,.22)}
-    .cta:before{content:"";position:absolute;width:160px;height:160px;border-radius:50%;left:-65px;top:-75px;background:rgba(255,255,255,.07)}
-    .cta strong{position:relative;display:block;font-size:18px}
-    .cta p{position:relative;margin:5px 0 14px;color:#f3dfe0;font-size:11px;line-height:1.8}
-    .cta a{position:relative;display:inline-flex;align-items:center;gap:8px;padding:10px 15px;background:#fff;color:var(--wine);border-radius:14px;font-size:11px;font-weight:800}
-
-    footer{text-align:center;padding:22px 18px 28px;color:#8a7d77;font-size:10px}
-    footer strong{color:var(--wine)}
-    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:9999;background:#241d1d;color:#fff;padding:10px 15px;border-radius:999px;font-size:11px;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 12px 35px rgba(0,0,0,.22)}
-    .toast.show{opacity:1;transform:translate(-50%,0)}
-    @media(max-width:480px){
-      .shell{box-shadow:none}
-      .topbar{padding-inline:14px}
-      .hero,.content{padding-left:13px;padding-right:13px}
-      .profile-card{border-radius:26px;padding-inline:15px}
-      .avatar-wrap,.avatar{width:112px;height:112px}
-      .quick{gap:8px}.quick button,.quick a{min-height:72px;font-size:10px}
-      .service-grid{gap:8px}
-      .service{padding:13px}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7c1822">
+<title>أونلاين للهدايا | Online Gifts</title>
+<meta name="description" content="أونلاين للهدايا - هدايا حسب الطلب، طباعة 3D، NFC، وفرص التسويق والربح عبر الإنترنت.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+:root{--wine:#7c1822;--wine2:#4f0f16;--gold:#caa45d;--cream:#fffaf4;--text:#2b2222;--muted:#746868;--line:rgba(124,24,34,.12);--shadow:0 18px 50px rgba(81,39,34,.13)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Cairo",Arial,sans-serif;color:var(--text);background:linear-gradient(180deg,#f1e7dc,#ece0d4)}a{text-decoration:none;color:inherit}button{font:inherit}
+.shell{width:min(100%,760px);margin:auto;min-height:100vh;background:rgba(255,250,244,.97);box-shadow:var(--shadow);overflow:hidden}
+.cover{position:relative;background:#eee3d7}.cover img{display:block;width:100%;height:auto;min-height:190px;object-fit:cover}.cover:after{content:"";position:absolute;inset:auto 0 0;height:70px;background:linear-gradient(180deg,transparent,rgba(79,15,22,.22));pointer-events:none}
+.cover-controls{position:absolute;top:12px;left:12px;right:12px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px}.nfc-badge{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.9);color:var(--wine);font-size:10px;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.12)}.nfc-badge i{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;background:var(--wine);color:#fff}.lang{display:flex;gap:3px;padding:3px;border-radius:999px;background:rgba(255,255,255,.93);box-shadow:0 8px 20px rgba(0,0,0,.12)}.lang button{border:0;background:transparent;color:#6e6262;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:800;cursor:pointer}.lang button.active{background:var(--wine);color:#fff}
+.intro{text-align:center;padding:18px 18px 4px}.intro h1{margin:0;font-family:"Aref Ruqaa Ink","Cairo",serif;font-size:clamp(40px,9vw,58px);line-height:1.15;color:var(--wine2);font-weight:700}.intro .en{margin-top:3px;color:var(--gold);font-weight:800;letter-spacing:2.4px;font-size:12px}.intro p{max-width:560px;margin:11px auto 0;color:var(--muted);font-size:12.5px;line-height:1.9}
+.actions{padding:15px 16px 4px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.action{border:0;border-radius:18px;min-height:58px;padding:11px 12px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:11.5px;font-weight:800;box-shadow:0 10px 22px rgba(82,42,36,.1);cursor:pointer}.action-marketer{background:linear-gradient(135deg,var(--wine2),#8e202b);color:#fff}.action-wa{background:linear-gradient(135deg,#d8b66f,#b98b36);color:#302112}.action-soft{background:#fff;border:1px solid var(--line);color:var(--wine2)}
+.content{padding:4px 16px 28px}.section-title{display:flex;align-items:center;gap:10px;margin:18px 0 12px;color:var(--wine2);font-weight:800;font-size:14px}.section-title:before,.section-title:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(124,24,34,.22))}.section-title:after{background:linear-gradient(90deg,rgba(124,24,34,.22),transparent)}
+.links{display:grid;gap:11px}.social{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:19px;color:#fff;box-shadow:0 11px 24px rgba(63,38,34,.14);position:relative;overflow:hidden}.social:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 45%)}.social-icon{width:48px;height:48px;flex:0 0 48px;border-radius:15px;display:grid;place-items:center;background:rgba(255,255,255,.18);font-size:22px;position:relative;z-index:1}.social-text{flex:1;min-width:0;position:relative;z-index:1}.social-text b{display:block;font-size:13.5px}.social-text small{display:block;margin-top:2px;font-size:10px;color:rgba(255,255,255,.92)}.arrow{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.17);font-size:11px;position:relative;z-index:1}.wa{background:linear-gradient(135deg,#20ca67,#0da34b)}.ig{background:linear-gradient(135deg,#7437b4,#d92c7c,#f2842c)}.tt{background:linear-gradient(135deg,#101010,#303030)}.fb{background:linear-gradient(135deg,#2875ed,#1752b4)}.map{background:linear-gradient(135deg,#dbb14f,#b47e16);color:#211508}.map small{color:rgba(33,21,8,.8)}.channel{background:linear-gradient(135deg,#176e50,#0c4b36)}
+.services{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.service{min-height:124px;padding:15px;border-radius:20px;background:linear-gradient(145deg,#fff,#faf1e6);border:1px solid rgba(202,164,93,.28);box-shadow:0 8px 20px rgba(82,45,39,.06)}.service i{width:41px;height:41px;border-radius:13px;display:grid;place-items:center;background:#f3e2cd;color:var(--wine);font-size:17px}.service b{display:block;margin-top:11px;color:#392b2b;font-size:12.5px;line-height:1.45}.service small{display:block;margin-top:4px;color:var(--muted);font-size:9.4px;line-height:1.6}
+footer{text-align:center;padding:21px 16px 28px;color:#897c76;font-size:9.8px}footer strong{color:var(--wine)}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#241d1d;color:#fff;padding:9px 14px;border-radius:999px;font-size:10.5px;transition:.22s;z-index:100;box-shadow:0 12px 30px rgba(0,0,0,.22)}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){.shell{box-shadow:none}.cover img{min-height:150px}.intro{padding-inline:13px}.content,.actions{padding-left:13px;padding-right:13px}.intro h1{font-size:43px}.service{padding:13px;min-height:116px}.cover-controls{top:8px;left:8px;right:8px}.nfc-badge{padding:5px 8px}.nfc-badge span{display:none}}
+</style>
 </head>
 <body>
-  <main class="shell">
-    <div class="topbar">
-      <div class="brand-mini"><span class="nfc-dot"><i class="fa-solid fa-wifi"></i></span><span>NFC PROFILE</span></div>
-      <div class="lang-switch" aria-label="Language">
-        <button class="lang-btn active" data-lang="ar" type="button">العربية</button>
-        <button class="lang-btn" data-lang="tr" type="button">Türkçe</button>
-      </div>
-    </div>
-
-    <section class="hero">
-      <div class="profile-card">
-        <div class="avatar-wrap">
-          <img class="avatar" src="assets/logo-main.png" alt="Online Gifts">
-          <span class="verified"><i class="fa-solid fa-check"></i></span>
-        </div>
-        <h1 class="trn" data-ar="أونلاين للهدايا" data-tr="Online Hediyeler">أونلاين للهدايا</h1>
-        <div class="en-name">ONLINE GIFTS</div>
-        <p class="bio trn" data-ar="هدايا مخصصة، طباعة وحفر وتنفيذ أفكار مميزة حسب الطلب." data-tr="Kişiye özel hediyeler, baskı, gravür ve isteğe özel tasarımlar.">هدايا مخصصة، طباعة وحفر وتنفيذ أفكار مميزة حسب الطلب.</p>
-        <div class="status"><i class="fa-solid fa-circle"></i><span class="trn" data-ar="تواصل معنا مباشرة" data-tr="Bizimle doğrudan iletişime geçin">تواصل معنا مباشرة</span></div>
-
-        <div class="quick">
-          <a href="contact.vcf" download="Online-Gifts.vcf">
-            <i class="fa-solid fa-address-card"></i>
-            <span class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişilere Kaydet">حفظ جهة الاتصال</span>
-          </a>
-          <a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span class="trn" data-ar="محادثة واتساب" data-tr="WhatsApp Sohbet">محادثة واتساب</span>
-          </a>
-          <button id="shareBtn" type="button">
-            <i class="fa-solid fa-share-nodes"></i>
-            <span class="trn" data-ar="مشاركة الصفحة" data-tr="Sayfayı Paylaş">مشاركة الصفحة</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="content">
-      <div class="section-label trn" data-ar="روابطنا" data-tr="Bağlantılarımız">روابطنا</div>
-      <div class="links">
-        <a class="link-card wa" href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">
-          <span class="link-icon"><i class="fa-brands fa-whatsapp"></i></span>
-          <span class="link-copy"><b>WhatsApp</b><small class="trn" data-ar="راسلنا مباشرة للاستفسار والطلب" data-tr="Bilgi ve sipariş için bize yazın">راسلنا مباشرة للاستفسار والطلب</small></span>
-          <span class="arrow"><i class="fa-solid fa-chevron-left"></i></span>
-        </a>
-        <a class="link-card ig" href="https://www.instagram.com/telef98/?hl=ar" target="_blank" rel="noopener">
-          <span class="link-icon"><i class="fa-brands fa-instagram"></i></span>
-          <span class="link-copy"><b>Instagram</b><small class="trn" data-ar="شاهد أحدث أعمالنا وتصاميمنا" data-tr="En yeni çalışmalarımızı görün">شاهد أحدث أعمالنا وتصاميمنا</small></span>
-          <span class="arrow"><i class="fa-solid fa-chevron-left"></i></span>
-        </a>
-        <a class="link-card tt" href="https://www.tiktok.com/@on_gift" target="_blank" rel="noopener">
-          <span class="link-icon"><i class="fa-brands fa-tiktok"></i></span>
-          <span class="link-copy"><b>TikTok</b><small class="trn" data-ar="فيديوهات المنتجات وطريقة التنفيذ" data-tr="Ürün ve üretim videolarımız">فيديوهات المنتجات وطريقة التنفيذ</small></span>
-          <span class="arrow"><i class="fa-solid fa-chevron-left"></i></span>
-        </a>
-        <a class="link-card fb" href="https://www.facebook.com/onlayinn" target="_blank" rel="noopener">
-          <span class="link-icon"><i class="fa-brands fa-facebook-f"></i></span>
-          <span class="link-copy"><b>Facebook</b><small class="trn" data-ar="تابع صفحتنا والعروض الجديدة" data-tr="Sayfamızı ve kampanyaları takip edin">تابع صفحتنا والعروض الجديدة</small></span>
-          <span class="arrow"><i class="fa-solid fa-chevron-left"></i></span>
-        </a>
-        <a class="link-card map" href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener">
-          <span class="link-icon"><i class="fa-solid fa-location-dot"></i></span>
-          <span class="link-copy"><b>Google Maps</b><small class="trn" data-ar="قيّم تجربتك معنا على Google" data-tr="Bizi Google'da değerlendirin">قيّم تجربتك معنا على Google</small></span>
-          <span class="arrow"><i class="fa-solid fa-chevron-left"></i></span>
-        </a>
-        <a class="link-card channel" href="https://whatsapp.com/channel/0029VaaNlxi2UPBBkc38612Z" target="_blank" rel="noopener">
-          <span class="link-icon"><i class="fa-brands fa-whatsapp"></i></span>
-          <span class="link-copy"><b class="trn" data-ar="قناة واتساب" data-tr="WhatsApp Kanalı">قناة واتساب</b><small class="trn" data-ar="العروض والمنتجات الجديدة أولًا بأول" data-tr="Yeni ürünler ve kampanyalar">العروض والمنتجات الجديدة أولًا بأول</small></span>
-          <span class="arrow"><i class="fa-solid fa-chevron-left"></i></span>
-        </a>
-      </div>
-
-      <section class="services">
-        <div class="section-label trn" data-ar="ماذا نقدم؟" data-tr="Neler Yapıyoruz?">ماذا نقدم؟</div>
-        <div class="service-grid">
-          <article class="service"><i class="fa-solid fa-gift"></i><strong class="trn" data-ar="هدايا حسب الطلب" data-tr="Kişiye Özel Hediyeler">هدايا حسب الطلب</strong><small class="trn" data-ar="أفكار مخصصة للمناسبات والعملاء" data-tr="Özel günler için kişiselleştirilmiş fikirler">أفكار مخصصة للمناسبات والعملاء</small></article>
-          <article class="service"><i class="fa-solid fa-cube"></i><strong class="trn" data-ar="طباعة ثلاثية الأبعاد" data-tr="3D Baskı">طباعة ثلاثية الأبعاد</strong><small class="trn" data-ar="مجسمات ومنتجات بتصاميم خاصة" data-tr="Özel tasarımlı modeller ve ürünler">مجسمات ومنتجات بتصاميم خاصة</small></article>
-          <article class="service"><i class="fa-solid fa-pen-ruler"></i><strong class="trn" data-ar="حفر وطباعة" data-tr="Baskı ve Gravür">حفر وطباعة</strong><small class="trn" data-ar="أسماء وشعارات وصور حسب الطلب" data-tr="İsim, logo ve fotoğraf uygulamaları">أسماء وشعارات وصور حسب الطلب</small></article>
-          <article class="service"><i class="fa-solid fa-wifi"></i><strong class="trn" data-ar="حلول NFC" data-tr="NFC Çözümleri">حلول NFC</strong><small class="trn" data-ar="ميداليات وروابط ذكية للأعمال" data-tr="İşletmeler için akıllı NFC çözümleri">ميداليات وروابط ذكية للأعمال</small></article>
-        </div>
-      </section>
-
-      <section class="cta">
-        <strong class="trn" data-ar="عندك فكرة لهدية؟" data-tr="Bir hediye fikriniz mi var?">عندك فكرة لهدية؟</strong>
-        <p class="trn" data-ar="ابعث لنا فكرتك أو صورتك، ونتواصل معك لتحديد أنسب طريقة للتنفيذ." data-tr="Fikrinizi veya görselinizi gönderin, en uygun uygulama için sizinle iletişime geçelim.">ابعث لنا فكرتك أو صورتك، ونتواصل معك لتحديد أنسب طريقة للتنفيذ.</p>
-        <a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span class="trn" data-ar="ابدأ المحادثة" data-tr="Sohbeti Başlat">ابدأ المحادثة</span></a>
-      </section>
-    </section>
-
-    <footer>
-      <div>© <span id="year"></span> <strong>Online Gifts</strong> — <span class="trn" data-ar="جميع الحقوق محفوظة" data-tr="Tüm hakları saklıdır">جميع الحقوق محفوظة</span></div>
-    </footer>
-  </main>
-
-  <div class="toast" id="toast">تم نسخ الرابط</div>
-  <script>
-    (()=>{
-      const tr = {
-        ar:{dir:"rtl",title:"أونلاين للهدايا | Online Gifts",toast:"تم نسخ الرابط"},
-        tr:{dir:"ltr",title:"Online Hediyeler | Online Gifts",toast:"Bağlantı kopyalandı"}
-      };
-      let current="ar";
-      const toast=document.getElementById("toast");
-      const showToast=(text)=>{toast.textContent=text;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1800)};
-
-      document.querySelectorAll(".lang-btn").forEach(btn=>btn.addEventListener("click",()=>{
-        current=btn.dataset.lang;
-        document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b===btn));
-        document.documentElement.lang=current;
-        document.documentElement.dir=tr[current].dir;
-        document.title=tr[current].title;
-        document.querySelectorAll(".trn").forEach(el=>{
-          const text=el.dataset[current];
-          if(text) el.textContent=text;
-        });
-      }));
-
-      document.getElementById("shareBtn").addEventListener("click",async()=>{
-        const data={title:document.title,text:current==="ar"?"أونلاين للهدايا":"Online Gifts",url:location.href};
-        try{
-          if(navigator.share){await navigator.share(data)}
-          else{await navigator.clipboard.writeText(location.href);showToast(tr[current].toast)}
-        }catch(e){
-          if(e?.name!=="AbortError"){
-            try{await navigator.clipboard.writeText(location.href);showToast(tr[current].toast)}catch{}
-          }
-        }
-      });
-      document.getElementById("year").textContent=new Date().getFullYear();
-    })();
-  </script>
+<main class="shell">
+<section class="cover">
+<img src="assets/cover-new.webp" alt="غلاف أونلاين للهدايا">
+<div class="cover-controls">
+<div class="nfc-badge"><i class="fa-solid fa-wifi"></i><span>NFC PROFILE</span></div>
+<div class="lang"><button class="lang-btn active" type="button" data-lang="ar">العربية</button><button class="lang-btn" type="button" data-lang="tr">Türkçe</button></div>
+</div>
+</section>
+<section class="intro">
+<h1 class="trn" data-ar="أون لاين للهدايا" data-tr="Online Hediyeler">أون لاين للهدايا</h1>
+<div class="en">ONLINE GIFTS</div>
+<p class="trn" data-ar="هدايا مطبوعة ومخصصة، طباعة 3D، ميداليات ومنتجات NFC، مع إمكانية العمل معنا كمسوّق والربح عبر الإنترنت." data-tr="Kişiye özel hediyeler, 3D baskı, madalyalar ve NFC ürünleri. Ayrıca bizimle pazarlamacı olarak çalışıp internetten kazanabilirsiniz.">هدايا مطبوعة ومخصصة، طباعة 3D، ميداليات ومنتجات NFC، مع إمكانية العمل معنا كمسوّق والربح عبر الإنترنت.</p>
+</section>
+<section class="actions">
+<a class="action action-marketer" href="https://sites.google.com/view/onlenei/%D8%A7%D9%84%D8%B5%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9?authuser=0" target="_blank" rel="noopener"><i class="fa-solid fa-coins"></i><span class="trn" data-ar="اعمل معنا كمسوّق واربح" data-tr="Bizimle pazarlayın ve kazanın">اعمل معنا كمسوّق واربح</span></a>
+<a class="action action-wa" href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span class="trn" data-ar="ابدأ المحادثة" data-tr="WhatsApp ile konuş">ابدأ المحادثة</span></a>
+<a class="action action-soft" href="contact.vcf" download="Online-Gifts.vcf"><i class="fa-solid fa-address-card"></i><span class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişiyi kaydet">حفظ جهة الاتصال</span></a>
+<button class="action action-soft" id="shareBtn" type="button"><i class="fa-solid fa-share-nodes"></i><span class="trn" data-ar="مشاركة الصفحة" data-tr="Sayfayı paylaş">مشاركة الصفحة</span></button>
+</section>
+<section class="content">
+<div class="section-title trn" data-ar="روابطنا" data-tr="Bağlantılarımız">روابطنا</div>
+<div class="links">
+<a class="social wa" href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener"><span class="social-icon"><i class="fa-brands fa-whatsapp"></i></span><span class="social-text"><b>WhatsApp</b><small class="trn" data-ar="للاستفسار والطلب مباشرة" data-tr="Bilgi ve sipariş için">للاستفسار والطلب مباشرة</small></span><span class="arrow"><i class="fa-solid fa-chevron-left"></i></span></a>
+<a class="social ig" href="https://www.instagram.com/telef98/?hl=ar" target="_blank" rel="noopener"><span class="social-icon"><i class="fa-brands fa-instagram"></i></span><span class="social-text"><b>Instagram</b><small class="trn" data-ar="أحدث أعمالنا وتصاميمنا" data-tr="Yeni çalışmalar ve tasarımlar">أحدث أعمالنا وتصاميمنا</small></span><span class="arrow"><i class="fa-solid fa-chevron-left"></i></span></a>
+<a class="social tt" href="https://www.tiktok.com/@on_gift" target="_blank" rel="noopener"><span class="social-icon"><i class="fa-brands fa-tiktok"></i></span><span class="social-text"><b>TikTok</b><small class="trn" data-ar="فيديوهات المنتجات والتنفيذ" data-tr="Ürün ve üretim videoları">فيديوهات المنتجات والتنفيذ</small></span><span class="arrow"><i class="fa-solid fa-chevron-left"></i></span></a>
+<a class="social fb" href="https://www.facebook.com/onlayinn" target="_blank" rel="noopener"><span class="social-icon"><i class="fa-brands fa-facebook-f"></i></span><span class="social-text"><b>Facebook</b><small class="trn" data-ar="صفحتنا والعروض الجديدة" data-tr="Sayfamız ve kampanyalar">صفحتنا والعروض الجديدة</small></span><span class="arrow"><i class="fa-solid fa-chevron-left"></i></span></a>
+<a class="social map" href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener"><span class="social-icon"><i class="fa-solid fa-location-dot"></i></span><span class="social-text"><b>Google Maps</b><small class="trn" data-ar="قيّم تجربتك معنا" data-tr="Bizi Google'da değerlendirin">قيّم تجربتك معنا</small></span><span class="arrow"><i class="fa-solid fa-chevron-left"></i></span></a>
+<a class="social channel" href="https://whatsapp.com/channel/0029VaaNlxi2UPBBkc38612Z" target="_blank" rel="noopener"><span class="social-icon"><i class="fa-brands fa-whatsapp"></i></span><span class="social-text"><b class="trn" data-ar="قناة واتساب" data-tr="WhatsApp Kanalı">قناة واتساب</b><small class="trn" data-ar="العروض والمنتجات أولًا بأول" data-tr="Yeni ürünler ve kampanyalar">العروض والمنتجات أولًا بأول</small></span><span class="arrow"><i class="fa-solid fa-chevron-left"></i></span></a>
+</div>
+<div class="section-title trn" data-ar="ماذا نقدم؟" data-tr="Neler sunuyoruz?">ماذا نقدم؟</div>
+<div class="services">
+<article class="service"><i class="fa-solid fa-gift"></i><b class="trn" data-ar="هدايا حسب الطلب" data-tr="Kişiye özel hediyeler">هدايا حسب الطلب</b><small class="trn" data-ar="هدايا وتصاميم مخصصة حسب المناسبة والطلب." data-tr="Özel gün ve isteğe göre kişiselleştirilmiş hediyeler.">هدايا وتصاميم مخصصة حسب المناسبة والطلب.</small></article>
+<article class="service"><i class="fa-solid fa-cube"></i><b class="trn" data-ar="طباعة 3D" data-tr="3D Baskı">طباعة 3D</b><small class="trn" data-ar="مجسمات وموديلات ومنتجات خاصة حسب الطلب." data-tr="Özel modeller ve ürünler için 3D baskı.">مجسمات وموديلات ومنتجات خاصة حسب الطلب.</small></article>
+<article class="service"><i class="fa-solid fa-chart-line"></i><b class="trn" data-ar="التسويق والربح على الإنترنت" data-tr="İnternetten pazarlama ve kazanç">التسويق والربح على الإنترنت</b><small class="trn" data-ar="اعمل معنا كمسوّق لمنتجاتنا وحقق دخلًا إضافيًا." data-tr="Ürünlerimizi pazarlayarak ek gelir elde edin.">اعمل معنا كمسوّق لمنتجاتنا وحقق دخلًا إضافيًا.</small></article>
+<article class="service"><i class="fa-solid fa-wifi"></i><b>NFC</b><small class="trn" data-ar="ميداليات وروابط وصفحات ذكية للأعمال والأشخاص." data-tr="İşletmeler ve kişiler için akıllı NFC ürünleri.">ميداليات وروابط وصفحات ذكية للأعمال والأشخاص.</small></article>
+</div>
+</section>
+<footer>© <span id="year"></span> <strong>Online Gifts</strong> — <span class="trn" data-ar="جميع الحقوق محفوظة" data-tr="Tüm hakları saklıdır">جميع الحقوق محفوظة</span></footer>
+</main>
+<div class="toast" id="toast">تم نسخ الرابط</div>
+<script>
+(()=>{let current='ar';const meta={ar:{dir:'rtl',title:'أونلاين للهدايا | Online Gifts',toast:'تم نسخ الرابط'},tr:{dir:'ltr',title:'Online Hediyeler | Online Gifts',toast:'Bağlantı kopyalandı'}};const toast=document.getElementById('toast');const show=t=>{toast.textContent=t;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)};function setLang(l){current=l;document.documentElement.lang=l;document.documentElement.dir=meta[l].dir;document.title=meta[l].title;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('.trn').forEach(el=>{const v=el.dataset[l];if(v!==undefined)el.textContent=v})}document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));document.getElementById('shareBtn').addEventListener('click',async()=>{const d={title:document.title,text:current==='ar'?'أونلاين للهدايا':'Online Gifts',url:location.href};try{if(navigator.share)await navigator.share(d);else{await navigator.clipboard.writeText(location.href);show(meta[current].toast)}}catch(e){if(e?.name!=='AbortError'){try{await navigator.clipboard.writeText(location.href);show(meta[current].toast)}catch{}}}});document.getElementById('year').textContent=new Date().getFullYear();setLang('ar')})();
+</script>
 </body>
 </html>
