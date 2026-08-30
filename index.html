@@ -6,6 +6,14 @@
 <meta name="theme-color" content="#7c1822">
 <title>أونلاين للهدايا | Online Gifts</title>
 <meta name="description" content="أونلاين للهدايا - هدايا حسب الطلب، طباعة 3D، NFC، وفرص التسويق والربح عبر الإنترنت.">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SP57KJJ7NR"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-SP57KJJ7NR');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa+Ink:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -31,7 +39,7 @@ footer{text-align:center;padding:21px 16px 28px;color:#897c76;font-size:9.8px}fo
 </section>
 <section class="intro"><h1 class="trn" data-ar="أون لاين للهدايا" data-tr="Online Hediyeler">أون لاين للهدايا</h1><div class="en">ONLINE GIFTS</div><p class="trn" data-ar="هدايا مطبوعة ومخصصة، طباعة 3D، ميداليات ومنتجات NFC، مع إمكانية العمل معنا كمسوّق والربح عبر الإنترنت." data-tr="Kişiye özel hediyeler, 3D baskı, madalyalar ve NFC ürünleri. Ayrıca bizimle pazarlamacı olarak çalışıp internetten kazanabilirsiniz.">هدايا مطبوعة ومخصصة، طباعة 3D، ميداليات ومنتجات NFC، مع إمكانية العمل معنا كمسوّق والربح عبر الإنترنت.</p></section>
 <section class="actions">
-<a class="action action-marketer" href="marketer.html"><i class="fa-solid fa-coins"></i><span class="trn" data-ar="اعمل معنا كمسوّق واربح" data-tr="Bizimle pazarlayın ve kazanın">اعمل معنا كمسوّق واربح</span></a>
+<a class="action action-marketer" id="marketerBtn" href="marketer.html"><i class="fa-solid fa-coins"></i><span class="trn" data-ar="اعمل معنا كمسوّق واربح" data-tr="Bizimle pazarlayın ve kazanın">اعمل معنا كمسوّق واربح</span></a>
 <a class="action action-wa" href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span class="trn" data-ar="ابدأ المحادثة" data-tr="WhatsApp ile konuş">ابدأ المحادثة</span></a>
 <a class="action action-soft" href="contact.vcf" download="Online-Gifts.vcf"><i class="fa-solid fa-address-card"></i><span class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişiyi kaydet">حفظ جهة الاتصال</span></a>
 <button class="action action-soft" id="shareBtn" type="button"><i class="fa-solid fa-share-nodes"></i><span class="trn" data-ar="مشاركة الصفحة" data-tr="Sayfayı paylaş">مشاركة الصفحة</span></button>
@@ -58,7 +66,7 @@ footer{text-align:center;padding:21px 16px 28px;color:#897c76;font-size:9.8px}fo
 </main>
 <div class="toast" id="toast">تم نسخ الرابط</div>
 <script>
-(()=>{let current='ar';const meta={ar:{dir:'rtl',title:'أونلاين للهدايا | Online Gifts',toast:'تم نسخ الرابط'},tr:{dir:'ltr',title:'Online Hediyeler | Online Gifts',toast:'Bağlantı kopyalandı'}};const toast=document.getElementById('toast');const show=t=>{toast.textContent=t;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)};function setLang(l){current=l;document.documentElement.lang=l;document.documentElement.dir=meta[l].dir;document.title=meta[l].title;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('.trn').forEach(el=>{const v=el.dataset[l];if(v!==undefined)el.textContent=v})}document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));document.getElementById('shareBtn').addEventListener('click',async()=>{const d={title:document.title,text:current==='ar'?'أونلاين للهدايا':'Online Gifts',url:location.href};try{if(navigator.share)await navigator.share(d);else{await navigator.clipboard.writeText(location.href);show(meta[current].toast)}}catch(e){if(e?.name!=='AbortError'){try{await navigator.clipboard.writeText(location.href);show(meta[current].toast)}catch{}}}});document.getElementById('year').textContent=new Date().getFullYear();setLang('ar')})();
+(()=>{let current='ar';const meta={ar:{dir:'rtl',title:'أونلاين للهدايا | Online Gifts',toast:'تم نسخ الرابط'},tr:{dir:'ltr',title:'Online Hediyeler | Online Gifts',toast:'Bağlantı kopyalandı'}};const toast=document.getElementById('toast');const show=t=>{toast.textContent=t;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)};function setLang(l){current=l;document.documentElement.lang=l;document.documentElement.dir=meta[l].dir;document.title=meta[l].title;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));document.querySelectorAll('.trn').forEach(el=>{const v=el.dataset[l];if(v!==undefined)el.textContent=v})}document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));document.getElementById('shareBtn').addEventListener('click',async()=>{const d={title:document.title,text:current==='ar'?'أونلاين للهدايا':'Online Gifts',url:location.href};try{if(navigator.share)await navigator.share(d);else{await navigator.clipboard.writeText(location.href);show(meta[current].toast)}}catch(e){if(e?.name!=='AbortError'){try{await navigator.clipboard.writeText(location.href);show(meta[current].toast)}catch{}}}});const marketerBtn=document.getElementById('marketerBtn');if(marketerBtn)marketerBtn.addEventListener('click',()=>{if(typeof gtag==='function')gtag('event','marketer_click',{event_category:'engagement',event_label:'home_marketer_button',transport_type:'beacon'})});document.getElementById('year').textContent=new Date().getFullYear();setLang('ar')})();
 </script>
 </body>
 </html>
