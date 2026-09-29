@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تتبع الطلب | Online Gifts</title>
+<meta name="description" content="تتبع طلبك من Online Gifts باستخدام رقم الطلب ورقم الهاتف.">
+<meta name="robots" content="noindex,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+:root{--bg:#f7f4ef;--surface:#fff;--ink:#171310;--muted:#756e67;--dark:#17110e;--gold:#d3a54e;--red:#8f1f2d;--green:#1caf63;--line:rgba(23,17,14,.09);--max:760px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cairo",Arial,sans-serif}a{text-decoration:none;color:inherit}.container{width:min(calc(100% - 28px),var(--max));margin:auto}.top{background:var(--dark);color:#fff}.nav{min-height:72px;display:flex;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:10px}.brand img{width:46px;height:46px;object-fit:contain}.brand strong{display:block}.brand span{display:block;font-size:8px;letter-spacing:2px;color:#b9ada3}.nav-actions{margin-inline-start:auto;display:flex;gap:7px}.nav-actions a,.lang-btn{border:0;border-radius:11px;padding:9px 11px;font-size:9px;font-weight:900}.nav-actions a{background:#fff;color:var(--dark)}.lang-btn{background:#2b211b;color:#fff;cursor:pointer}
+main{padding:54px 0 70px}.card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:30px;box-shadow:0 18px 60px rgba(35,25,19,.08)}.eyebrow{font-size:9px;font-weight:900;color:var(--red);letter-spacing:1px}.card h1{font-size:34px;line-height:1.3;margin:8px 0}.card>p{color:var(--muted);font-size:11px;line-height:1.9;margin:0 0 22px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:5px}.field label{font-size:9px;font-weight:900}.field input{height:46px;border:1px solid var(--line);border-radius:13px;padding:0 12px;outline:none;font:inherit;font-size:10.5px}.field input:focus{border-color:rgba(143,31,45,.35);box-shadow:0 0 0 4px rgba(143,31,45,.06)}.submit{width:100%;height:48px;border:0;border-radius:14px;background:var(--dark);color:#fff;margin-top:12px;font:inherit;font-size:10.5px;font-weight:900;cursor:pointer}.submit:disabled{opacity:.55}.result{display:none;margin-top:16px}.result.show{display:block}.error{padding:11px;border-radius:12px;background:#fff0f0;color:#9b1d2a;font-size:9.5px;font-weight:800}.order{border:1px solid var(--line);border-radius:18px;overflow:hidden}.order-head{background:var(--dark);color:#fff;padding:16px}.order-head small{display:block;color:#c9beb5;font-size:8.5px}.order-head strong{display:block;font-size:18px;margin-top:2px}.status{display:inline-flex;margin-top:9px;padding:6px 9px;border-radius:999px;background:#f3d897;color:#2b1b0d;font-size:8.5px;font-weight:900}.rows{padding:14px}.row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line);font-size:9.5px}.row:last-child{border-bottom:0}.row span:last-child{font-weight:800;text-align:end}.items{padding:14px;border-top:1px solid var(--line)}.items h3{font-size:10.5px;margin:0 0 7px}.item{display:flex;justify-content:space-between;gap:10px;font-size:9px;padding:5px 0}.track-link{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;background:var(--green);color:#fff;border-radius:12px;margin:0 14px 14px;font-size:9.5px;font-weight:900}.footer{padding:22px 0;background:var(--dark);color:#948981;font-size:8.5px}.footer .container{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.footer a{color:#fff}
+@media(max-width:600px){main{padding-top:28px}.card{padding:22px;border-radius:22px}.card h1{font-size:28px}.grid{grid-template-columns:1fr}.nav-actions a{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="container nav"><a class="brand" href="/"><img src="/assets/logo-gold.png" alt="Online Gifts"><div><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></div></a><div class="nav-actions"><a href="/products/" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><button class="lang-btn" id="langBtn" type="button">Türkçe</button></div></div></header>
+<main><div class="container"><section class="card"><div class="eyebrow">ORDER TRACKING</div><h1 class="trn" data-ar="تتبع طلبك" data-tr="Siparişini takip et">تتبع طلبك</h1><p class="trn" data-ar="اكتب رقم الطلب الذي يبدأ بـ web ورقم الهاتف المستخدم أثناء الطلب." data-tr="web ile başlayan sipariş numaranızı ve siparişte kullandığınız telefon numarasını girin.">اكتب رقم الطلب الذي يبدأ بـ web ورقم الهاتف المستخدم أثناء الطلب.</p><div class="grid"><div class="field"><label class="trn" data-ar="رقم الطلب" data-tr="Sipariş numarası">رقم الطلب</label><input id="orderNumber" placeholder="web12" autocomplete="off"></div><div class="field"><label class="trn" data-ar="رقم الهاتف" data-tr="Telefon">رقم الهاتف</label><input id="phone" type="tel" placeholder="05XXXXXXXXX" autocomplete="tel"></div></div><button class="submit" id="submit" type="button"><i class="fa-solid fa-magnifying-glass"></i> <span class="trn" data-ar="عرض حالة الطلب" data-tr="Siparişi göster">عرض حالة الطلب</span></button><div class="result" id="result"></div></section></div></main>
+<footer class="footer"><div class="container"><span>© Online Gifts</span><span><a href="/">الرئيسية</a> · <a href="/products/">المنتجات</a></span></div></footer>
+<script>
+(()=>{
+const API='https://bayi.onlinegiftis.com';
+let current='ar';
+const $=id=>document.getElementById(id);
+const txt=(ar,tr)=>current==='tr'?tr:ar;
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
+const statusText=s=>({
+ new:txt('جديد','Yeni'),
+ preparing:txt('قيد التجهيز','Hazırlanıyor'),
+ shipped:txt('تم الشحن','Kargoya verildi'),
+ delivered:txt('تم التسليم','Teslim edildi'),
+ cancelled:txt('ملغى','İptal'),
+ returned:txt('مرتجع','İade'),
+ returned_shipping:txt('مرتجع - شحن','İade - Kargo'),
+ returned_full:txt('مرتجع كامل','Tam iade')
+}[s]||s);
+function applyLang(l){
+ current=l;document.documentElement.lang=l;document.documentElement.dir=l==='tr'?'ltr':'rtl';
+ document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
+ $('langBtn').textContent=l==='tr'?'العربية':'Türkçe';
+}
+$('langBtn').addEventListener('click',()=>applyLang(current==='ar'?'tr':'ar'));
+async function track(){
+ const result=$('result'),btn=$('submit');result.className='result';result.innerHTML='';
+ const orderNumber=$('orderNumber').value.trim(),phone=$('phone').value.trim();
+ if(!orderNumber||!phone){result.className='result show';result.innerHTML='<div class="error">'+txt('أدخل رقم الطلب ورقم الهاتف.','Sipariş numarası ve telefonu girin.')+'</div>';return}
+ btn.disabled=true;
+ try{
+  const r=await fetch(API+'/api/store/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderNumber,phone})}),d=await r.json();
+  if(!r.ok)throw new Error(d.error||txt('تعذر العثور على الطلب.','Sipariş bulunamadı.'));
+  const o=d.order;
+  const items=(o.items||[]).map(x=>'<div class="item"><span>'+esc(x.productName)+'</span><strong>× '+Number(x.quantity||0)+'</strong></div>').join('');
+  const tracking=o.trackingUrl&&/^https?:\/\//i.test(o.trackingUrl)?'<a class="track-link" target="_blank" rel="noopener" href="'+esc(o.trackingUrl)+'"><i class="fa-solid fa-truck-fast"></i>'+txt('فتح تتبع شركة الشحن','Kargo takibini aç')+'</a>':'';
+  result.className='result show';
+  result.innerHTML='<div class="order"><div class="order-head"><small>'+txt('رقم الطلب','Sipariş no')+'</small><strong>'+esc(o.orderNumber)+'</strong><span class="status">'+esc(statusText(o.status))+'</span></div><div class="rows"><div class="row"><span>'+txt('طريقة الدفع','Ödeme')+'</span><span>'+(o.paymentMethod==='bank_transfer'?txt('تحويل بنكي','Banka havalesi'):txt('عند الاستلام','Kapıda ödeme'))+'</span></div><div class="row"><span>'+txt('إجمالي الطلب','Sipariş toplamı')+'</span><span>'+money(o.saleTotal)+'</span></div>'+(o.shippingCompany?'<div class="row"><span>'+txt('شركة الشحن','Kargo firması')+'</span><span>'+esc(o.shippingCompany)+'</span></div>':'')+(o.trackingCode?'<div class="row"><span>'+txt('كود التتبع','Takip kodu')+'</span><span>'+esc(o.trackingCode)+'</span></div>':'')+'</div><div class="items"><h3>'+txt('المنتجات','Ürünler')+'</h3>'+items+'</div>'+tracking+'</div>'
+ }catch(e){result.className='result show';result.innerHTML='<div class="error">'+esc(e.message||txt('تعذر تتبع الطلب.','Sipariş takip edilemedi.'))+'</div>'}
+ finally{btn.disabled=false}
+}
+$('submit').addEventListener('click',track);
+document.addEventListener('keydown',e=>{if(e.key==='Enter')track()});
+})();
+</script>
+</body></html>
