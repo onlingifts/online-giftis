@@ -174,7 +174,7 @@ img{max-width:100%}
 .about-card i{width:47px;height:47px;border-radius:14px;background:#f5eee6;color:var(--red);display:grid;place-items:center;font-size:18px}
 .about-card strong{display:block;font-size:14px;margin-top:18px}
 .about-card p{font-size:10.5px;line-height:1.9;color:var(--muted);margin:6px 0 0}
-.seo-copy{padding:18px 0 58px}
+.discover{padding:6px 0 44px}.discover-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.discover-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;align-items:center;gap:14px;transition:.2s}.discover-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(35,25,19,.07)}.discover-card i{width:44px;height:44px;border-radius:14px;background:#f5eee6;color:var(--red);display:grid;place-items:center;flex:0 0 44px}.discover-card strong{display:block;font-size:12px}.discover-card span{display:block;font-size:9px;line-height:1.7;color:var(--muted);margin-top:3px}.seo-copy{padding:18px 0 58px}
 .seo-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
 .seo-panel{background:#fff;border:1px solid var(--line);border-radius:28px;padding:30px}
 .seo-panel.dark{background:linear-gradient(135deg,#1b1410,#2f2119);color:#fff}
@@ -429,6 +429,7 @@ img{max-width:100%}
  </div>
 </section>
 
+<section class="discover"><div class="container discover-grid"><a class="discover-card" href="/gifts-istanbul/"><i class="fa-solid fa-location-dot"></i><div><strong>هدايا في إسطنبول</strong><span>أفكار هدايا مخصصة ومعلومات الطلب والشحن داخل تركيا.</span></div></a><a class="discover-card" href="/custom-gifts-turkey/"><i class="fa-solid fa-wand-magic-sparkles"></i><div><strong>هدايا مخصصة في تركيا</strong><span>أسماء، صور، شعارات وتصاميم خاصة حسب نوع المنتج.</span></div></a></div></section>
 <section class="seo-copy" id="istanbul-gifts">
  <div class="container seo-grid">
   <article class="seo-panel dark">
@@ -677,7 +678,7 @@ $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();
 restoreCart();
 const savedLang=localStorage.getItem('og_lang');if(savedLang==='tr')applyLanguage('tr');
-renderCart();loadProducts();
+renderCart();loadProducts().then(()=>{if(new URLSearchParams(location.search).get('cart')==='1'&&state.cart.length)openModal(cartModal)});
 })();
 </script>
 </body>
