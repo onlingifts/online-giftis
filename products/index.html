@@ -460,7 +460,7 @@ img{max-width:100%}
 (()=>{
 const API='https://bayi.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],cart:[],search:'',category:'all'};
+const state={products:[],cart:[],search:'',category:'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod'};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -482,9 +482,19 @@ function contactHref(p){
 }
 function unavailableLabel(p){
  if(p.orderableReason==='out_of_stock')return txt('نفد المخزون','Stokta yok');
- if(p.orderableReason==='prepaid_only')return txt('دفع مسبق - واتساب','Ön ödemeli - WhatsApp');
- if(p.orderableReason==='custom_order')return txt('طلب خاص - واتساب','Özel sipariş - WhatsApp');
  return txt('السعر عند الطلب','Fiyat için iletişime geçin')
+}
+function productFlags(p){
+ return {
+  requiresCustomizationText:Boolean(p.requiresCustomizationText ?? (p.customizationType==='text'||p.customizationType==='text_and_image')),
+  requiresCustomizationImage:Boolean(p.requiresCustomizationImage ?? (p.customizationType==='image'||p.customizationType==='text_and_image')),
+  requiresDesignInput:Boolean(p.requiresDesignInput ?? p.designType),
+  requiresPrepayment:Boolean(p.requiresPrepayment ?? p.paymentPolicy==='prepaid_only')
+ }
+}
+function hydrateItem(x,p){
+ const flags=productFlags(p);
+ return {...x,name:p.name,price:p.price,stock:p.stockQuantity,quantity:Math.max(1,Math.min(Number(x.quantity||1),p.stockQuantity)),customizationText:String(x.customizationText||''),...flags};
 }
 function saveCart(){try{localStorage.setItem('og_cart_v1',JSON.stringify(state.cart))}catch{}}
 function restoreCart(){try{const c=JSON.parse(localStorage.getItem('og_cart_v1')||'[]');if(Array.isArray(c))state.cart=c}catch{}}
@@ -492,16 +502,14 @@ function visibleProducts(){
  const q=state.search.toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar');
  return state.products.filter(p=>{
   const hay=(String(p.name||'')+' '+String(p.description||'')+' '+categoryList(p).join(' ')).toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar');
-  const bySearch=!q||hay.includes(q);
-  const byCat=state.category==='all'||categoryList(p).includes(state.category);
-  return bySearch&&byCat
+  return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))
  })
 }
 function renderCategories(){
  const set=[];
  state.products.forEach(p=>categoryList(p).forEach(c=>{if(!set.includes(c))set.push(c)}));
  categories.innerHTML='<button class="cat-btn '+(state.category==='all'?'active':'')+'" data-cat="all">'+txt('الكل','Tümü')+'</button>'+
- set.map(c=>'<button class="cat-btn '+(state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
+  set.map(c=>'<button class="cat-btn '+(state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
  categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.category=b.dataset.cat;renderCategories();renderProducts()}))
 }
 function renderProducts(){
@@ -510,55 +518,93 @@ function renderProducts(){
  grid.innerHTML=list.map(p=>{
   const image=p.hasImage?API+p.imageUrl:'';
   const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
-  const cats=categoryList(p);
+  const cats=categoryList(p),flags=productFlags(p);
   const action=p.orderable
    ? '<button class="add-cart" type="button" data-add="'+p.id+'"><i class="fa-solid fa-cart-plus"></i>'+txt('أضف للسلة','Sepete ekle')+'</button><a class="details-btn" href="/products/'+p.id+'/" aria-label="'+txt('تفاصيل المنتج','Ürün detayı')+'"><i class="fa-solid fa-eye"></i></a>'
    : '<a class="contact-order" href="'+contactHref(p)+'" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i>'+unavailableLabel(p)+'</a>';
-  return '<article class="product-card">'+
-   '<div class="product-media">'+(image?'<img src="'+image+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
-   '<div class="badges">'+(p.isFeatured?'<span class="badge hot">'+txt('الأكثر طلباً','Çok satan')+'</span>':'')+(p.stockQuantity>0?'<span class="badge stock">'+txt('متوفر','Stokta')+'</span>':'')+'</div></div>'+
+  const extraBadges=(flags.requiresPrepayment?'<span class="badge stock">'+txt('دفع مسبق','Ön ödemeli')+'</span>':'')+
+   ((flags.requiresCustomizationImage||flags.requiresCustomizationText||flags.requiresDesignInput)?'<span class="badge stock">'+txt('مخصص','Kişiye özel')+'</span>':'');
+  return '<article class="product-card"><div class="product-media">'+
+   (image?'<img src="'+image+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
+   '<div class="badges">'+(p.isFeatured?'<span class="badge hot">'+txt('الأكثر طلباً','Çok satan')+'</span>':'')+(p.stockQuantity>0?'<span class="badge stock">'+txt('متوفر','Stokta')+'</span>':'')+extraBadges+'</div></div>'+
    '<div class="product-body"><div class="product-category">'+esc(cats.join(' • ')||txt('هدايا','Hediye'))+'</div><div class="product-name">'+esc(p.name)+'</div><div class="product-desc">'+esc(p.description||'')+'</div>'+
    '<div class="product-bottom"><div class="product-price">'+price+'</div><div class="product-actions">'+action+'</div></div></div></article>'
  }).join('');
- grid.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>addToCart(Number(b.dataset.add))));
-
-}
-function openProduct(id){
- const p=state.products.find(x=>x.id===id);if(!p)return;
- const image=p.hasImage?API+p.imageUrl:'';
- const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
- const meta=categoryList(p).map(c=>'<span>'+esc(c)+'</span>').join('')+'<span>'+txt('المخزون: ','Stok: ')+p.stockQuantity+'</span>';
- const action=p.orderable
-  ? '<button class="detail-action" type="button" data-modal-add="'+p.id+'"><i class="fa-solid fa-cart-plus"></i> '+txt('أضف للسلة','Sepete ekle')+'</button>'
-  : '<a class="detail-action" style="display:flex;align-items:center;justify-content:center;background:#1caf63" href="'+contactHref(p)+'" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> '+unavailableLabel(p)+'</a>';
- $('productModalBody').innerHTML='<div class="product-modal-card"><div class="product-modal-media">'+(image?'<img src="'+image+'" alt="'+esc(p.name)+'">':'')+'</div><div class="product-modal-info"><h3>'+esc(p.name)+'</h3><div class="detail-meta">'+meta+'</div><p>'+esc(p.description||'')+'</p><div class="product-modal-price">'+price+'</div>'+action+'</div></div>';
- const btn=$('productModalBody').querySelector('[data-modal-add]');if(btn)btn.addEventListener('click',()=>{closeModal(productModal);addToCart(Number(btn.dataset.modalAdd))});
- openModal(productModal)
+ grid.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>addToCart(Number(b.dataset.add))))
 }
 function addToCart(id){
  const p=state.products.find(x=>x.id===id);if(!p||!p.orderable)return;
- let custom='';
- if(p.customizationType==='text'){
-  custom=prompt(txt('اكتب الاسم أو النص المطلوب لهذا المنتج:','Bu ürün için ismi veya metni yazın:'))?.trim()||'';
-  if(!custom)return
- }
- const existing=state.cart.find(x=>x.productId===id&&String(x.customizationText||'')===String(custom||''));
+ const flags=productFlags(p);
+ const existing=state.cart.find(x=>x.productId===id);
  if(existing){if(existing.quantity<p.stockQuantity)existing.quantity+=1}
- else state.cart.push({productId:id,name:p.name,price:p.price,quantity:1,stock:p.stockQuantity,customizationText:custom});
+ else state.cart.push({productId:id,name:p.name,price:p.price,quantity:1,stock:p.stockQuantity,customizationText:'',...flags});
  saveCart();renderCart();
  if(typeof gtag==='function')gtag('event','add_to_cart',{currency:'TRY',value:p.price||0,items:[{item_id:String(p.id),item_name:p.name,price:p.price||0,quantity:1}]});
  openModal(cartModal)
+}
+function uploadBlock(x){
+ const needsFile=x.requiresCustomizationImage||x.requiresDesignInput;
+ if(!needsFile)return '';
+ const selected=state.uploads.get(x.productId);
+ const label=x.requiresCustomizationImage?txt('ارفع صورة/ملف التخصيص *','Kişiselleştirme dosyası *'):txt('ارفع صورة/ملف (أو اكتب التفاصيل)','Görsel/dosya yükle (veya detay yaz)');
+ return '<div class="cart-upload"><label>'+label+'</label><input type="file" data-upload="'+x.productId+'" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf"><small data-upload-name="'+x.productId+'">'+(selected?txt('تم اختيار: ','Seçildi: ')+esc(selected.name):txt('الحد الأقصى 10 MB','En fazla 10 MB'))+'</small></div>'
+}
+function textBlock(x){
+ if(!x.requiresCustomizationText&&!x.requiresDesignInput)return '';
+ const required=x.requiresCustomizationText?' *':'';
+ return '<div class="cart-upload"><label>'+txt('الاسم أو تفاصيل التخصيص','İsim veya kişiselleştirme detayı')+required+'</label><input type="text" data-custom-text="'+x.productId+'" value="'+esc(x.customizationText||'')+'" placeholder="'+txt('اكتب المطلوب هنا','İstenen detayı yazın')+'"></div>'
 }
 function renderCart(){
  state.cart=state.cart.filter(x=>state.products.length?state.products.some(p=>p.id===x.productId):true);
  const count=state.cart.reduce((n,x)=>n+x.quantity,0);
  $('cartCount').textContent=count;$('navCartCount').textContent=count;$('cartFab').classList.toggle('show',count>0);
- if(!count){$('cartItems').innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-bag-shopping"></i></div>'+txt('السلة فارغة','Sepet boş')+'</div>';$('cartTotal').textContent=money(0);saveCart();return}
- $('cartItems').innerHTML=state.cart.map((x,i)=>'<div class="cart-item"><div><b>'+esc(x.name)+'</b><small>'+money(x.price)+' × '+x.quantity+(x.customizationText?' — '+esc(x.customizationText):'')+'</small></div><div class="cart-item-actions"><button type="button" data-minus="'+i+'"><i class="fa-solid fa-minus"></i></button><strong>'+x.quantity+'</strong><button type="button" data-plus="'+i+'"><i class="fa-solid fa-plus"></i></button><button type="button" data-remove="'+i+'"><i class="fa-solid fa-trash"></i></button></div></div>').join('');
+ if(!count){$('cartItems').innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-bag-shopping"></i></div>'+txt('السلة فارغة','Sepet boş')+'</div>';$('cartTotal').textContent=money(0);saveCart();renderPayment();return}
+ $('cartItems').innerHTML=state.cart.map((x,i)=>'<div class="cart-item"><div class="cart-item-main"><b>'+esc(x.name)+'</b><small>'+money(x.price)+' × '+x.quantity+'</small>'+textBlock(x)+uploadBlock(x)+'</div><div class="cart-item-actions"><button type="button" data-minus="'+i+'"><i class="fa-solid fa-minus"></i></button><strong>'+x.quantity+'</strong><button type="button" data-plus="'+i+'"><i class="fa-solid fa-plus"></i></button><button type="button" data-remove="'+i+'"><i class="fa-solid fa-trash"></i></button></div></div>').join('');
  $('cartTotal').textContent=money(state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0));
- $('cartItems').querySelectorAll('[data-minus]').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.minus),x=state.cart[i];if(x.quantity>1)x.quantity--;else state.cart.splice(i,1);saveCart();renderCart()}));
+ $('cartItems').querySelectorAll('[data-custom-text]').forEach(input=>input.addEventListener('input',()=>{const x=state.cart.find(v=>v.productId===Number(input.dataset.customText));if(x){x.customizationText=input.value.slice(0,500);saveCart()}}));
+ $('cartItems').querySelectorAll('[data-upload]').forEach(input=>input.addEventListener('change',()=>{
+   const id=Number(input.dataset.upload),file=input.files?.[0]||null,name=$('cartItems').querySelector('[data-upload-name="'+id+'"]');
+   if(file&&file.size>10*1024*1024){input.value='';state.uploads.delete(id);if(name)name.textContent=txt('الملف أكبر من 10 MB','Dosya 10 MB sınırını aşıyor');return}
+   if(file)state.uploads.set(id,file);else state.uploads.delete(id);
+   if(name)name.textContent=file?txt('تم اختيار: ','Seçildi: ')+file.name:txt('الحد الأقصى 10 MB','En fazla 10 MB')
+ }));
+ $('cartItems').querySelectorAll('[data-minus]').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.minus),x=state.cart[i];if(x.quantity>1)x.quantity--;else{state.uploads.delete(x.productId);state.cart.splice(i,1)}saveCart();renderCart()}));
  $('cartItems').querySelectorAll('[data-plus]').forEach(b=>b.addEventListener('click',()=>{const x=state.cart[Number(b.dataset.plus)];if(x.quantity<x.stock)x.quantity++;saveCart();renderCart()}));
- $('cartItems').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{state.cart.splice(Number(b.dataset.remove),1);saveCart();renderCart()}))
+ $('cartItems').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{const x=state.cart[Number(b.dataset.remove)];state.uploads.delete(x.productId);state.cart.splice(Number(b.dataset.remove),1);saveCart();renderCart()}));
+ renderPayment()
+}
+function renderPayment(){
+ const cod=$('payCod'),bank=$('payBank'),details=$('bankDetails'),warning=$('paymentWarning'),info=$('bankInfo');
+ if(!cod||!bank)return;
+ const mustPrepay=state.cart.some(x=>x.requiresPrepayment);
+ const bankReady=Boolean(state.config?.bankConfigured);
+ if(mustPrepay)state.paymentMethod='bank_transfer';
+ if(state.paymentMethod==='bank_transfer'&&!bankReady&&!mustPrepay)state.paymentMethod='cod';
+ cod.disabled=mustPrepay;
+ bank.disabled=!bankReady;
+ cod.checked=state.paymentMethod==='cod';
+ bank.checked=state.paymentMethod==='bank_transfer';
+ details.classList.toggle('show',state.paymentMethod==='bank_transfer');
+ let msg='';
+ if(mustPrepay)msg=txt('السلة تحتوي منتجاً يتطلب الدفع المسبق؛ تم اختيار التحويل البنكي تلقائياً.','Sepette ön ödeme gerektiren ürün var; banka havalesi otomatik seçildi.');
+ if(mustPrepay&&!bankReady)msg=txt('الدفع البنكي غير متاح حالياً. تواصل معنا لإكمال الطلب.','Banka havalesi şu anda kullanılamıyor. Siparişi tamamlamak için bizimle iletişime geçin.');
+ warning.textContent=msg;warning.classList.toggle('show',Boolean(msg));
+ if(info){
+   const c=state.config||{};
+   info.innerHTML=(c.bankName?'<div class="bank-row"><span>'+txt('البنك','Banka')+'</span><span>'+esc(c.bankName)+'</span></div>':'')+
+    (c.bankAccountName?'<div class="bank-row"><span>'+txt('اسم الحساب','Hesap sahibi')+'</span><span>'+esc(c.bankAccountName)+'</span></div>':'')+
+    (c.iban?'<div class="bank-row"><span>IBAN</span><span>'+esc(c.iban)+'</span></div>':'')+
+    (c.bankNote?'<div class="bank-row"><span>'+txt('ملاحظة','Not')+'</span><span>'+esc(c.bankNote)+'</span></div>':'')
+ }
+ const label=$('checkoutSubmitLabel');
+ if(label)label.textContent=state.paymentMethod==='bank_transfer'?txt('تثبيت الطلب بعد التحويل','Havale sonrası siparişi tamamla'):txt('تثبيت الطلب - الدفع عند الاستلام','Siparişi tamamla - Kapıda ödeme')
+}
+async function loadConfig(){
+ try{
+  const r=await fetch(API+'/api/store/config',{cache:'no-store'}),d=await r.json();
+  state.config=r.ok&&d.config?d.config:{bankConfigured:false}
+ }catch{state.config={bankConfigured:false}}
+ renderPayment()
 }
 async function loadProducts(){
  grid.innerHTML='<div class="products-state"><i class="fa-solid fa-spinner fa-spin"></i><br><br>'+txt('جاري تحميل المنتجات...','Ürünler yükleniyor...')+'</div>';
@@ -566,34 +612,55 @@ async function loadProducts(){
   const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
   if(!r.ok||!Array.isArray(d.products))throw new Error('products');
   state.products=d.products;
-  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:p.name,price:p.price,stock:p.stockQuantity,quantity:Math.min(x.quantity,p.stockQuantity)}:x});
+  const deduped=[];
+  for(const old of state.cart){
+    const p=state.products.find(p=>p.id===old.productId);if(!p||!p.orderable)continue;
+    const item=hydrateItem(old,p),existing=deduped.find(x=>x.productId===item.productId);
+    if(existing)existing.quantity=Math.min(existing.stock,existing.quantity+item.quantity);else deduped.push(item)
+  }
+  state.cart=deduped;saveCart();
   renderCategories();renderProducts();renderCart()
  }catch{
   grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>'+txt('تعذر تحميل المنتجات حالياً. تقدر تطلب مباشرة عبر واتساب.','Ürünler şu anda yüklenemedi. WhatsApp üzerinden sipariş verebilirsiniz.')+'</div>'
  }
 }
+function checkoutError(message){
+ const result=$('checkoutResult');result.className='checkout-result show err';result.textContent=message
+}
 async function checkout(){
  const result=$('checkoutResult');result.className='checkout-result';result.textContent='';
  if(!state.cart.length)return;
  const required=['checkoutName','checkoutPhone','checkoutCity','checkoutAddress'];
- if(required.some(id=>!$(id).value.trim())){result.className='checkout-result show err';result.textContent=txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والعنوان الكامل.','Lütfen ad soyad, telefon, il ve açık adres alanlarını doldurun.');return}
+ if(required.some(id=>!$(id).value.trim())){checkoutError(txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والعنوان الكامل.','Lütfen ad soyad, telefon, il ve açık adres alanlarını doldurun.'));return}
+ for(const x of state.cart){
+  if(x.requiresCustomizationText&&!String(x.customizationText||'').trim()){checkoutError(txt('اكتب النص المطلوب للمنتج: ','Ürün için metni girin: ')+x.name);return}
+  if(x.requiresCustomizationImage&&!state.uploads.get(x.productId)){checkoutError(txt('ارفع ملف التخصيص للمنتج: ','Ürün için kişiselleştirme dosyasını yükleyin: ')+x.name);return}
+  if(x.requiresDesignInput&&!String(x.customizationText||'').trim()&&!state.uploads.get(x.productId)){checkoutError(txt('اكتب تفاصيل التخصيص أو ارفع ملفاً للمنتج: ','Detay yazın veya dosya yükleyin: ')+x.name);return}
+ }
+ if(state.paymentMethod==='bank_transfer'){
+  if(!state.config?.bankConfigured){checkoutError(txt('الدفع البنكي غير متاح حالياً. تواصل معنا لإكمال الطلب.','Banka havalesi şu anda kullanılamıyor.'));return}
+  if(!state.receipt){checkoutError(txt('أرفق إشعار الحوالة قبل تثبيت الطلب.','Siparişi tamamlamadan önce havale dekontunu yükleyin.'));return}
+ }
  const payload={
-  items:state.cart.map(x=>({productId:x.productId,quantity:x.quantity,customizationText:x.customizationText||''})),
+  items:state.cart.map(x=>({productId:x.productId,quantity:x.quantity,customizationText:String(x.customizationText||'').trim()})),
   customerName:$('checkoutName').value.trim(),customerPhone:$('checkoutPhone').value.trim(),
   city:$('checkoutCity').value.trim(),district:$('checkoutDistrict').value.trim(),
-  address:$('checkoutAddress').value.trim(),notes:$('checkoutNotes').value.trim()
+  address:$('checkoutAddress').value.trim(),notes:$('checkoutNotes').value.trim(),
+  paymentMethod:state.paymentMethod
  };
+ const form=new FormData();form.append('payload',JSON.stringify(payload));
+ for(const x of state.cart){const file=state.uploads.get(x.productId);if(file)form.append('customization_'+x.productId,file)}
+ if(state.paymentMethod==='bank_transfer'&&state.receipt)form.append('transferReceipt',state.receipt);
  const btn=$('checkoutSubmit');btn.disabled=true;
  try{
-  const r=await fetch(API+'/api/store/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}),d=await r.json();
+  const r=await fetch(API+'/api/store/orders',{method:'POST',body:form}),d=await r.json();
   if(!r.ok)throw new Error(d.error||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'));
   result.className='checkout-result show ok';
   result.textContent=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+d.order.orderNumber;
-  state.cart=[];saveCart();renderCart();await loadProducts();
+  state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
- }catch(e){
-  result.className='checkout-result show err';result.textContent=e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı')
- }finally{btn.disabled=false}
+ }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}
+ finally{btn.disabled=false}
 }
 function openModal(el){el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.classList.add('modal-open')}
 function closeModal(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');if(!document.querySelector('.modal-backdrop.open'))document.body.classList.remove('modal-open')}
@@ -603,7 +670,7 @@ function applyLanguage(l){
  document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
  document.querySelectorAll('.trn-placeholder').forEach(el=>{el.placeholder=el.dataset[l+'Placeholder']||el.placeholder});
  localStorage.setItem('og_lang',l);
- renderCategories();renderProducts();renderCart()
+ renderCategories();renderProducts();renderCart();renderPayment()
 }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
 $('productSearch').addEventListener('input',e=>{state.search=e.target.value.trim();renderProducts()});
@@ -614,11 +681,14 @@ $('productClose').addEventListener('click',()=>closeModal(productModal));
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(cartModal);closeModal(productModal)}});
+document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{state.paymentMethod=r.value;renderPayment()}));
+$('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();
 restoreCart();
 const savedLang=localStorage.getItem('og_lang');if(savedLang==='tr')applyLanguage('tr');
-renderCart();loadProducts().then(()=>{if(new URLSearchParams(location.search).get('cart')==='1'&&state.cart.length)openModal(cartModal)});
+renderCart();
+Promise.all([loadConfig(),loadProducts()]).then(()=>{if(new URLSearchParams(location.search).get('cart')==='1'&&state.cart.length)openModal(cartModal)});
 })();
 </script>
 </body>
