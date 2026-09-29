@@ -236,6 +236,13 @@ img{max-width:100%}
 .cart-upload label{display:block;font-size:8.8px;font-weight:900;margin-bottom:5px}
 .cart-upload input{width:100%;font-size:8.5px}
 .cart-upload small{margin-top:5px;color:#6f655d}
+.checkout-costs{margin:10px 0 2px;border:1px solid var(--line);border-radius:15px;background:#fff;padding:10px 12px}
+.checkout-cost-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0;font-size:9.5px;border-bottom:1px solid var(--line)}
+.checkout-cost-row:last-child{border-bottom:0}
+.checkout-cost-row strong{font-size:10px}
+.checkout-cost-row.total{font-size:11px;font-weight:900;color:var(--dark)}
+.checkout-cost-row.total strong{font-size:13px}
+.checkout-free{font-weight:900;color:#16864b}
 .payment-box{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}
 .payment-title{font-size:10.5px;font-weight:900;margin-bottom:9px}
 .payment-options{display:flex;gap:8px;flex-wrap:wrap}
@@ -349,7 +356,7 @@ img{max-width:100%}
 <div class="topbar">
  <div class="container">
   <div class="topbar-info">
-   <span><i class="fa-solid fa-truck-fast"></i><span class="trn" data-ar="شحن داخل تركيا" data-tr="Türkiye geneli kargo">شحن داخل تركيا</span></span>
+   <span><i class="fa-solid fa-truck-fast"></i><span class="trn" data-ar="توصيل مجاني داخل تركيا" data-tr="Türkiye genelinde ücretsiz teslimat">توصيل مجاني داخل تركيا</span></span>
    <span><i class="fa-solid fa-wand-magic-sparkles"></i><span class="trn" data-ar="تنفيذ حسب الطلب" data-tr="Kişiye özel üretim">تنفيذ حسب الطلب</span></span>
   </div>
   <div class="lang">
@@ -421,6 +428,11 @@ img{max-width:100%}
   <div class="sheet-body">
    <div class="cart-items" id="cartItems"></div>
    <div class="cart-total"><span class="trn" data-ar="إجمالي المنتجات" data-tr="Ürün toplamı">إجمالي المنتجات</span><strong id="cartTotal">0 ₺</strong></div>
+   <div class="checkout-costs">
+    <div class="checkout-cost-row"><span class="trn" data-ar="التوصيل" data-tr="Teslimat">التوصيل</span><strong class="checkout-free trn" data-ar="مجاني" data-tr="Ücretsiz">مجاني</strong></div>
+    <div class="checkout-cost-row" id="codFeeRow"><span class="trn" data-ar="أجرة الدفع عند الاستلام" data-tr="Kapıda ödeme ücreti">أجرة الدفع عند الاستلام</span><strong id="codFeeAmount">75 ₺</strong></div>
+    <div class="checkout-cost-row total"><span class="trn" data-ar="الإجمالي النهائي" data-tr="Genel toplam">الإجمالي النهائي</span><strong id="checkoutGrandTotal">0 ₺</strong></div>
+   </div>
    <div class="checkout-grid">
     <div class="field"><label class="trn" data-ar="الاسم الكامل *" data-tr="Ad soyad *">الاسم الكامل *</label><input id="checkoutName" autocomplete="name"></div>
     <div class="field"><label class="trn" data-ar="رقم الهاتف *" data-tr="Telefon *">رقم الهاتف *</label><input id="checkoutPhone" type="tel" autocomplete="tel"></div>
@@ -432,7 +444,7 @@ img{max-width:100%}
    <div class="payment-box">
     <div class="payment-title trn" data-ar="طريقة الدفع" data-tr="Ödeme yöntemi">طريقة الدفع</div>
     <div class="payment-options">
-     <label class="payment-option"><input type="radio" name="paymentMethod" value="cod" id="payCod" checked><span class="trn" data-ar="الدفع عند الاستلام" data-tr="Kapıda ödeme">الدفع عند الاستلام</span></label>
+     <label class="payment-option"><input type="radio" name="paymentMethod" value="cod" id="payCod" checked><span class="trn" data-ar="الدفع عند الاستلام (+75₺)" data-tr="Kapıda ödeme (+75₺)">الدفع عند الاستلام (+75₺)</span></label>
      <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" id="payBank"><span class="trn" data-ar="تحويل بنكي مسبق" data-tr="Banka havalesi">تحويل بنكي مسبق</span></label>
     </div>
     <div class="payment-warning" id="paymentWarning"></div>
@@ -596,14 +608,21 @@ function renderPayment(){
     (c.iban?'<div class="bank-row"><span>IBAN</span><span>'+esc(c.iban)+'</span></div>':'')+
     (c.bankNote?'<div class="bank-row"><span>'+txt('ملاحظة','Not')+'</span><span>'+esc(c.bankNote)+'</span></div>':'')
  }
+ const subtotal=state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0);
+ const codFee=state.paymentMethod==='cod'?Number(state.config?.codFee??75):0;
+ const grandTotal=Math.round((subtotal+codFee)*100)/100;
+ const codFeeRow=$('codFeeRow'),codFeeAmount=$('codFeeAmount'),grandTotalEl=$('checkoutGrandTotal');
+ if(codFeeRow)codFeeRow.style.display=state.paymentMethod==='cod'?'flex':'none';
+ if(codFeeAmount)codFeeAmount.textContent=money(codFee);
+ if(grandTotalEl)grandTotalEl.textContent=money(grandTotal);
  const label=$('checkoutSubmitLabel');
  if(label)label.textContent=state.paymentMethod==='bank_transfer'?txt('تثبيت الطلب بعد التحويل','Havale sonrası siparişi tamamla'):txt('تثبيت الطلب - الدفع عند الاستلام','Siparişi tamamla - Kapıda ödeme')
 }
 async function loadConfig(){
  try{
   const r=await fetch(API+'/api/store/config',{cache:'no-store'}),d=await r.json();
-  state.config=r.ok&&d.config?d.config:{bankConfigured:false}
- }catch{state.config={bankConfigured:false}}
+  state.config=r.ok&&d.config?d.config:{bankConfigured:false,freeDelivery:true,deliveryFee:0,codFee:75}
+ }catch{state.config={bankConfigured:false,freeDelivery:true,deliveryFee:0,codFee:75}}
  renderPayment()
 }
 async function loadProducts(){
