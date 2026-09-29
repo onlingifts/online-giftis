@@ -572,7 +572,7 @@ function renderProducts(){
   const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
   const cats=categoryList(p);
   const action=p.orderable
-   ? '<button class="add-cart" type="button" data-add="'+p.id+'"><i class="fa-solid fa-cart-plus"></i>'+txt('أضف للسلة','Sepete ekle')+'</button><button class="details-btn" type="button" data-detail="'+p.id+'"><i class="fa-solid fa-eye"></i></button>'
+   ? '<button class="add-cart" type="button" data-add="'+p.id+'"><i class="fa-solid fa-cart-plus"></i>'+txt('أضف للسلة','Sepete ekle')+'</button><a class="details-btn" href="/products/'+p.id+'/" aria-label="'+txt('تفاصيل المنتج','Ürün detayı')+'"><i class="fa-solid fa-eye"></i></a>'
    : '<a class="contact-order" href="'+contactHref(p)+'" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i>'+unavailableLabel(p)+'</a>';
   return '<article class="product-card">'+
    '<div class="product-media">'+(image?'<img src="'+image+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
@@ -581,7 +581,7 @@ function renderProducts(){
    '<div class="product-bottom"><div class="product-price">'+price+'</div><div class="product-actions">'+action+'</div></div></div></article>'
  }).join('');
  grid.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>addToCart(Number(b.dataset.add))));
- grid.querySelectorAll('[data-detail]').forEach(b=>b.addEventListener('click',()=>openProduct(Number(b.dataset.detail))))
+
 }
 function openProduct(id){
  const p=state.products.find(x=>x.id===id);if(!p)return;
