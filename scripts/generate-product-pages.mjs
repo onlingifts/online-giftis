@@ -13,7 +13,7 @@ function absImage(p){return p.hasImage && p.imageUrl ? BACKEND+p.imageUrl : SITE
 function productUrl(p){return SITE+'/products/'+p.id+'/'}
 function descriptionFor(p){
   const d=clean(p.description);
-  const core=d||('Online Gifts '+p.name+' ürünü / '+p.name+' هدية مخصصة');
+  const core=d||('صفحة '+p.name+' من Online Gifts تعرض معلومات المنتج والسعر والمخزون وخيارات الطلب الحالية داخل تركيا.');
   return core.slice(0,155);
 }
 function schemaFor(p){
@@ -43,6 +43,7 @@ function schemaFor(p){
 function pageFor(p){
   const title=('شراء '+p.name+' في تركيا | Online Gifts').slice(0,65);
   const desc=descriptionFor(p);
+  const bodyDesc=clean(p.description)||('هذا المنتج هو '+p.name+' من Online Gifts. تعرض الصفحة السعر والمخزون وخيارات الطلب الحالية، وقد يحتاج المنتج إلى تخصيص أو تنسيق إضافي حسب نوعه.');
   const image=absImage(p);
   const price=p.price!==null?money(p.price):'السعر عند الطلب';
   const stock=p.stockQuantity>0?'متوفر حالياً: '+p.stockQuantity:'غير متوفر حالياً';
