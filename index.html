@@ -664,7 +664,7 @@ function applyLanguage(l){
  localStorage.setItem('og_lang',l);
  renderCategories();renderProducts();renderCart()
 }
-document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
+document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.lang==='tr'){location.href='/tr/';return}applyLanguage('ar')}));
 $('productSearch').addEventListener('input',e=>{state.search=e.target.value.trim();renderProducts()});
 $('cartFab').addEventListener('click',()=>openModal(cartModal));
 $('navCart').addEventListener('click',()=>openModal(cartModal));
