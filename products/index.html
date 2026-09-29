@@ -656,7 +656,7 @@ async function checkout(){
   const r=await fetch(API+'/api/store/orders',{method:'POST',body:form}),d=await r.json();
   if(!r.ok)throw new Error(d.error||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'));
   result.className='checkout-result show ok';
-  result.textContent=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+d.order.orderNumber;
+  result.innerHTML=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+esc(d.order.orderNumber)+'<br><a href="/track/" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
   state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
  }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}
