@@ -1,0 +1,17 @@
+/* Shared category presentation. Does not change commerce data or API payloads. */
+(function(root){
+'use strict';
+const categories={"all": {"ar": "كل المنتجات", "tr": "Tüm ürünler", "theme": "default", "icon": "gift"}, "gifts": {"ar": "هدايا مخصصة", "tr": "Kişiye özel hediyeler", "theme": "soft", "icon": "gift"}, "love": {"ar": "هدايا الحب", "tr": "Romantik hediyeler", "theme": "love", "icon": "heart"}, "kids": {"ar": "هدايا الأطفال", "tr": "Çocuk hediyeleri", "theme": "kids", "icon": "star"}, "family": {"ar": "هدايا العائلة", "tr": "Aile hediyeleri", "theme": "family", "icon": "house"}, "nfc": {"ar": "منتجات NFC", "tr": "NFC ürünleri", "theme": "nfc", "icon": "wifi"}, "3d_printing": {"ar": "الطباعة ثلاثية الأبعاد", "tr": "3D baskı", "theme": "3d", "icon": "cube"}, "laser": {"ar": "الحفر بالليزر", "tr": "Lazer kazıma", "theme": "laser", "icon": "bolt"}, "shirts": {"ar": "الطباعة الحرارية", "tr": "Transfer baskı", "theme": "thermal", "icon": "shirt"}, "drinkware": {"ar": "الأكواب المخصصة", "tr": "Kişiye özel kupalar", "theme": "cups", "icon": "mug-hot"}, "perfumes_accessories": {"ar": "العطور والإكسسوارات", "tr": "Parfüm ve aksesuarlar", "theme": "luxury", "icon": "gem"}, "perfume": {"ar": "العطور", "tr": "Parfümler", "theme": "luxury", "icon": "gem"}, "keychains": {"ar": "الميداليات والإكسسوارات", "tr": "Anahtarlık ve aksesuarlar", "theme": "accessories", "icon": "key"}, "men": {"ar": "الهدايا الرجالية", "tr": "Erkeklere hediyeler", "theme": "men", "icon": "gift"}, "women": {"ar": "الهدايا النسائية", "tr": "Kadınlara hediyeler", "theme": "women", "icon": "gift"}, "luxury": {"ar": "الهدايا الفاخرة", "tr": "Lüks hediyeler", "theme": "luxury", "icon": "gem"}, "occasions": {"ar": "المناسبات", "tr": "Özel günler", "theme": "occasions", "icon": "star"}, "misc": {"ar": "هدايا متنوعة", "tr": "Diğer hediyeler", "theme": "default", "icon": "gift"}};
+const aliases={'3d':'3d_printing',thermal:'shirts',cups:'drinkware',accessories:'keychains'};
+function key(value){const v=String(value||'all');return aliases[v]||Object.keys(categories).find(k=>categories[k].ar===v||categories[k].tr===v)||v}
+function info(value){const k=key(value);return categories[k]||{ar:k,tr:k,theme:'default',icon:'gift'}}
+function list(p){const raw=p.categories??p.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim())}
+function productCategory(p,requested){const c=list(p);if(requested&&c.includes(requested))return requested;return c.find(x=>!['gifts','misc'].includes(x))||c[0]||'all'}
+function apply(category){const c=info(category);document.documentElement.dataset.theme=c.theme;return c}
+root.OGThemes={categories,key,info,list,productCategory,apply};
+if(typeof document!=='undefined'){
+ const p=document.body?.dataset.productCategories;
+ apply(p?productCategory({categories:JSON.parse(p)},new URLSearchParams(location.search).get('category')):new URLSearchParams(location.search).get('category')||'all');
+ document.addEventListener('DOMContentLoaded',()=>{if(!document.body.dataset.productId)return;let language='ar';try{language=localStorage.getItem('og_lang')||'ar'}catch{}if(language==='tr'){document.querySelectorAll('.product-options [data-tr]').forEach(el=>{el.textContent=el.dataset.tr});const link=document.querySelector('.product-options a');if(link)link.textContent=info(new URL(link.href).searchParams.get('category')).tr}});
+}
+})(typeof window==='undefined'?globalThis:window);

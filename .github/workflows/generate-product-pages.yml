@@ -9,6 +9,8 @@ on:
       - main
     paths:
       - "scripts/generate-product-pages.mjs"
+      - "assets/themes.js"
+      - "assets/themes.css"
       - "assets/product-page.css"
       - "assets/product-page.js"
       - "assets/seo-landing.css"
