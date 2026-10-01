@@ -44,3 +44,5 @@ body{background:var(--theme-bg);color:var(--theme-text)}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 /* Keep checkout readable and identical across light and dark catalogues. */
 .sheet{--bg:#FBF8F3;--ink:#171310;--muted:#6D665F;--red:#8D1828;--line:rgba(23,19,16,.09);--theme-bg:#FBF8F3;--theme-surface:#fff;--theme-text:#171310;--theme-muted:#6D665F;color:var(--ink);background:var(--bg)}
+
+.brand img,.footer-brand img{border-radius:12px}
