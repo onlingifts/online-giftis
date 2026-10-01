@@ -24,7 +24,7 @@
   "name":"Online Gifts",
   "alternateName":"أونلاين للهدايا",
   "url":"https://onlinegiftis.com/",
-  "logo":"https://onlinegiftis.com/assets/logo-main.png",
+  "logo":"https://onlinegiftis.com/assets/brand-logo.webp",
   "image":"https://onlinegiftis.com/assets/cover-new.webp",
   "description":"متجر هدايا مخصصة في تركيا وإسطنبول منذ 2016، يقدم الطباعة الحرارية والحفر بالليزر والطباعة ثلاثية الأبعاد ومنتجات NFC.",
   "foundingDate":"2016-01-11",
@@ -370,7 +370,7 @@ img{max-width:100%}
 <header class="header">
  <div class="container nav">
   <a class="brand" href="/" aria-label="Online Gifts">
-   <img src="/assets/logo-main.png" alt="Online Gifts">
+   <img src="/assets/brand-logo.webp" alt="Online Gifts">
    <span class="brand-copy"><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></span>
   </a>
   <nav class="navlinks">
@@ -404,7 +404,7 @@ img{max-width:100%}
  <div class="container">
   <div class="footer-grid">
    <div>
-    <div class="footer-brand"><img src="/assets/logo-gold.png" alt="Online Gifts"><div><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></div></div>
+    <div class="footer-brand"><img src="/assets/brand-logo.webp" alt="Online Gifts"><div><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></div></div>
     <p class="trn" data-ar="هدايا مخصصة، طباعة، حفر ليزر، طباعة ثلاثية الأبعاد ومنتجات NFC مع خدمة داخل تركيا." data-tr="Kişiye özel hediyeler, baskı, lazer kazıma, 3D baskı ve NFC ürünleri; Türkiye genelinde hizmet.">هدايا مخصصة، طباعة، حفر ليزر، طباعة ثلاثية الأبعاد ومنتجات NFC مع خدمة داخل تركيا.</p>
     <div class="footer-social">
      <a href="https://www.instagram.com/telef98/?hl=ar" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -473,7 +473,7 @@ img{max-width:100%}
 (()=>{
 const API='https://bayi.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],cart:[],search:'',category:new URLSearchParams(location.search).get('category')||'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod'};
+const state={products:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod'};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -684,6 +684,7 @@ function applyLanguage(l){
  renderCategories();renderProducts();renderCart();renderPayment()
 }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
+$('productSearch').value=state.search;
 $('productSearch').addEventListener('input',e=>{state.search=e.target.value.trim();renderProducts()});
 $('cartFab').addEventListener('click',()=>openModal(cartModal));
 $('navCart').addEventListener('click',()=>openModal(cartModal));
