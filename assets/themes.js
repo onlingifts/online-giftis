@@ -12,6 +12,6 @@ root.OGThemes={categories,key,info,list,productCategory,apply};
 if(typeof document!=='undefined'){
  const p=document.body?.dataset.productCategories;
  apply(p?productCategory({categories:JSON.parse(p)},new URLSearchParams(location.search).get('category')):new URLSearchParams(location.search).get('category')||'all');
- document.addEventListener('DOMContentLoaded',()=>{if(!document.body.dataset.productId)return;let language='ar';try{language=localStorage.getItem('og_lang')||'ar'}catch{}if(language==='tr'){document.querySelectorAll('.product-options [data-tr]').forEach(el=>{el.textContent=el.dataset.tr});const link=document.querySelector('.product-options a');if(link)link.textContent=info(new URL(link.href).searchParams.get('category')).tr}});
+ document.addEventListener('DOMContentLoaded',()=>{if(!document.body.dataset.productId)return;const language=document.documentElement.lang;if(language==='tr'){document.querySelectorAll('.product-options [data-tr]').forEach(el=>{el.textContent=el.dataset.tr});const link=document.querySelector('.product-options a');if(link)link.textContent=info(new URL(link.href).searchParams.get('category')).tr}});
 }
 })(typeof window==='undefined'?globalThis:window);
