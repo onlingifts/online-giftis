@@ -350,6 +350,8 @@ img{max-width:100%}
  .about-cards{grid-template-columns:1fr}
 }
 </style>
+<link rel="stylesheet" href="/assets/themes.css">
+<script src="/assets/themes.js"></script>
 </head>
 <body>
 <div class="topbar">
@@ -471,7 +473,7 @@ img{max-width:100%}
 (()=>{
 const API='https://bayi.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],cart:[],search:'',category:'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod'};
+const state={products:[],cart:[],search:'',category:new URLSearchParams(location.search).get('category')||'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod'};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -485,7 +487,7 @@ function categoryList(p){
  if(typeof raw==='string')return raw.split(',').map(x=>x.trim()).filter(Boolean);
  return [];
 }
-function categoryLabel(c){return c||txt('أخرى','Diğer')}
+function categoryLabel(c){const i=OGThemes.info(c);return txt(i.ar,i.tr)}
 function contactHref(p){
  const m=txt('مرحبا، أريد طلب المنتج: ','Merhaba, şu ürünü sipariş etmek istiyorum: ')+p.name;
  const join=WA.includes('?')?'&':'?';
@@ -517,11 +519,16 @@ function visibleProducts(){
  })
 }
 function renderCategories(){
+ const theme=OGThemes.apply(state.category);
+ const hero=document.querySelector('#products .section-head');
+ hero.querySelector('h1').textContent=categoryLabel(state.category);
+ hero.querySelector('p').textContent=txt('تفاصيل تحمل ذوقك. اكتشف مجموعتنا واختر هديتك، مع توصيل مجاني داخل تركيا.','Seni yansıtan detaylar. Koleksiyonumuzu keşfet, hediyeni seç; Türkiye genelinde ücretsiz teslimat.');
+ let icon=hero.querySelector('.theme-icon');if(!icon){icon=document.createElement('i');hero.firstElementChild.prepend(icon)}icon.className='theme-icon fa-solid fa-'+theme.icon;icon.setAttribute('aria-hidden','true');
  const set=[];
  state.products.forEach(p=>categoryList(p).forEach(c=>{if(!set.includes(c))set.push(c)}));
  categories.innerHTML='<button class="cat-btn '+(state.category==='all'?'active':'')+'" data-cat="all">'+txt('الكل','Tümü')+'</button>'+
   set.map(c=>'<button class="cat-btn '+(state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
- categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.category=b.dataset.cat;renderCategories();renderProducts()}))
+ categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.category=b.dataset.cat;const url=new URL(location.href);if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}))
 }
 function renderProducts(){
  const list=visibleProducts();
@@ -532,10 +539,10 @@ function renderProducts(){
   const cats=categoryList(p),flags=productFlags(p);
   const extraBadges=(flags.requiresPrepayment?'<span class="badge stock">'+txt('دفع مسبق','Ön ödemeli')+'</span>':'')+
    ((flags.requiresCustomizationImage||flags.requiresCustomizationText||flags.requiresDesignInput)?'<span class="badge stock">'+txt('مخصص','Kişiye özel')+'</span>':'');
-  return '<a class="product-card-link" href="/products/'+p.id+'/" aria-label="'+txt('فتح المنتج: ','Ürünü aç: ')+esc(p.name)+'"><article class="product-card"><div class="product-media">'+
+  return '<a class="product-card-link" href="/products/'+p.id+'/'+(state.category==='all'?'':'?category='+encodeURIComponent(state.category))+'" aria-label="'+txt('فتح المنتج: ','Ürünü aç: ')+esc(p.name)+'"><article class="product-card"><div class="product-media">'+
    (image?'<img src="'+image+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
    '<div class="badges">'+(p.isFeatured?'<span class="badge hot">'+txt('الأكثر طلباً','Çok satan')+'</span>':'')+(p.stockQuantity>0?'<span class="badge stock">'+txt('متوفر','Stokta')+'</span>':'')+extraBadges+'</div></div>'+
-   '<div class="product-body"><div class="product-category">'+esc(cats.join(' • ')||txt('هدايا','Hediye'))+'</div><div class="product-name">'+esc(p.name)+'</div><div class="product-desc">'+esc(p.description||'')+'</div>'+
+   '<div class="product-body"><div class="product-category">'+esc(cats.map(categoryLabel).join(' • ')||txt('هدايا','Hediye'))+'</div><div class="product-name">'+esc(p.name)+'</div><div class="product-desc">'+esc(p.description||'')+'</div>'+
    '<div class="product-bottom"><div class="product-price">'+price+'</div><div class="product-actions"><span class="open-product"><i class="fa-solid fa-arrow-up-right-from-square"></i>'+txt('عرض المنتج','Ürünü görüntüle')+'</span></div></div></div></article></a>'
  }).join('')
 }
@@ -689,6 +696,7 @@ document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventLi
 $('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();
+window.addEventListener('popstate',()=>{state.category=new URLSearchParams(location.search).get('category')||'all';renderCategories();renderProducts()});
 restoreCart();
 const savedLang=localStorage.getItem('og_lang');if(savedLang==='tr')applyLanguage('tr');
 renderCart();

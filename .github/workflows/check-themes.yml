@@ -1,0 +1,36 @@
+name: Check storefront themes
+on:
+  pull_request:
+    paths:
+      - 'assets/**'
+      - 'index.html'
+      - 'tr/index.html'
+      - 'products/**'
+      - 'scripts/**'
+      - '.github/workflows/check-themes.yml'
+permissions:
+  contents: read
+jobs:
+  themes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - run: node scripts/check-themes.mjs
+      - name: Prepare read-only catalogue fixture
+        run: curl --fail --max-time 60 https://bayi.onlinegiftis.com/api/store/products -o /tmp/og-products.json
+      - name: Install browser for responsive checks
+        run: |
+          npm install --no-save --package-lock=false playwright@1.61.1
+          npx playwright install --with-deps chromium
+      - name: Verify mobile, tablet, desktop and category navigation
+        run: |
+          python3 -m http.server 8765 >/tmp/storefront-server.log 2>&1 &
+          node scripts/check-themes-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: theme-previews
+          path: /tmp/og-*.png
