@@ -459,3 +459,39 @@ body[data-product-id] .footer{
   body[data-product-id] .copy-grid{grid-template-columns:1fr!important}
   body[data-product-id] .panel{padding:20px!important}
 }
+
+
+/* ===== Category campaign UX V3 ===== */
+.category-campaign{
+ display:block;margin:0 0 14px;overflow:hidden;border-radius:30px;
+ background:var(--theme-secondary);border:1px solid var(--line);
+ box-shadow:0 20px 55px color-mix(in srgb,var(--theme-text) 10%,transparent)
+}
+.category-campaign[hidden]{display:none!important}
+.category-campaign img{display:block;width:100%;height:auto;aspect-ratio:1000/563;object-fit:cover;transition:transform .3s}
+.category-campaign:hover img{transform:scale(1.01)}
+html[data-has-campaign="true"] #products>.container>.section-head.premium-shop-hero{
+ min-height:205px;padding-block:24px
+}
+html[data-has-campaign="true"] .category-visual{min-height:170px}
+html[data-has-campaign="true"] .visual-a{height:145px;width:126px}
+html[data-has-campaign="true"] .visual-b{height:105px;width:94px}
+html[data-has-campaign="true"] .visual-c{height:94px;width:88px}
+.shop-guidance{
+ display:flex;align-items:center;gap:9px;margin:-2px 2px 15px;padding:10px 13px;
+ border-radius:14px;background:color-mix(in srgb,var(--theme-secondary) 60%,var(--theme-surface));
+ color:var(--theme-muted);font-size:9.5px;line-height:1.65;border:1px solid var(--line)
+}
+.shop-guidance i{color:var(--theme-primary);font-size:14px}
+@media(max-width:760px){
+ .category-campaign{margin:0 0 10px;border-radius:23px}
+ .category-campaign img{aspect-ratio:1000/563}
+ html[data-has-campaign="true"] #products>.container>.section-head.premium-shop-hero{
+   min-height:330px;padding:20px 18px 16px!important
+ }
+ html[data-has-campaign="true"] .category-visual{min-height:135px}
+ html[data-has-campaign="true"] .visual-a{width:96px;height:112px}
+ html[data-has-campaign="true"] .visual-b{width:75px;height:84px}
+ html[data-has-campaign="true"] .visual-c{width:70px;height:79px}
+ .shop-guidance{font-size:8.5px;margin-bottom:10px;padding:9px 10px}
+}
