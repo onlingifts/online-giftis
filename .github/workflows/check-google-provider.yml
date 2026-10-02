@@ -1,0 +1,25 @@
+name: Check Supabase Google provider
+
+on:
+  push:
+    branches:
+      - feat/customer-membership
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check public auth settings
+        run: |
+          node <<'NODE'
+          const url='https://mqqvcreobqjyhflodvom.supabase.co/auth/v1/settings';
+          const key='sb_publishable_KsWvGfiVoQbCozyFAiCiww_vHAYBIws';
+          const r=await fetch(url,{headers:{apikey:key}});
+          const data=await r.json();
+          console.log('status='+r.status);
+          console.log('google_enabled='+Boolean(data?.external?.google || (Array.isArray(data?.providers)&&data.providers.includes('google'))));
+          console.log('email_enabled='+Boolean(data?.external?.email ?? data?.email));
+          NODE
