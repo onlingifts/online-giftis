@@ -105,6 +105,14 @@ async function getUser(){
   return null;
  }
 }
+async function providerEnabled(provider){
+ try{
+  const data=await authFetch('/auth/v1/settings');
+  if(data?.external&&typeof data.external==='object')return Boolean(data.external[provider]);
+  if(Array.isArray(data?.providers))return data.providers.includes(provider);
+  return false;
+ }catch{return false}
+}
 function googleSignIn(){
  const redirect=authRedirect();
  location.href=SUPABASE_URL+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(redirect);
@@ -144,6 +152,7 @@ window.OGCustomerAuth={
  refresh,
  getAccessToken,
  getUser,
+ providerEnabled,
  googleSignIn,
  signOut,
  consumeOAuthCallback
