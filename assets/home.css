@@ -431,3 +431,31 @@
  .quick-start a{flex-basis:85px}
  .campaign-card{flex-basis:88%}
 }
+
+
+/* ===== Customer membership campaign ===== */
+.member-offer{padding-block:18px 8px}
+.member-offer-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:14px}
+.member-offer-main,.member-offer-weekly{position:relative;overflow:hidden;border-radius:28px;min-height:190px;padding:28px;display:flex;align-items:center;gap:22px}
+.member-offer-main{
+ background:
+  radial-gradient(circle at 88% 10%,rgba(255,214,125,.28),transparent 28%),
+  linear-gradient(135deg,#4d0f20,#8f1838 58%,#bd2651);
+ color:#fff;box-shadow:0 20px 48px rgba(87,17,39,.18)
+}
+.member-offer-main:after{content:"200₺";position:absolute;inset-inline-end:-8px;bottom:-34px;font-size:108px;font-weight:900;line-height:1;color:rgba(255,255,255,.075);letter-spacing:-5px}
+.member-offer-gift{width:92px;height:92px;flex:0 0 92px;border-radius:28px;display:grid;place-items:center;background:linear-gradient(145deg,#f7d88a,#b98020);color:#4a2a00;font-size:36px;box-shadow:inset 0 1px #fff8,0 16px 30px #2b081d4a;transform:rotate(-5deg)}
+.member-offer-copy{position:relative;z-index:2}.member-offer-copy small{display:block;font-size:10px;font-weight:900;letter-spacing:1px;color:#f5d48b}.member-offer-copy h2{font-size:clamp(24px,3vw,38px);line-height:1.3;margin:6px 0 7px}.member-offer-copy p{max-width:620px;margin:0;color:#f8e9ed;font-size:11px;line-height:1.9}
+.member-offer-cta{display:inline-flex;align-items:center;gap:9px;margin-top:15px;padding:10px 14px;border-radius:12px;background:#fff;color:#6e1530;font-size:10px;font-weight:900;box-shadow:0 8px 20px #32091e30}
+.member-offer-weekly{background:linear-gradient(145deg,#fff8df,#f6e8b4);border:1px solid #ecd994;color:#59440f;display:block}
+.member-offer-weekly .weekly-icon{width:48px;height:48px;border-radius:15px;background:#1f1812;color:#f4ce65;display:grid;place-items:center;font-size:20px;margin-bottom:14px}
+.member-offer-weekly strong{display:block;font-size:19px}.member-offer-weekly p{font-size:10px;line-height:1.9;margin:7px 0 0;color:#715c26}.member-offer-weekly b{display:inline-flex;margin-top:12px;padding:6px 9px;border-radius:999px;background:#fff8;font-size:8px}
+@media(max-width:760px){
+ .member-offer{width:calc(100% - 18px);padding-block:9px 3px}
+ .member-offer-grid{grid-template-columns:1fr;gap:9px}
+ .member-offer-main{min-height:180px;border-radius:23px;padding:20px 18px;gap:14px;align-items:flex-start}
+ .member-offer-gift{width:60px;height:60px;flex-basis:60px;border-radius:18px;font-size:25px}
+ .member-offer-copy h2{font-size:23px;margin-top:4px}.member-offer-copy p{font-size:9.5px}.member-offer-cta{margin-top:11px}
+ .member-offer-main:after{font-size:76px;bottom:-22px}
+ .member-offer-weekly{min-height:0;border-radius:20px;padding:17px}.member-offer-weekly .weekly-icon{width:40px;height:40px;margin-bottom:10px}.member-offer-weekly strong{font-size:16px}
+}
