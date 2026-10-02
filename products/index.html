@@ -681,7 +681,11 @@ function renderAccount(){
   const span=btn.querySelector('span');
   if(span)span.textContent=logged?txt('عضويتي','Üyeliğim'):txt('حسابي','Hesabım')
  }
- if(!logged){renderPayment();return}
+ if(!logged){
+  const submitLabel=$('accountSubmit')?.querySelector('span');
+  if(submitLabel)submitLabel.textContent=state.accountMode==='register'?txt('إنشاء الحساب','Hesap oluştur'):txt('تسجيل الدخول','Giriş yap');
+  renderPayment();return
+ }
  const customer=state.customer||{},benefits=state.benefits||{};
  $('memberDisplayName').textContent=customer.displayName||txt('عضو Online Gifts','Online Gifts Üyesi');
  $('memberEmail').textContent=customer.email||'';
@@ -707,7 +711,10 @@ async function loadCustomerAccount(){
  try{
   const r=await fetch(API+'/api/store/account',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
   const d=await r.json();
-  if(!r.ok)throw new Error(d.error||'account');
+  if(!r.ok){
+   if(r.status===401)await OGCustomerAuth.signOut();
+   throw new Error(d.error||'account')
+  }
   state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount()
  }catch{
   state.customer=null;state.benefits=null;renderAccount()
@@ -724,8 +731,9 @@ async function submitAccount(){
    if(fullName.length<2||phone.replace(/\D/g,'').length<7)throw new Error(txt('أدخل الاسم الكامل ورقم هاتف صحيح.','Ad soyad ve geçerli telefon numarası girin.'));
    const result=await OGCustomerAuth.signUp({email,password,fullName,phone});
    if(result.requiresEmailConfirmation){
+    setAccountMode('login');
     accountMessage(txt('تم إنشاء الحساب. افتح بريدك الإلكتروني وأكّد الحساب، وبعدها سجّل الدخول.','Hesap oluşturuldu. E-postanı doğruladıktan sonra giriş yap.'),'ok');
-    setAccountMode('login');return
+    return
    }
   }else await OGCustomerAuth.signIn(email,password);
   await loadCustomerAccount();
@@ -857,7 +865,7 @@ async function checkout(){
   result.className='checkout-result show ok';
   let success=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+esc(d.order.orderNumber);
   if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: ')+esc(money(d.order.discountAmount))+'</strong>';
-  if(d.memberBenefits?.weekly?.giftEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
+  if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
   result.innerHTML=success+'<br><a href="/track/" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
   if(d.memberBenefits)state.benefits=d.memberBenefits;
   state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
