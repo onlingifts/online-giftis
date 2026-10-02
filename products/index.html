@@ -349,6 +349,33 @@ img{max-width:100%}
  .primary,.secondary{width:100%}
  .about-cards{grid-template-columns:1fr}
 }
+
+/* Customer membership */
+.customer-account-btn{height:44px;padding:0 13px;border:1px solid var(--line);background:#fff;border-radius:15px;color:var(--dark);display:flex;align-items:center;gap:7px;font-size:10px;font-weight:900}
+.customer-account-btn.is-member{border-color:#c99b38;background:#fff8e7;color:#7d5710}
+.member-discount-row{color:#13834a}.member-discount-row strong{color:#13834a}
+.account-sheet{width:min(100%,570px)}
+.membership-promo-card,.membership-weekly-card,.member-first-order{display:flex;gap:13px;align-items:flex-start;border-radius:18px;padding:15px;margin-bottom:12px}
+.membership-promo-card{background:linear-gradient(135deg,#781727,#b82431);color:#fff}
+.membership-weekly-card{background:#fff7dd;border:1px solid #ecd28c;color:#5f460c}
+.membership-promo-card strong,.membership-weekly-card strong,.member-first-order strong{display:block;font-size:13px}
+.membership-promo-card p,.membership-weekly-card p,.member-first-order p{margin:4px 0 0;font-size:9.5px;line-height:1.8}
+.membership-promo-icon{width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:18px}
+.membership-weekly-card>i{margin-top:3px;font-size:20px}.account-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#eee7df;padding:5px;border-radius:14px;margin:15px 0}
+.account-tabs button{border:0;background:transparent;border-radius:10px;min-height:40px;font-size:10px;font-weight:900}.account-tabs button.active{background:#fff;box-shadow:0 4px 14px #0000000d}
+.account-form{display:grid;gap:10px}.account-form>div{display:grid;gap:5px}.account-form label{font-size:9px;font-weight:900}.account-form input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:13px;padding:0 12px;outline:none;background:#fff}
+.account-primary,.google-login-btn,.account-logout{width:100%;min-height:48px;border-radius:14px;font-size:10px;font-weight:900}
+.account-primary{border:0;background:var(--red);color:#fff}.google-login-btn{border:1px solid var(--line);background:#fff;color:#292320;display:flex;align-items:center;justify-content:center;gap:9px}
+.account-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:9px;margin:13px 0}.account-or:before,.account-or:after{content:"";height:1px;background:var(--line);flex:1}
+.account-result{margin-top:10px;border-radius:11px;padding:0;font-size:9.5px;font-weight:800;line-height:1.7}.account-result.ok,.account-result.err{padding:10px}.account-result.ok{background:#e9f7ef;color:#126a3a}.account-result.err{background:#fff0f0;color:#9b1d2a}
+.member-profile-card{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:15px;background:#fff}.member-avatar{width:48px;height:48px;flex:0 0 48px;border-radius:50%;background:#2b2019;color:#fff;display:grid;place-items:center}
+.member-profile-card span,.member-profile-card small{display:block;color:var(--muted);font-size:8.5px}.member-profile-card strong{display:block;font-size:14px;margin:2px 0}
+.member-first-order{margin-top:12px;background:#eaf8f0;border:1px solid #bce3cc;color:#14663a}.member-first-order>i{font-size:20px;margin-top:3px}
+.weekly-progress-card{margin-top:12px;border:1px solid var(--line);border-radius:18px;padding:15px;background:#fff}.weekly-progress-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.weekly-progress-head strong{font-size:13px}.weekly-progress-head p{font-size:9px;color:var(--muted);margin:3px 0}.weekly-progress-head>span{white-space:nowrap;background:#eee8e1;border-radius:999px;padding:5px 8px;font-size:8px;font-weight:900}.weekly-progress-head>span.earned{background:#e8f8ef;color:#126a3a}
+.weekly-stat{display:flex;justify-content:space-between;font-size:9px;font-weight:900;margin-top:12px}.weekly-bar{height:8px;background:#eee8e1;border-radius:999px;overflow:hidden;margin-top:5px}.weekly-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#b82431,#d6a83d);border-radius:999px;transition:width .25s}.weekly-progress-card>small{display:block;margin-top:12px;color:var(--muted);font-size:8.5px;line-height:1.8}
+.account-logout{margin-top:12px;border:1px solid var(--line);background:#fff;color:#8f1f2d;display:flex;align-items:center;justify-content:center;gap:8px}
+@media(max-width:760px){.customer-account-btn{width:44px;padding:0;justify-content:center}.customer-account-btn span{display:none}.account-sheet{border-radius:25px 25px 16px 16px}.membership-promo-card,.membership-weekly-card{padding:13px}}
+
 </style>
 <link rel="stylesheet" href="/assets/themes.css">
 <script src="/assets/themes.js"></script>
@@ -380,6 +407,7 @@ img{max-width:100%}
    <a href="/marketer.html" class="trn" data-ar="اعمل معنا" data-tr="Bizimle çalış">اعمل معنا</a>
   </nav>
   <div class="nav-actions">
+   <button class="customer-account-btn" id="customerAccountBtn" type="button"><i class="fa-regular fa-user"></i><span class="trn" data-ar="حسابي" data-tr="Hesabım">حسابي</span></button>
    <button class="icon-btn" id="navCart" type="button" aria-label="السلة"><i class="fa-solid fa-bag-shopping"></i><span class="nav-cart-count" id="navCartCount">0</span></button>
    <a class="wa-btn" href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i><span class="trn" data-ar="اطلب عبر واتساب" data-tr="WhatsApp'tan sipariş">اطلب عبر واتساب</span></a>
   </div>
@@ -433,6 +461,7 @@ img{max-width:100%}
    <div class="cart-total"><span class="trn" data-ar="إجمالي المنتجات" data-tr="Ürün toplamı">إجمالي المنتجات</span><strong id="cartTotal">0 ₺</strong></div>
    <div class="checkout-costs">
     <div class="checkout-cost-row"><span class="trn" data-ar="التوصيل" data-tr="Teslimat">التوصيل</span><strong class="checkout-free trn" data-ar="مجاني" data-tr="Ücretsiz">مجاني</strong></div>
+    <div class="checkout-cost-row member-discount-row" id="memberDiscountRow" hidden><span class="trn" data-ar="خصم العضوية لأول طلب" data-tr="Üyelik ilk sipariş indirimi">خصم العضوية لأول طلب</span><strong id="memberDiscountAmount">-200 ₺</strong></div>
     <div class="checkout-cost-row" id="codFeeRow"><span class="trn" data-ar="أجرة الدفع عند الاستلام" data-tr="Kapıda ödeme ücreti">أجرة الدفع عند الاستلام</span><strong id="codFeeAmount">75 ₺</strong></div>
     <div class="checkout-cost-row total"><span class="trn" data-ar="الإجمالي النهائي" data-tr="Genel toplam">الإجمالي النهائي</span><strong id="checkoutGrandTotal">0 ₺</strong></div>
    </div>
@@ -471,16 +500,56 @@ img{max-width:100%}
  </div>
 </div>
 
+<div class="modal-backdrop" id="accountModal" aria-hidden="true">
+ <div class="sheet account-sheet" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+  <div class="sheet-head"><h2 id="accountTitle" class="trn" data-ar="عضوية Online Gifts" data-tr="Online Gifts Üyeliği">عضوية Online Gifts</h2><button class="close-btn" id="accountClose" type="button"><i class="fa-solid fa-xmark"></i></button></div>
+  <div class="sheet-body">
+   <div id="accountGuestView">
+    <div class="membership-promo-card">
+     <span class="membership-promo-icon"><i class="fa-solid fa-gift"></i></span>
+     <div><strong class="trn" data-ar="200₺ خصم على أول طلب" data-tr="İlk siparişe 200₺ indirim">200₺ خصم على أول طلب</strong><p class="trn" data-ar="سجّل عضويتك، وثبّت أول طلب من حسابك ليُطبَّق الخصم تلقائياً." data-tr="Üye ol, ilk siparişini hesabından tamamla; indirim otomatik uygulansın.">سجّل عضويتك، وثبّت أول طلب من حسابك ليُطبَّق الخصم تلقائياً.</p></div>
+    </div>
+    <div class="membership-weekly-card"><i class="fa-solid fa-star"></i><div><strong class="trn" data-ar="خلي هديتك علينا" data-tr="Hediyen bizden olsun">خلي هديتك علينا</strong><p class="trn" data-ar="ثبّت 5 طلبات أو اشترِ 5 قطع خلال نفس الأسبوع، وبتحصل على هدية من متجرنا. هدية واحدة لكل أسبوع حسب الهدايا المتاحة." data-tr="Aynı hafta içinde 5 sipariş ver veya toplam 5 ürün satın al; mağazamızdan bir hediye kazan. Haftada bir hediye, mevcut hediye seçeneklerinden.">ثبّت 5 طلبات أو اشترِ 5 قطع خلال نفس الأسبوع، وبتحصل على هدية من متجرنا. هدية واحدة لكل أسبوع حسب الهدايا المتاحة.</p></div></div>
+    <div class="account-tabs"><button type="button" class="active" data-account-mode="login"><span class="trn" data-ar="تسجيل الدخول" data-tr="Giriş yap">تسجيل الدخول</span></button><button type="button" data-account-mode="register"><span class="trn" data-ar="حساب جديد" data-tr="Yeni hesap">حساب جديد</span></button></div>
+    <div class="account-form">
+     <div class="account-register-only" hidden><label class="trn" data-ar="الاسم الكامل" data-tr="Ad soyad">الاسم الكامل</label><input id="accountFullName" autocomplete="name"></div>
+     <div class="account-register-only" hidden><label class="trn" data-ar="رقم الهاتف" data-tr="Telefon">رقم الهاتف</label><input id="accountPhone" type="tel" autocomplete="tel"></div>
+     <div><label class="trn" data-ar="البريد الإلكتروني" data-tr="E-posta">البريد الإلكتروني</label><input id="accountEmail" type="email" autocomplete="email" dir="ltr"></div>
+     <div><label class="trn" data-ar="كلمة المرور" data-tr="Şifre">كلمة المرور</label><input id="accountPassword" type="password" minlength="8" autocomplete="current-password" dir="ltr"></div>
+     <button class="account-primary" id="accountSubmit" type="button"><span class="trn" data-ar="تسجيل الدخول" data-tr="Giriş yap">تسجيل الدخول</span></button>
+    </div>
+    <div class="account-or" id="accountGoogleOr" hidden><span class="trn" data-ar="أو" data-tr="veya">أو</span></div>
+    <button class="google-login-btn" id="googleLoginBtn" type="button" hidden><i class="fa-brands fa-google"></i><span class="trn" data-ar="المتابعة باستخدام Google" data-tr="Google ile devam et">المتابعة باستخدام Google</span></button>
+    <div class="account-result" id="accountResult"></div>
+   </div>
+   <div id="accountMemberView" hidden>
+    <div class="member-profile-card"><div class="member-avatar"><i class="fa-solid fa-user"></i></div><div><span class="trn" data-ar="أهلاً في عضويتك" data-tr="Üyeliğine hoş geldin">أهلاً في عضويتك</span><strong id="memberDisplayName"></strong><small id="memberEmail"></small></div></div>
+    <div class="member-first-order" id="memberFirstOrderCard"><i class="fa-solid fa-ticket"></i><div><strong class="trn" data-ar="خصم أول طلب: 200₺" data-tr="İlk sipariş indirimi: 200₺">خصم أول طلب: 200₺</strong><p class="trn" data-ar="سيُطبَّق تلقائياً عند تثبيت أول طلب من هذا الحساب." data-tr="Bu hesaptan vereceğin ilk siparişte otomatik uygulanır.">سيُطبَّق تلقائياً عند تثبيت أول طلب من هذا الحساب.</p></div></div>
+    <div class="weekly-progress-card">
+     <div class="weekly-progress-head"><div><strong class="trn" data-ar="خلي هديتك علينا" data-tr="Hediyen bizden olsun">خلي هديتك علينا</strong><p class="trn" data-ar="يكفي تحقيق أحد الشرطين خلال نفس الأسبوع." data-tr="Aynı hafta içinde iki koşuldan birini tamamlaman yeterli.">يكفي تحقيق أحد الشرطين خلال نفس الأسبوع.</p></div><span id="weeklyGiftState"></span></div>
+     <div class="weekly-stat"><span class="trn" data-ar="الطلبات" data-tr="Siparişler">الطلبات</span><strong id="weeklyOrdersProgress">0 / 5</strong></div>
+     <div class="weekly-bar"><span id="weeklyOrdersBar"></span></div>
+     <div class="weekly-stat"><span class="trn" data-ar="القطع" data-tr="Ürün adedi">القطع</span><strong id="weeklyItemsProgress">0 / 5</strong></div>
+     <div class="weekly-bar"><span id="weeklyItemsBar"></span></div>
+     <small class="trn" data-ar="عند الوصول لـ 5 طلبات أو 5 قطع، تُسجَّل لك هدية واحدة لهذا الأسبوع من الهدايا المتاحة في متجرنا." data-tr="5 siparişe veya toplam 5 ürüne ulaştığında bu hafta için mevcut mağaza hediyelerinden bir hediye hakkın kaydedilir.">عند الوصول لـ 5 طلبات أو 5 قطع، تُسجَّل لك هدية واحدة لهذا الأسبوع من الهدايا المتاحة في متجرنا.</small>
+    </div>
+    <button class="account-logout" id="accountLogout" type="button"><i class="fa-solid fa-arrow-right-from-bracket"></i><span class="trn" data-ar="تسجيل الخروج" data-tr="Çıkış yap">تسجيل الخروج</span></button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script src="/assets/customer-auth.js"></script>
 <script>
 (()=>{
 const API='https://bayi.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod'};
+const state={products:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login'};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
 const txt=(ar,tr)=>lang()==='tr'?tr:ar;
-const grid=$('productGrid'),categories=$('categories'),cartModal=$('cartModal'),productModal=$('productModal');
+const grid=$('productGrid'),categories=$('categories'),cartModal=$('cartModal'),productModal=$('productModal'),accountModal=$('accountModal');
 
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function categoryList(p){
@@ -590,6 +659,98 @@ function textBlock(x){
  const required=x.requiresCustomizationText?' *':'';
  return '<div class="cart-upload"><label>'+txt('الاسم أو تفاصيل التخصيص','İsim veya kişiselleştirme detayı')+required+'</label><input type="text" data-custom-text="'+x.productId+'" value="'+esc(x.customizationText||'')+'" placeholder="'+txt('اكتب المطلوب هنا','İstenen detayı yazın')+'"></div>'
 }
+function accountMessage(message,type=''){
+ const el=$('accountResult');if(!el)return;el.textContent=message||'';el.className='account-result'+(type?' '+type:'')
+}
+function setAccountMode(mode){
+ state.accountMode=mode==='register'?'register':'login';
+ document.querySelectorAll('[data-account-mode]').forEach(b=>b.classList.toggle('active',b.dataset.accountMode===state.accountMode));
+ document.querySelectorAll('.account-register-only').forEach(el=>el.hidden=state.accountMode!=='register');
+ const password=$('accountPassword');if(password)password.autocomplete=state.accountMode==='register'?'new-password':'current-password';
+ const label=$('accountSubmit')?.querySelector('span');
+ if(label)label.textContent=state.accountMode==='register'?txt('إنشاء الحساب','Hesap oluştur'):txt('تسجيل الدخول','Giriş yap');
+ accountMessage('')
+}
+function renderAccount(){
+ const logged=Boolean(state.customer);
+ $('accountGuestView').hidden=logged;
+ $('accountMemberView').hidden=!logged;
+ const btn=$('customerAccountBtn');
+ if(btn){
+  btn.classList.toggle('is-member',logged);
+  const span=btn.querySelector('span');
+  if(span)span.textContent=logged?txt('عضويتي','Üyeliğim'):txt('حسابي','Hesabım')
+ }
+ if(!logged){
+  const submitLabel=$('accountSubmit')?.querySelector('span');
+  if(submitLabel)submitLabel.textContent=state.accountMode==='register'?txt('إنشاء الحساب','Hesap oluştur'):txt('تسجيل الدخول','Giriş yap');
+  renderPayment();return
+ }
+ const customer=state.customer||{},benefits=state.benefits||{};
+ $('memberDisplayName').textContent=customer.displayName||txt('عضو Online Gifts','Online Gifts Üyesi');
+ $('memberEmail').textContent=customer.email||'';
+ const first=Boolean(benefits.firstOrderDiscountAvailable);
+ $('memberFirstOrderCard').hidden=!first;
+ const weekly=benefits.weekly||{};
+ const orderCount=Math.min(5,Number(weekly.orderCount||0)),itemCount=Math.min(5,Number(weekly.itemCount||0));
+ $('weeklyOrdersProgress').textContent=orderCount+' / 5';
+ $('weeklyItemsProgress').textContent=itemCount+' / 5';
+ $('weeklyOrdersBar').style.width=(orderCount*20)+'%';
+ $('weeklyItemsBar').style.width=(itemCount*20)+'%';
+ const gift=$('weeklyGiftState');
+ gift.textContent=weekly.giftEarned?txt('الهدية صارت إلك ✓','Hediyen hazır ✓'):txt('قيد التقدم','Devam ediyor');
+ gift.classList.toggle('earned',Boolean(weekly.giftEarned));
+ if(!$('checkoutName').value&&customer.displayName)$('checkoutName').value=customer.displayName;
+ if(!$('checkoutPhone').value&&customer.phone)$('checkoutPhone').value=customer.phone;
+ renderPayment()
+}
+async function loadCustomerAccount(){
+ if(!window.OGCustomerAuth)return;
+ const token=await OGCustomerAuth.getAccessToken();
+ if(!token){state.customer=null;state.benefits=null;renderAccount();return}
+ try{
+  const r=await fetch(API+'/api/store/account',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+  const d=await r.json();
+  if(!r.ok){
+   if(r.status===401)await OGCustomerAuth.signOut();
+   throw new Error(d.error||'account')
+  }
+  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount()
+ }catch{
+  state.customer=null;state.benefits=null;renderAccount()
+ }
+}
+async function submitAccount(){
+ const email=$('accountEmail').value.trim(),password=$('accountPassword').value;
+ if(!email||!password){accountMessage(txt('أدخل البريد الإلكتروني وكلمة المرور.','E-posta ve şifreyi girin.'),'err');return}
+ const button=$('accountSubmit');button.disabled=true;accountMessage(txt('جاري التحقق...','Kontrol ediliyor...'));
+ try{
+  if(state.accountMode==='register'){
+   if(password.length<8)throw new Error(txt('كلمة المرور لازم تكون 8 أحرف على الأقل.','Şifre en az 8 karakter olmalı.'));
+   const fullName=$('accountFullName').value.trim(),phone=$('accountPhone').value.trim();
+   if(fullName.length<2||phone.replace(/\D/g,'').length<7)throw new Error(txt('أدخل الاسم الكامل ورقم هاتف صحيح.','Ad soyad ve geçerli telefon numarası girin.'));
+   const result=await OGCustomerAuth.signUp({email,password,fullName,phone});
+   if(result.requiresEmailConfirmation){
+    setAccountMode('login');
+    accountMessage(txt('تم إنشاء الحساب. افتح بريدك الإلكتروني وأكّد الحساب، وبعدها سجّل الدخول.','Hesap oluşturuldu. E-postanı doğruladıktan sonra giriş yap.'),'ok');
+    return
+   }
+  }else await OGCustomerAuth.signIn(email,password);
+  await loadCustomerAccount();
+  if(state.customer)accountMessage('')
+ }catch(error){accountMessage(error?.message||txt('تعذر إكمال العملية.','İşlem tamamlanamadı.'),'err')}
+ finally{button.disabled=false}
+}
+async function initCustomerAccount(){
+ if(!window.OGCustomerAuth)return;
+ const oauth=OGCustomerAuth.consumeOAuthCallback();
+ if(oauth&&!oauth.ok)accountMessage(oauth.error||txt('فشل تسجيل الدخول عبر Google.','Google ile giriş başarısız.'),'err');
+ const googleEnabled=await OGCustomerAuth.providerEnabled('google');
+ $('googleLoginBtn').hidden=!googleEnabled;
+ $('accountGoogleOr').hidden=!googleEnabled;
+ await loadCustomerAccount();
+ if(new URLSearchParams(location.search).get('account')==='1')openModal(accountModal)
+}
 function renderCart(){
  state.cart=state.cart.filter(x=>state.products.length?state.products.some(p=>p.id===x.productId):true);
  const count=state.cart.reduce((n,x)=>n+x.quantity,0);
@@ -633,8 +794,12 @@ function renderPayment(){
     (c.bankNote?'<div class="bank-row"><span>'+txt('ملاحظة','Not')+'</span><span>'+esc(c.bankNote)+'</span></div>':'')
  }
  const subtotal=state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0);
+ const memberDiscount=state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
  const codFee=state.paymentMethod==='cod'?Number(state.config?.codFee??75):0;
- const grandTotal=Math.round((subtotal+codFee)*100)/100;
+ const grandTotal=Math.round((Math.max(0,subtotal-memberDiscount)+codFee)*100)/100;
+ const discountRow=$('memberDiscountRow'),discountAmount=$('memberDiscountAmount');
+ if(discountRow)discountRow.hidden=memberDiscount<=0;
+ if(discountAmount)discountAmount.textContent='-'+money(memberDiscount);
  const codFeeRow=$('codFeeRow'),codFeeAmount=$('codFeeAmount'),grandTotalEl=$('checkoutGrandTotal');
  if(codFeeRow)codFeeRow.style.display=state.paymentMethod==='cod'?'flex':'none';
  if(codFeeAmount)codFeeAmount.textContent=money(codFee);
@@ -696,11 +861,18 @@ async function checkout(){
  if(state.paymentMethod==='bank_transfer'&&state.receipt)form.append('transferReceipt',state.receipt);
  const btn=$('checkoutSubmit');btn.disabled=true;
  try{
-  const r=await fetch(API+'/api/store/orders',{method:'POST',body:form}),d=await r.json();
+  const token=window.OGCustomerAuth?await OGCustomerAuth.getAccessToken():null;
+  const headers=token?{Authorization:'Bearer '+token}:undefined;
+  const r=await fetch(API+'/api/store/orders',{method:'POST',body:form,headers}),d=await r.json();
   if(!r.ok)throw new Error(d.error||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'));
   result.className='checkout-result show ok';
-  result.innerHTML=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+esc(d.order.orderNumber)+'<br><a href="/track/" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
+  let success=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+esc(d.order.orderNumber);
+  if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: ')+esc(money(d.order.discountAmount))+'</strong>';
+  if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
+  result.innerHTML=success+'<br><a href="/track/" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
+  if(d.memberBenefits)state.benefits=d.memberBenefits;
   state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
+  if(state.customer)await loadCustomerAccount();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
  }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}
  finally{btn.disabled=false}
@@ -713,7 +885,7 @@ function applyLanguage(l){
  document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
  document.querySelectorAll('.trn-placeholder').forEach(el=>{el.placeholder=el.dataset[l+'Placeholder']||el.placeholder});
  localStorage.setItem('og_lang',l);
- renderCategories();renderProducts();renderCart();renderPayment()
+ renderCategories();renderProducts();renderCart();renderPayment();renderAccount()
 }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
 $('productSearch').value=state.search;
@@ -722,9 +894,16 @@ $('cartFab').addEventListener('click',()=>openModal(cartModal));
 $('navCart').addEventListener('click',()=>openModal(cartModal));
 $('cartClose').addEventListener('click',()=>closeModal(cartModal));
 $('productClose').addEventListener('click',()=>closeModal(productModal));
+$('customerAccountBtn').addEventListener('click',()=>openModal(accountModal));
+$('accountClose').addEventListener('click',()=>closeModal(accountModal));
+document.querySelectorAll('[data-account-mode]').forEach(b=>b.addEventListener('click',()=>setAccountMode(b.dataset.accountMode)));
+$('accountSubmit').addEventListener('click',submitAccount);
+$('googleLoginBtn').addEventListener('click',()=>OGCustomerAuth?.googleSignIn());
+$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;renderAccount();setAccountMode('login')});
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(cartModal);closeModal(productModal)}});
+accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(cartModal);closeModal(productModal);closeModal(accountModal)}});
 document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{state.paymentMethod=r.value;renderPayment()}));
 $('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
@@ -732,8 +911,9 @@ $('year').textContent=new Date().getFullYear();
 window.addEventListener('popstate',()=>{state.category=new URLSearchParams(location.search).get('category')||'all';renderCategories();renderProducts()});
 restoreCart();
 const savedLang=localStorage.getItem('og_lang');if(savedLang==='tr')applyLanguage('tr');
+setAccountMode('login');
 renderCart();
-Promise.all([loadConfig(),loadProducts()]).then(()=>{if(new URLSearchParams(location.search).get('cart')==='1'&&state.cart.length)openModal(cartModal)});
+Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{if(new URLSearchParams(location.search).get('cart')==='1'&&state.cart.length)openModal(cartModal)});
 })();
 </script>
 </body>
