@@ -518,8 +518,8 @@ img{max-width:100%}
      <div><label class="trn" data-ar="كلمة المرور" data-tr="Şifre">كلمة المرور</label><input id="accountPassword" type="password" minlength="8" autocomplete="current-password" dir="ltr"></div>
      <button class="account-primary" id="accountSubmit" type="button"><span class="trn" data-ar="تسجيل الدخول" data-tr="Giriş yap">تسجيل الدخول</span></button>
     </div>
-    <div class="account-or"><span class="trn" data-ar="أو" data-tr="veya">أو</span></div>
-    <button class="google-login-btn" id="googleLoginBtn" type="button"><i class="fa-brands fa-google"></i><span class="trn" data-ar="المتابعة باستخدام Google" data-tr="Google ile devam et">المتابعة باستخدام Google</span></button>
+    <div class="account-or" id="accountGoogleOr" hidden><span class="trn" data-ar="أو" data-tr="veya">أو</span></div>
+    <button class="google-login-btn" id="googleLoginBtn" type="button" hidden><i class="fa-brands fa-google"></i><span class="trn" data-ar="المتابعة باستخدام Google" data-tr="Google ile devam et">المتابعة باستخدام Google</span></button>
     <div class="account-result" id="accountResult"></div>
    </div>
    <div id="accountMemberView" hidden>
@@ -745,6 +745,9 @@ async function initCustomerAccount(){
  if(!window.OGCustomerAuth)return;
  const oauth=OGCustomerAuth.consumeOAuthCallback();
  if(oauth&&!oauth.ok)accountMessage(oauth.error||txt('فشل تسجيل الدخول عبر Google.','Google ile giriş başarısız.'),'err');
+ const googleEnabled=await OGCustomerAuth.providerEnabled('google');
+ $('googleLoginBtn').hidden=!googleEnabled;
+ $('accountGoogleOr').hidden=!googleEnabled;
  await loadCustomerAccount();
  if(new URLSearchParams(location.search).get('account')==='1')openModal(accountModal)
 }
