@@ -388,6 +388,7 @@ img{max-width:100%}
 
 <main id="top"><section class="section" id="products">
  <div class="container">
+  <a class="category-campaign" id="categoryCampaign" href="/products/" hidden><img id="categoryCampaignImg" src="" width="1000" height="563" alt=""></a>
   <div class="section-head premium-shop-hero">
    <div class="shop-hero-copy"><div class="section-kicker">ONLINE GIFTS STORE</div><h1 class="trn" data-ar="كل المنتجات" data-tr="Tüm ürünler" style="margin:0;font-size:clamp(28px,4vw,42px)">كل المنتجات</h1><p class="trn" data-ar="الأسعار والمخزون مرتبطة مباشرة بنظامنا. المنتجات المخصصة تقبل رفع الصورة أو الملف من داخل السلة، والدفع المسبق يظهر معلومات التحويل البنكي مباشرة." data-tr="Fiyatlar ve stok doğrudan sistemimize bağlıdır. Kişiye özel ürünlerde dosyanızı sepetten yükleyebilir, ön ödemeli ürünlerde banka bilgilerini doğrudan görebilirsiniz.">الأسعار والمخزون مرتبطة مباشرة بنظامنا. المنتجات المخصصة تقبل رفع الصورة أو الملف من داخل السلة، والدفع المسبق يظهر معلومات التحويل البنكي مباشرة.</p><div class="shop-hero-badges"><span><i class="fa-solid fa-truck-fast"></i><b class="trn" data-ar="توصيل مجاني" data-tr="Ücretsiz teslimat">توصيل مجاني</b></span><span><i class="fa-solid fa-wand-magic-sparkles"></i><b class="trn" data-ar="تخصيص حسب المنتج" data-tr="Ürüne göre kişiselleştirme">تخصيص حسب المنتج</b></span></div></div>
    <div class="category-visual" id="categoryVisual" aria-hidden="true"><span class="visual-ring"></span><span class="visual-card visual-a"></span><span class="visual-card visual-b"></span><span class="visual-card visual-c"></span><span class="visual-sticker"><i class="fa-solid fa-gift"></i></span></div>
@@ -396,6 +397,7 @@ img{max-width:100%}
    <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="productSearch" class="trn-placeholder" data-ar-placeholder="ابحث باسم المنتج..." data-tr-placeholder="Ürün ara..." placeholder="ابحث باسم المنتج..."></div>
    <div class="categories" id="categories"></div>
   </div>
+  <div class="shop-guidance"><i class="fa-solid fa-circle-info"></i><span class="trn" data-ar="اضغط على أي منتج لتفتح التفاصيل والتخصيص، وبعدها ثبّت الطلب من صفحة المنتج." data-tr="Detayları ve kişiselleştirmeyi görmek için ürüne dokun; siparişi ürün sayfasından tamamla.">اضغط على أي منتج لتفتح التفاصيل والتخصيص، وبعدها ثبّت الطلب من صفحة المنتج.</span></div>
   <div class="product-grid" id="productGrid"><div class="products-state"><i class="fa-solid fa-spinner fa-spin"></i><br><br>جاري تحميل المنتجات...</div></div>
  </div>
 </section></main>
@@ -518,6 +520,23 @@ function visibleProducts(){
   return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))
  })
 }
+const categoryCampaigns={
+ all:{src:'/assets/campaign-main.webp',href:'/products/',alt:'هدايا مميزة من Online Gifts'},
+ gifts:{src:'/assets/campaign-main.webp',href:'/products/?category=gifts',alt:'هدايا مميزة من Online Gifts'},
+ love:{src:'/assets/campaign-love.webp',href:'/products/?category=love',alt:'هدايا الحب'},
+ nfc:{src:'/assets/campaign-nfc.webp',href:'/products/?category=nfc',alt:'منتجات NFC الذكية'},
+ luxury:{src:'/assets/campaign-luxury.webp',href:'/products/?category=luxury',alt:'الهدايا الفاخرة'},
+ perfume:{src:'/assets/campaign-luxury.webp',href:'/products/?category=perfume',alt:'العطور والهدايا الفاخرة'},
+ perfumes_accessories:{src:'/assets/campaign-luxury.webp',href:'/products/?category=perfumes_accessories',alt:'العطور والإكسسوارات'},
+ men:{src:'/assets/campaign-luxury.webp',href:'/products/?category=men',alt:'الهدايا الرجالية الفاخرة'}
+};
+function renderCategoryCampaign(){
+ const link=$('categoryCampaign'),img=$('categoryCampaignImg');if(!link||!img)return;
+ if(lang()==='tr'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
+ const cfg=categoryCampaigns[state.category];
+ if(!cfg){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
+ link.href=cfg.href;img.src=cfg.src;img.alt=cfg.alt;link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');
+}
 function renderCategoryVisual(){
  const host=$('categoryVisual');if(!host)return;
  const list=visibleProducts().filter(p=>p.hasImage).slice(0,3);
@@ -540,6 +559,7 @@ function renderCategories(){
  categories.innerHTML='<button class="cat-btn '+(state.category==='all'?'active':'')+'" data-cat="all">'+txt('الكل','Tümü')+'</button>'+
   set.map(c=>'<button class="cat-btn '+(state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
  categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.category=b.dataset.cat;const url=new URL(location.href);if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}))
+ renderCategoryCampaign()
  renderCategoryVisual()
 }
 function renderProducts(){
