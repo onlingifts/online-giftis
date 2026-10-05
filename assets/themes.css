@@ -1,6 +1,6 @@
 /* Central theme tokens; existing layout and checkout contracts are preserved. */
-:root,[data-theme="default"]{--theme-bg:#FBF8F3;--theme-surface:#FFFFFF;--theme-primary:#8D1828;--theme-secondary:#F4ECE2;--theme-text:#171310;--theme-muted:#6D665F;--theme-accent:#C99C52;--theme-on-primary:#fff;}
-[data-theme="soft"]{--theme-bg:#FFF9F7;--theme-surface:#FFFFFF;--theme-primary:#C52450;--theme-secondary:#FFDDE7;--theme-text:#171310;--theme-muted:#766068;--theme-accent:#D5A44B;--theme-on-primary:#fff;}
+:root,[data-theme="default"]{--theme-bg:#FFF8FA;--theme-surface:#FFFFFF;--theme-primary:#FF3F73;--theme-secondary:#FFE8EF;--theme-text:#18223D;--theme-muted:#748096;--theme-accent:#E69A45;--theme-on-primary:#fff;}
+[data-theme="soft"]{--theme-bg:#FFF8FA;--theme-surface:#FFFFFF;--theme-primary:#F7356F;--theme-secondary:#FFE5ED;--theme-text:#18223D;--theme-muted:#748096;--theme-accent:#E69A45;--theme-on-primary:#fff;}
 [data-theme="love"]{--theme-bg:#FFF7F9;--theme-surface:#FFFFFF;--theme-primary:#A61E48;--theme-secondary:#FADBE5;--theme-text:#341720;--theme-muted:#805764;--theme-accent:#C79A50;--theme-on-primary:#fff;}
 [data-theme="kids"]{--theme-bg:#FFFBEF;--theme-surface:#FFFFFF;--theme-primary:#9E3261;--theme-secondary:#DDF3FA;--theme-text:#243C50;--theme-muted:#626A72;--theme-accent:#E8B73F;--theme-on-primary:#fff;}
 [data-theme="family"]{--theme-bg:#FAF4EB;--theme-surface:#FFFFFF;--theme-primary:#995A66;--theme-secondary:#F1DED9;--theme-text:#3C2E27;--theme-muted:#76665E;--theme-accent:#B18A4F;--theme-on-primary:#fff;}
@@ -43,7 +43,7 @@ body{background:var(--theme-bg);color:var(--theme-text)}
 @media(max-width:410px){#productGrid{grid-template-columns:1fr}.product-media{aspect-ratio:1.15}.product-name{min-height:0;font-size:16px}.product-desc{min-height:0}.product-price{font-size:20px}.nav-actions .wa-btn span{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 /* Keep checkout readable and identical across light and dark catalogues. */
-.sheet{--bg:#FBF8F3;--ink:#171310;--muted:#6D665F;--red:#8D1828;--line:rgba(23,19,16,.09);--theme-bg:#FBF8F3;--theme-surface:#fff;--theme-text:#171310;--theme-muted:#6D665F;color:var(--ink);background:var(--bg)}
+.sheet{--bg:#FFF8FA;--ink:#18223D;--muted:#748096;--red:#FF3F73;--line:rgba(24,34,61,.09);--theme-bg:#FFF8FA;--theme-surface:#fff;--theme-text:#18223D;--theme-muted:#748096;color:var(--ink);background:var(--bg)}
 
 .brand img,.footer-brand img{border-radius:12px}
 
@@ -494,4 +494,23 @@ html[data-has-campaign="true"] .visual-c{height:94px;width:88px}
  html[data-has-campaign="true"] .visual-b{width:75px;height:84px}
  html[data-has-campaign="true"] .visual-c{width:70px;height:79px}
  .shop-guidance{font-size:8.5px;margin-bottom:10px;padding:9px 10px}
+}
+
+
+/* ===== Catalogue favorites + pink consistency ===== */
+.product-card-wrap{position:relative;min-width:0;height:100%}
+.product-card-wrap .product-card-link{height:100%}
+.catalog-favorite{
+ position:absolute;z-index:8;top:16px;right:16px;width:36px;height:36px;border:0;border-radius:50%;
+ display:grid;place-items:center;background:rgba(255,255,255,.94);color:#18223d;font-size:16px;
+ box-shadow:0 8px 22px rgba(35,24,30,.12);backdrop-filter:blur(8px)
+}
+.catalog-favorite:hover,.catalog-favorite.is-favorite{color:#ff3f73;background:#fff1f5}
+[data-theme="luxury"] .catalog-favorite,[data-theme="laser"] .catalog-favorite,[data-theme="accessories"] .catalog-favorite,[data-theme="3d"] .catalog-favorite,[data-theme="men"] .catalog-favorite{
+ background:rgba(18,18,18,.86);color:#f8f1e7;border:1px solid color-mix(in srgb,var(--theme-accent) 24%,transparent)
+}
+[data-theme="luxury"] .catalog-favorite.is-favorite,[data-theme="laser"] .catalog-favorite.is-favorite,[data-theme="accessories"] .catalog-favorite.is-favorite,[data-theme="3d"] .catalog-favorite.is-favorite,[data-theme="men"] .catalog-favorite.is-favorite{color:#f2bd68}
+.cat-btn[data-favorites] i{font-size:.9em}
+@media(max-width:760px){
+ .catalog-favorite{top:11px;right:11px;width:29px;height:29px;font-size:13px}
 }
