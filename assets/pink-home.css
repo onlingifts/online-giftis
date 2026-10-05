@@ -33,6 +33,9 @@ body.pink-home .sr-only,.skip-link:not(:focus){position:absolute!important;width
 .pink-search input::placeholder{color:#929aab}
 .pink-scan-link{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#c21f49;font-size:20px;background:#fff6f8}
 .pink-scan-link:hover{background:#ffe9ef}
+.pink-search-submit{width:42px;height:42px;border:0;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#ff5c87,#ff2f73);color:#fff;font-size:14px;box-shadow:0 7px 16px rgba(244,49,105,.18)}
+.pink-search-submit:hover{filter:brightness(.98)}
+
 
 .pink-main{padding:14px 0 80px}
 .pink-hero{position:relative}
@@ -136,7 +139,7 @@ body.pink-home .sr-only,.skip-link:not(:focus){position:absolute!important;width
  .pink-search{min-height:48px;border-radius:17px;margin-top:5px;padding:4px 6px 4px 11px}
  .pink-search>i{font-size:19px}
  .pink-search input{font-size:11.5px}
- .pink-scan-link{width:38px;height:38px;border-radius:11px;font-size:18px}
+ .pink-scan-link{width:38px;height:38px;border-radius:11px;font-size:18px}.pink-search-submit{width:38px;height:38px;border-radius:11px;font-size:12px}
  .pink-main{padding-top:9px}
  .pink-hero-link{border-radius:22px}
  .pink-hero-copy{inset-inline-start:5%;width:47%}
