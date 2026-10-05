@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://onlinegiftis.com/sitemap.xml
+Sitemap: https://onlinegiftis.com/image-sitemap.xml
