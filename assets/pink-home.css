@@ -40,14 +40,14 @@ body.pink-home .sr-only,.skip-link:not(:focus){position:absolute!important;width
 .pink-main{padding:14px 0 80px}
 .pink-hero{position:relative}
 .pink-hero-link{position:relative;display:block;overflow:hidden;border-radius:29px;isolation:isolate;background:#ffdfe8;box-shadow:0 18px 44px rgba(118,42,65,.1)}
-.pink-hero-link>img{width:100%;aspect-ratio:1000/563;object-fit:cover}
-.pink-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,235,241,.98) 0%,rgba(255,235,241,.9) 29%,rgba(255,235,241,.16) 58%,rgba(255,235,241,0) 76%)}
-.pink-hero-copy{position:absolute;z-index:2;inset-inline-start:5.4%;top:50%;transform:translateY(-50%);width:42%;text-align:right}
+.pink-hero-link>img{width:100%;aspect-ratio:332/160;object-fit:cover}
+.pink-hero-shade{display:none}
+.pink-hero-copy{display:none}
 .pink-hero-copy strong{display:block;color:#83152e;font-size:clamp(28px,4.2vw,55px);line-height:1.35;font-weight:900;letter-spacing:-1.4px}
 .pink-hero-copy small{display:block;margin-top:10px;color:#62708a;font-size:clamp(10px,1.25vw,15px);font-weight:600}
 .pink-hero-copy small i{color:var(--pink)}
 .pink-hero-copy b{margin-top:19px;min-height:48px;padding:0 24px;border-radius:999px;display:inline-flex;align-items:center;gap:20px;color:#fff;background:linear-gradient(90deg,#ff7459,#ff286d);box-shadow:0 11px 24px rgba(246,54,107,.25);font-size:14px}
-.pink-slider-dots{position:absolute;z-index:3;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(8px)}
+.pink-slider-dots{display:none}
 .pink-slider-dots span{width:8px;height:8px;border-radius:50%;background:#f1d3db}
 .pink-slider-dots span.active{width:19px;border-radius:999px;background:var(--pink)}
 
@@ -213,3 +213,6 @@ body.pink-home .sr-only,.skip-link:not(:focus){position:absolute!important;width
  .pink-product-open{width:28px;height:28px}
  .pink-bottom-nav{width:calc(100% - 12px)}
 }
+
+.pink-hero-exact .pink-hero-link{background:#ffdbe5}
+.pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:332/160;object-fit:cover}
