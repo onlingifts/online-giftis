@@ -17,7 +17,7 @@ for(const file of pages){
  const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(ids).size,ids.length,`Duplicate ID: ${file}`);
  for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim()){if(m[0].includes('application/ld+json'))JSON.parse(m[1]);else new Script(m[1],{filename:file})}
- assert.ok(html.includes('/assets/themes.css'),file);
+ assert.ok(html.includes(file==='index.html'?'storefront-critical:start':'/assets/themes.css'),file);
  if(/^products\/\d/.test(file)){assert.ok(html.includes('data-product-categories='),file);assert.ok(html.includes('rel="canonical"'),file);assert.ok(readFileSync('sitemap.xml','utf8').includes('https://onlinegiftis.com/'+file.replace('index.html','')),file)}
 }
 console.log(`Theme selection, script syntax, unique IDs, JSON-LD and sitemap checks passed (${pages.length} pages).`);

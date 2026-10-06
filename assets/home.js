@@ -28,7 +28,7 @@
   return '<article class="pink-product-card">'+
    '<button class="pink-favorite'+(active?' is-favorite':'')+'" type="button" data-favorite-id="'+id+'" aria-label="إضافة للمفضلة" aria-pressed="'+active+'"><i class="'+(active?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
    '<a class="pink-product-link" href="/products/'+id+'/">'+
-    '<span class="pink-product-media">'+(image?'<img src="'+esc(image)+'" alt="'+esc(p.name)+'" loading="lazy">':'<span class="pink-empty">بدون صورة</span>')+'</span>'+
+    '<span class="pink-product-media">'+(image?'<img '+OGImages.product(p,'(max-width: 900px) calc((100vw - 34px) / 3), (max-width: 1208px) calc((100vw - 67px) / 4), 282px')+' alt="'+esc(p.name)+'" loading="lazy" decoding="async">':'<span class="pink-empty">بدون صورة</span>')+'</span>'+
     '<span class="pink-product-body"><strong class="pink-product-name">'+esc(p.name)+'</strong><span class="pink-product-bottom"><b class="pink-product-price">'+esc(price)+'</b><span class="pink-product-open" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span></span></span>'+
    '</a></article>'
  }
@@ -37,7 +37,7 @@
   const map={birthday:'occasions',love:'love',family:'family',kids:'kids'};
   document.querySelectorAll('[data-occasion]').forEach(card=>{
    const p=pickByCategory(products,map[card.dataset.occasion]);if(!p?.imageUrl)return;
-   const img=card.querySelector('img');if(img)img.src=API+p.imageUrl
+   const img=card.querySelector('img');if(img)OGImages.setProduct(img,p,'(max-width: 900px) calc((100vw - 36px) / 4), 280px')
   })
  }
  async function loadProducts(){
