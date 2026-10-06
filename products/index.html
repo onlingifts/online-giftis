@@ -49,10 +49,10 @@ function gtag(){dataLayer.push(arguments)}
 gtag('js',new Date());
 gtag('config','G-SP57KJJ7NR');
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="preconnect" href="https://bayi.onlinegiftis.com">
+
+<link rel="stylesheet" href="/assets/store-fonts.css">
+
 <style>
 :root{
  --bg:#f7f4ef;--surface:#fff;--surface2:#f1ece5;--ink:#171310;--muted:#766f68;
@@ -378,7 +378,7 @@ img{max-width:100%}
 
 </style>
 <link rel="stylesheet" href="/assets/themes.css">
-<script src="/assets/themes.js"></script>
+<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js"></script><script src="/assets/themes.js"></script>
 </head>
 <body>
 <div class="topbar">
@@ -606,7 +606,7 @@ function renderCategoryCampaign(){
  if(lang()==='tr'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
  const cfg=categoryCampaigns[state.category];
  if(!cfg){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
- link.href=cfg.href;img.src=cfg.src;img.alt=cfg.alt;link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');
+ link.href=cfg.href;OGImages.setAsset(img,cfg.src,'(max-width: 760px) calc(100vw - 18px), (max-width: 1280px) 92vw, 1180px');img.alt=cfg.alt;link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');
 }
 function renderCategoryVisual(){
  const host=$('categoryVisual');if(!host)return;
@@ -614,7 +614,7 @@ function renderCategoryVisual(){
  ['a','b','c'].forEach((key,index)=>{
   const el=host.querySelector('.visual-'+key);if(!el)return;
   const p=list[index];
-  el.innerHTML=p?'<img src="'+API+p.imageUrl+'" alt="" loading="eager">':'<i class="fa-solid fa-gift"></i>';
+  el.innerHTML=p?'<img '+OGImages.product(p,'160px')+' alt="" loading="eager" decoding="async">':'<i class="fa-solid fa-gift"></i>';
  });
  const sticker=host.querySelector('.visual-sticker i');
  if(sticker)sticker.className='fa-solid fa-'+OGThemes.info(state.category).icon;
@@ -644,7 +644,7 @@ function renderProducts(){
    ((flags.requiresCustomizationImage||flags.requiresCustomizationText||flags.requiresDesignInput)?'<span class="badge stock">'+txt('مخصص','Kişiye özel')+'</span>':'');
   return '<div class="product-card-wrap"><button type="button" class="catalog-favorite '+(liked?'is-favorite':'')+'" data-fav="'+p.id+'" aria-label="'+txt('إضافة للمفضلة','Favorilere ekle')+'" aria-pressed="'+liked+'"><i class="'+(liked?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
    '<a class="product-card-link" href="/products/'+p.id+'/'+(state.category==='all'?'':'?category='+encodeURIComponent(state.category))+'" aria-label="'+txt('فتح المنتج: ','Ürünü aç: ')+esc(p.name)+'"><article class="product-card"><div class="product-media">'+
-   (image?'<img src="'+image+'" alt="'+esc(p.name)+'" loading="lazy">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
+   (image?'<img '+OGImages.product(p,'(max-width: 760px) calc((100vw - 66px) / 2), (max-width: 1100px) 30vw, 260px')+' alt="'+esc(p.name)+'" loading="lazy" decoding="async">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
    '<div class="badges">'+(p.isFeatured?'<span class="badge hot">'+txt('الأكثر طلباً','Çok satan')+'</span>':'')+(p.stockQuantity>0?'<span class="badge stock">'+txt('متوفر','Stokta')+'</span>':'')+extraBadges+'</div></div>'+
    '<div class="product-body"><div class="product-category">'+esc(cats.map(categoryLabel).join(' • ')||txt('هدايا','Hediye'))+'</div><div class="product-name">'+esc(p.name)+'</div><div class="product-desc">'+esc(p.description||'')+'</div>'+
    '<div class="product-bottom"><div class="product-price">'+price+'</div><div class="product-actions"><span class="open-product"><i class="fa-solid fa-arrow-up-right-from-square"></i>'+txt('عرض المنتج','Ürünü görüntüle')+'</span></div></div></div></article></a></div>'
