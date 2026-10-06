@@ -1,0 +1,48 @@
+name: Build HQ Pink Hero
+
+on:
+  push:
+    branches:
+      - fix/high-res-pink-hero-v2
+    paths:
+      - '.tmp-hero-v2/**'
+      - '.github/workflows/build-hq-hero.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/high-res-pink-hero-v2
+          fetch-depth: 0
+
+      - name: Rebuild high-resolution hero
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .tmp-hero-v2/chunk*.b64 | tr -d '\n\r' | base64 -d > assets/pink-hero-hq.webp
+          file assets/pink-hero-hq.webp
+          bytes="$(wc -c < assets/pink-hero-hq.webp)"
+          echo "Hero bytes: $bytes"
+          test "$bytes" -gt 50000
+          rm -rf .tmp-hero-v2
+
+      - name: Commit binary asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A assets/pink-hero-hq.webp .tmp-hero-v2
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Build high-resolution pink hero asset"
+            git push origin HEAD:fix/high-res-pink-hero-v2
+          fi
