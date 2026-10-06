@@ -40,7 +40,7 @@ body.pink-home .sr-only,.skip-link:not(:focus){position:absolute!important;width
 .pink-main{padding:14px 0 80px}
 .pink-hero{position:relative}
 .pink-hero-link{position:relative;display:block;overflow:hidden;border-radius:29px;isolation:isolate;background:#ffdfe8;box-shadow:0 18px 44px rgba(118,42,65,.1)}
-.pink-hero-link>img{width:100%;aspect-ratio:332/160;object-fit:cover}
+.pink-hero-link>img{width:100%;aspect-ratio:1200/572;object-fit:cover}
 .pink-hero-shade{display:none}
 .pink-hero-copy{display:none}
 .pink-hero-copy strong{display:block;color:#83152e;font-size:clamp(28px,4.2vw,55px);line-height:1.35;font-weight:900;letter-spacing:-1.4px}
@@ -215,4 +215,4 @@ body.pink-home .sr-only,.skip-link:not(:focus){position:absolute!important;width
 }
 
 .pink-hero-exact .pink-hero-link{background:#ffdbe5}
-.pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:332/160;object-fit:cover}
+.pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:1200/572;object-fit:cover}
