@@ -1,6 +1,6 @@
 (()=>{
  'use strict';
- const API='https://bayi.onlinegiftis.com';
+ const API='https://api.onlinegiftis.com';
  const FAVORITES_KEY='og_favorites_v1';
  const CART_KEY='og_cart_v1';
  const $=id=>document.getElementById(id);
