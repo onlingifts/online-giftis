@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url><loc>https://onlinegiftis.com/products/2/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/2-mp.webp</image:loc></image:image></url>
-  <url><loc>https://onlinegiftis.com/products/1/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/1-ayna.webp</image:loc></image:image></url>
   <url><loc>https://onlinegiftis.com/products/60/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/60-pokih-fraha.webp</image:loc></image:image></url>
   <url><loc>https://onlinegiftis.com/products/56/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/56-3d-isim.webp</image:loc></image:image></url>
   <url><loc>https://onlinegiftis.com/products/8/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/8-mftah.webp</image:loc></image:image></url>
@@ -56,4 +55,5 @@
   <url><loc>https://onlinegiftis.com/products/20/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/20-old-cod-013.webp</image:loc></image:image></url>
   <url><loc>https://onlinegiftis.com/products/50/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/50-yastik.webp</image:loc></image:image></url>
   <url><loc>https://onlinegiftis.com/products/66/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/66-pakit.webp</image:loc></image:image></url>
+  <url><loc>https://onlinegiftis.com/products/1/</loc><image:image><image:loc>https://onlinegiftis.com/product-images/1-ayna.webp</image:loc></image:image></url>
 </urlset>
