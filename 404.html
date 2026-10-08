@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Online Gifts</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;min-height:100vh;display:grid;place-items:center;background:#faf7f4;color:#1b1613}
+    .box{max-width:520px;padding:28px;text-align:center}
+    a{color:#8f1f2d}
+  </style>
+</head>
+<body>
+<div class="box"><h1>Online Gifts</h1><p>جاري فتح الصفحة...</p><p><a href="/">العودة للرئيسية</a></p></div>
+<script>
+(function(){
+  var m=location.pathname.match(/^\/products\/(\d+)\/?$/);
+  if(m){
+    var q=new URLSearchParams(location.search);
+    q.set('id',m[1]);
+    location.replace('/product.html?'+q.toString());
+  }
+})();
+</script>
+</body>
+</html>
