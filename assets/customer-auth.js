@@ -3,6 +3,7 @@
 const SUPABASE_URL='https://mqqvcreobqjyhflodvom.supabase.co';
 const SUPABASE_KEY='sb_publishable_KsWvGfiVoQbCozyFAiCiww_vHAYBIws';
 const STORAGE_KEY='og_customer_session_v1';
+const t=(ar,tr)=>document.documentElement.lang==='tr'?tr:ar;
 
 function read(){
  try{
@@ -35,7 +36,7 @@ async function authFetch(path,options={}){
  let payload={};
  try{payload=await response.json()}catch{}
  if(!response.ok){
-  const message=payload.msg||payload.message||payload.error_description||payload.error||'تعذر إكمال العملية';
+  const message=payload.msg||payload.message||payload.error_description||payload.error||t('تعذر إكمال العملية','İşlem tamamlanamadı');
   const error=new Error(message);
   error.status=response.status;
   throw error;
@@ -68,7 +69,7 @@ async function signIn(email,password){
   })
  });
  const session=normalizeSession(data);
- if(!session)throw new Error('تعذر إنشاء جلسة الدخول');
+ if(!session)throw new Error(t('تعذر إنشاء جلسة الدخول','Oturum oluşturulamadı'));
  write(session);
  return session;
 }
