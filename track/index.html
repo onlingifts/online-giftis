@@ -24,7 +24,7 @@ main{padding:54px 0 70px}.card{background:#fff;border:1px solid var(--line);bord
 <script>
 (()=>{
 const API='https://api.onlinegiftis.com';
-let current='ar';
+let current=(new URLSearchParams(location.search).get('lang')==='tr'||localStorage.getItem('og_lang')==='tr')?'tr':'ar';
 const $=id=>document.getElementById(id);
 const txt=(ar,tr)=>current==='tr'?tr:ar;
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -42,8 +42,13 @@ const statusText=s=>({
 function applyLang(l){
  current=l;document.documentElement.lang=l;document.documentElement.dir=l==='tr'?'ltr':'rtl';
  document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
- $('langBtn').textContent=l==='tr'?'العربية':'Türkçe';
+ $('langBtn').textContent=l==='tr'?'العربية':'Türkçe';localStorage.setItem('og_lang',l);
+ const u=new URL(location.href);if(l==='tr')u.searchParams.set('lang','tr');else u.searchParams.delete('lang');history.replaceState({},'',u);
+ const brand=document.querySelector('.brand');if(brand)brand.href=l==='tr'?'/tr/':'/';
+ const productLink=document.querySelector('.nav-actions a');if(productLink)productLink.href=l==='tr'?'/products/?lang=tr':'/products/';
+ const footerLinks=document.querySelectorAll('.footer a');if(footerLinks[0]){footerLinks[0].href=l==='tr'?'/tr/':'/';footerLinks[0].textContent=l==='tr'?'Ana sayfa':'الرئيسية'}if(footerLinks[1]){footerLinks[1].href=l==='tr'?'/products/?lang=tr':'/products/';footerLinks[1].textContent=l==='tr'?'Ürünler':'المنتجات'}
 }
+applyLang(current);
 $('langBtn').addEventListener('click',()=>applyLang(current==='ar'?'tr':'ar'));
 async function track(){
  const result=$('result'),btn=$('submit');result.className='result';result.innerHTML='';
