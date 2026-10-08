@@ -29,11 +29,14 @@ async function build() {
     if (!variants.length) return null;
     return {width: meta.width, height: meta.height, variants};
   }
+  fs.mkdirSync('product-images',{recursive:true});
+  const sourcesFile='product-images/.sources.json';
+  const sources=fs.existsSync(sourcesFile)?JSON.parse(fs.readFileSync(sourcesFile,'utf8')):{};
   for (const file of fs.readdirSync('product-images')) {
     const id = file.match(/^(\d+)-/)?.[1];
     if (!id || !/\.(webp|jpg|jpeg|png|avif|gif)$/i.test(file)) continue;
     const entry = await preview('product-images/'+file, [160, 320, 480, 768]);
-    if (entry) manifest.products[id] = entry;
+    if (entry) manifest.products[id] = {...entry,source:sources[id]||null};
   }
   for (const file of fs.readdirSync('assets').filter(x => /^(pink-hero-hq|campaign-|collection-).*\.webp$/.test(x))) {
     try {

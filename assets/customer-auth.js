@@ -44,7 +44,7 @@ async function authFetch(path,options={}){
  return payload;
 }
 function authRedirect(){
- return location.origin+'/products/?account=1';
+ return location.origin+'/products/?account=1'+(document.documentElement.lang==='tr'?'&lang=tr':'');
 }
 async function signUp({email,password,fullName,phone}){
  const path='/auth/v1/signup?redirect_to='+encodeURIComponent(authRedirect());
@@ -73,7 +73,13 @@ async function signIn(email,password){
  write(session);
  return session;
 }
+let refreshInFlight=null;
 async function refresh(){
+ if(refreshInFlight)return refreshInFlight;
+ refreshInFlight=refreshSession().finally(()=>{refreshInFlight=null});
+ return refreshInFlight;
+}
+async function refreshSession(){
  const current=read();
  if(!current?.refreshToken)return null;
  try{
@@ -83,7 +89,7 @@ async function refresh(){
   });
   const session=normalizeSession(data);
   if(session){write(session);return session}
- }catch{}
+ }catch(error){if(![400,401,403].includes(error.status))throw error}
  write(null);
  return null;
 }

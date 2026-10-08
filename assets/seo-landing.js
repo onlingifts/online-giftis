@@ -19,16 +19,16 @@
    const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
    if(!r.ok||!Array.isArray(d.products))throw new Error();
    const items=d.products.slice(0,8);
-   grid.innerHTML=items.map(p=>{
+   grid.innerHTML=items.length?items.map(p=>{
     const name=localizedName(p),description=localizedDescription(p);
     const image=p.hasImage?API+p.imageUrl:'';
     const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişim');
-    const href='/products/'+p.id+'/'+(lang==='tr'?'?lang=tr':'');
+    const href='/products/detail/?id='+p.id+(lang==='tr'?'&lang=tr':'');
     return '<article class="card"><div class="media">'+
      (image?'<img '+OGImages.product(p,'(max-width: 760px) 90vw, 300px')+' alt="'+esc(name)+'" loading="lazy" decoding="async">':'')+
      '</div><div class="body"><div class="name">'+esc(name)+'</div><div class="desc">'+esc(description)+'</div><div class="price">'+price+
      '</div><a class="view" href="'+href+'">'+txt('شوف تفاصيل المنتج','Ürünü incele')+'</a></div></article>'
-   }).join('')
+   }).join(''):'<div class="state">'+txt('ما في منتجات متاحة حالياً.','Henüz ürün bulunmuyor.')+'</div>'
   }catch{
    grid.innerHTML='<div class="state">'+txt('تعذر تحميل المنتجات حالياً. تقدر تشوف كل المنتجات من المتجر الرئيسي.','Ürünler şu anda yüklenemedi. Tüm ürünleri ana mağazada görebilirsiniz.')+'</div>'
   }

@@ -19,8 +19,9 @@ jobs:
         with:
           node-version: '24'
       - run: node scripts/check-themes.mjs
+      - run: node --test scripts/check-auth.mjs
       - name: Prepare read-only catalogue fixture
-        run: curl --fail --max-time 60 https://bayi.onlinegiftis.com/api/store/products -o /tmp/og-products.json
+        run: curl --fail --max-time 60 https://api.onlinegiftis.com/api/store/products -o /tmp/og-products.json
       - name: Install browser for responsive checks
         run: |
           npm install --no-save --package-lock=false playwright@1.61.1

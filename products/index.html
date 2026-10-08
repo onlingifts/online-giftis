@@ -64,6 +64,7 @@ gtag('config','G-SP57KJJ7NR');
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Cairo",Arial,sans-serif}
 body.modal-open{overflow:hidden}
+[hidden]{display:none!important}
 a{text-decoration:none;color:inherit}
 button,input,textarea{font:inherit}
 button{cursor:pointer}
@@ -270,7 +271,7 @@ img{max-width:100%}
 .checkout-submit{width:100%;min-height:50px;margin-top:11px;border:0;border-radius:15px;background:var(--green);color:#fff;font-size:11px;font-weight:900}
 .checkout-submit:disabled{opacity:.55}
 .checkout-help{text-align:center;font-size:8.8px;line-height:1.7;color:var(--muted);margin:8px 5px 0}
-.checkout-result{display:none;margin-top:10px;padding:11px;border-radius:13px;font-size:10px;font-weight:800;line-height:1.7}
+.checkout-result{display:none;margin-top:10px;padding:11px;border-radius:13px;font-size:16px;font-weight:800;line-height:1.7}
 .checkout-result.show{display:block}
 .checkout-result.ok{background:#e8f8ef;color:#126a3a}
 .checkout-result.err{background:#fff0f0;color:#9b1d2a}
@@ -404,7 +405,7 @@ img{max-width:100%}
    <a href="/products/" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a>
    <a href="/#services" class="trn" data-ar="خدماتنا" data-tr="Hizmetler">خدماتنا</a>
    <a href="/#about" class="trn" data-ar="عن الشركة" data-tr="Hakkımızda">عن الشركة</a>
-   <a href="/marketer.html" class="trn" data-ar="اعمل معنا" data-tr="Bizimle çalış">اعمل معنا</a>
+   <a href="https://bayi.onlinegiftis.com/" class="trn" data-ar="اعمل معنا" data-tr="Bizimle çalış">اعمل معنا</a>
   </nav>
   <div class="nav-actions">
    <button class="customer-account-btn" id="customerAccountBtn" type="button"><i class="fa-regular fa-user"></i><span class="trn" data-ar="حسابي" data-tr="Hesabım">حسابي</span></button>
@@ -443,7 +444,7 @@ img{max-width:100%}
      <a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
     </div>
    </div>
-   <div><h4 class="trn" data-ar="روابط سريعة" data-tr="Hızlı bağlantılar">روابط سريعة</h4><div class="footer-links"><a href="#products" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a><a href="/#services" class="trn" data-ar="خدماتنا" data-tr="Hizmetler">خدماتنا</a><a href="/marketer.html" class="trn" data-ar="العمل معنا" data-tr="Bizimle çalış">العمل معنا</a><a href="/contact.vcf" download="Online-Gifts.vcf" class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişiyi kaydet">حفظ جهة الاتصال</a></div></div>
+   <div><h4 class="trn" data-ar="روابط سريعة" data-tr="Hızlı bağlantılar">روابط سريعة</h4><div class="footer-links"><a href="#products" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a><a href="/#services" class="trn" data-ar="خدماتنا" data-tr="Hizmetler">خدماتنا</a><a href="https://bayi.onlinegiftis.com/" class="trn" data-ar="العمل معنا" data-tr="Bizimle çalış">العمل معنا</a><a href="/contact.vcf" download="Online-Gifts.vcf" class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişiyi kaydet">حفظ جهة الاتصال</a></div></div>
    <div><h4 class="trn" data-ar="تواصل معنا" data-tr="İletişim">تواصل معنا</h4><div class="footer-links"><a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">WhatsApp</a><a href="https://whatsapp.com/channel/0029VaaNlxi2UPBBkc38612Z" target="_blank" rel="noopener" class="trn" data-ar="قناة واتساب" data-tr="WhatsApp Kanalı">قناة واتساب</a><a href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener">Google Maps</a></div></div>
   </div>
   <div class="copyright"><span>© <span id="year"></span> Online Gifts</span><span class="trn" data-ar="جميع الحقوق محفوظة" data-tr="Tüm hakları saklıdır">جميع الحقوق محفوظة</span></div>
@@ -487,8 +488,8 @@ img{max-width:100%}
     </div>
    </div>
    <button class="checkout-submit" id="checkoutSubmit" type="button"><i class="fa-solid fa-check"></i> <span id="checkoutSubmitLabel" class="trn" data-ar="تثبيت الطلب" data-tr="Siparişi tamamla">تثبيت الطلب</span></button>
-   <p class="checkout-help trn" data-ar="يتم تثبيت الطلب مباشرة في نظام Online Gifts برقم يبدأ بـ web، وتظهر ملفات التخصيص وإشعار الحوالة للإدارة ضمن نفس الطلب." data-tr="Sipariş web ile başlayan bir numarayla Online Gifts sistemine kaydedilir; kişiselleştirme dosyaları ve havale dekontu aynı siparişte yönetime ulaşır.">يتم تثبيت الطلب مباشرة في نظام Online Gifts برقم يبدأ بـ web، وتظهر ملفات التخصيص وإشعار الحوالة للإدارة ضمن نفس الطلب.</p>
-   <div class="checkout-result" id="checkoutResult"></div>
+   <p class="checkout-help trn" data-ar="راجع تفاصيل هديتك وعنوانك قبل تثبيت الطلب." data-tr="Siparişi tamamlamadan önce hediye detaylarını ve adresini kontrol et.">راجع تفاصيل هديتك وعنوانك قبل تثبيت الطلب.</p>
+   <div class="checkout-result" id="checkoutResult" role="status" aria-live="polite" tabindex="-1"></div>
   </div>
  </div>
 </div>
@@ -544,14 +545,14 @@ img{max-width:100%}
 (()=>{
 const API='https://api.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login'};
+const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
 const txt=(ar,tr)=>lang()==='tr'?tr:ar;
 const productName=p=>{const s=p?.storefront||{};return lang()==='tr'?(s.nameTr||p.name||''):(s.nameAr||p.name||'')};
 const productDescription=p=>{const s=p?.storefront||{};return lang()==='tr'?(s.shortDescriptionTr||s.descriptionTr||p.description||''):(s.shortDescriptionAr||s.descriptionAr||p.description||'')};
-function productHref(p){const q=new URLSearchParams();if(lang()==='tr')q.set('lang','tr');if(state.category!=='all')q.set('category',state.category);return '/products/'+p.id+'/'+(q.toString()?'?'+q.toString():'')}
+function productHref(p){const q=new URLSearchParams();if(lang()==='tr')q.set('lang','tr');if(state.category!=='all')q.set('category',state.category);q.set('id',p.id);return '/products/detail/?'+q.toString()}
 const grid=$('productGrid'),categories=$('categories'),cartModal=$('cartModal'),productModal=$('productModal'),accountModal=$('accountModal');
 
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -782,7 +783,8 @@ async function initCustomerAccount(){
  if(new URLSearchParams(location.search).get('account')==='1')openModal(accountModal)
 }
 function renderCart(){
- state.cart=state.cart.filter(x=>state.products.length?state.products.some(p=>p.id===x.productId):true);
+ $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded;
+ state.cart=state.cart.filter(x=>!state.catalogLoaded||state.products.some(p=>p.id===x.productId));
  const count=state.cart.reduce((n,x)=>n+x.quantity,0);
  $('cartCount').textContent=count;$('navCartCount').textContent=count;$('cartFab').classList.toggle('show',count>0);
  if(!count){$('cartItems').innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-bag-shopping"></i></div>'+txt('السلة فارغة','Sepet boş')+'</div>';$('cartTotal').textContent=money(0);saveCart();renderPayment();return}
@@ -845,16 +847,17 @@ async function loadConfig(){
  renderPayment()
 }
 async function loadProducts(){
+ state.catalogLoaded=false;$('checkoutSubmit').disabled=true;
  grid.innerHTML='<div class="products-state"><i class="fa-solid fa-spinner fa-spin"></i><br><br>'+txt('جاري تحميل المنتجات...','Ürünler yükleniyor...')+'</div>';
  try{
   const [pr,cr]=await Promise.all([
-    fetch(API+'/api/store/products?ts='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}}),
-    fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}})
+    fetch(API+'/api/store/products?ts='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)}),
+    fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store',signal:AbortSignal.timeout(15000)}).catch(()=>null)
   ]);
-  const [d,cd]=await Promise.all([pr.json(),cr.json()]);
+  const [d,cd]=await Promise.all([pr.json(),cr?cr.json().catch(()=>({})):{}]);
   if(!pr.ok||!Array.isArray(d.products))throw new Error('products');
-  state.products=d.products;
-  const rows=cr.ok&&Array.isArray(cd.categories)?cd.categories:[];
+  state.products=d.products;state.catalogLoaded=true;
+  const rows=cr?.ok&&Array.isArray(cd.categories)?cd.categories:[];
   state.categoryMeta=Object.fromEntries(rows.map(x=>[x.key,x]));
   state.categoryOrder=rows.map(x=>x.key);
   const deduped=[];
@@ -874,6 +877,8 @@ function checkoutError(message){
 }
 async function checkout(){
  const result=$('checkoutResult');result.className='checkout-result';result.textContent='';
+ if(state.submitting)return;
+ if(!state.catalogLoaded){checkoutError(txt('انتظر تحميل المنتجات قبل تثبيت الطلب.','Sipariş vermeden önce ürünlerin yüklenmesini bekleyin.'));return}
  if(!state.cart.length)return;
  const required=['checkoutName','checkoutPhone','checkoutCity','checkoutAddress'];
  if(required.some(id=>!$(id).value.trim())){checkoutError(txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والعنوان الكامل.','Lütfen ad soyad, telefon, il ve açık adres alanlarını doldurun.'));return}
@@ -896,7 +901,7 @@ async function checkout(){
  const form=new FormData();form.append('payload',JSON.stringify(payload));
  for(const x of state.cart){const file=state.uploads.get(x.productId);if(file)form.append('customization_'+x.productId,file)}
  if(state.paymentMethod==='bank_transfer'&&state.receipt)form.append('transferReceipt',state.receipt);
- const btn=$('checkoutSubmit');btn.disabled=true;
+ const btn=$('checkoutSubmit');state.submitting=true;btn.disabled=true;
  try{
   const token=window.OGCustomerAuth?await OGCustomerAuth.getAccessToken():null;
   const headers=token?{Authorization:'Bearer '+token}:undefined;
@@ -907,12 +912,13 @@ async function checkout(){
   if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: ')+esc(money(d.order.discountAmount))+'</strong>';
   if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
   result.innerHTML=success+'<br><a href="'+(lang()==='tr'?'/track/?lang=tr':'/track/')+'" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
+  result.focus();result.scrollIntoView({block:'nearest',behavior:'smooth'});
   if(d.memberBenefits)state.benefits=d.memberBenefits;
   state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
   if(state.customer)await loadCustomerAccount();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
  }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}
- finally{btn.disabled=false}
+ finally{state.submitting=false;btn.disabled=!state.cart.length}
 }
 function openModal(el){el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.classList.add('modal-open')}
 function closeModal(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');if(!document.querySelector('.modal-backdrop.open'))document.body.classList.remove('modal-open')}
@@ -924,7 +930,7 @@ function applyLanguage(l){
  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
  document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
  document.querySelectorAll('.trn-placeholder').forEach(el=>{el.placeholder=el.dataset[l+'Placeholder']||el.placeholder});
- localStorage.setItem('og_lang',l);
+ try{localStorage.setItem('og_lang',l)}catch{}
  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:productName(p)}:x});saveCart();
  renderCategories();renderProducts();renderCart();renderPayment();renderAccount()
 }
@@ -951,7 +957,7 @@ $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();
 window.addEventListener('popstate',()=>{const q=new URLSearchParams(location.search);state.category=q.get('category')||'all';state.favoritesOnly=q.get('favorites')==='1';renderCategories();renderProducts()});
 restoreCart();
-const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=localStorage.getItem('og_lang');if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
+const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=(()=>{try{return localStorage.getItem('og_lang')}catch{return null}})();if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
 setAccountMode('login');
 renderCart();
 Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const q=new URLSearchParams(location.search);if(q.get('cart')==='1'&&state.cart.length)openModal(cartModal);if(q.get('account')==='1')openModal(accountModal)});
