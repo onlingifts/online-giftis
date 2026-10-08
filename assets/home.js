@@ -63,8 +63,15 @@
    if(host)host.innerHTML='<div class="pink-empty">'+txt('تعذر تحميل المنتجات حالياً.','Ürünler şu anda yüklenemedi.')+'</div>'
   }
  }
+ async function loadCategories(){
+  try{const response=await fetch(API+'/api/store/categories',{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;
+   const all=data.categories.find(c=>c.key==='all'),banner=language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl);
+   if(banner){const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');if(img){img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=API+banner;img.alt=language==='tr'?(all.nameTr||'Online Gifts'):(all.nameAr||'Online Gifts');hero.classList.add('has-custom-banner')}}
+   const nav=document.querySelector('.pink-categories');if(nav){const icons={drinkware:'fa-mug-hot',nfc:'fa-wifi',family:'fa-people-roof',kids:'fa-child-reaching',love:'fa-heart',all:'fa-gift'};nav.innerHTML=data.categories.slice(0,8).map(c=>'<a href="/products/?'+(language==='tr'?'lang=tr&':'')+(c.key==='all'?'':'category='+encodeURIComponent(c.key))+'"><span class="pink-cat-icon cat-gift"><i class="fa-solid '+(icons[c.key]||'fa-gift')+'"></i></span><strong>'+esc(language==='tr'?(c.nameTr||c.nameAr):c.nameAr)+'</strong></a>').join('')}
+  }catch{}
+ }
  const y=$('year');if(y)y.textContent=new Date().getFullYear();
  try{localStorage.setItem('og_lang',language)}catch{}
- syncBadges();loadProducts();
+ syncBadges();loadProducts();loadCategories();
  window.addEventListener('storage',e=>{if(e.key===FAVORITES_KEY){try{favorites=new Set((JSON.parse(e.newValue||'[]')||[]).map(String))}catch{}syncBadges()}if(e.key===CART_KEY)syncBadges()});
 })();
