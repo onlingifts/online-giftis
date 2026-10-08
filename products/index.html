@@ -959,7 +959,16 @@ async function checkout(){
   if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: ')+esc(money(d.order.discountAmount))+'</strong>';
   if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
   result.innerHTML=success+'<br><a href="'+(lang()==='tr'?'/track/?lang=tr':'/track/')+'" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
-  result.focus();result.scrollIntoView({block:'nearest',behavior:'smooth'});
+  $('orderSuccessTitle').textContent=txt('تم تثبيت الطلب بنجاح','Siparişiniz başarıyla alındı');
+  $('orderSuccessDetails').textContent=txt('تم تسجيل طلبك في Online Gifts. احتفظ برقم الطلب لتتبعه.','Siparişin kaydedildi. Takip için sipariş numaranı sakla.');
+  $('orderSuccessNumber').textContent=d.order.orderNumber;
+  $('orderSuccessExtras').textContent=Number(d.order.discountAmount||0)>0?txt('خصم العضوية: ','Üyelik indirimi: ')+money(d.order.discountAmount):'';
+  $('orderSuccessTrack').href=lang()==='tr'?'/track/?lang=tr':'/track/';
+  $('orderSuccessTrack').textContent=txt('تتبع طلبي','Siparişimi takip et');
+  $('orderSuccessClose').textContent=txt('العودة للتسوق','Alışverişe devam et');
+  closeModal(cartModal);
+  openModal($('orderSuccessModal'));
+  $('orderSuccessClose').focus();
   if(d.memberBenefits)state.benefits=d.memberBenefits;
   state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
   if(state.customer)await loadCustomerAccount();
