@@ -9,6 +9,9 @@
  const requested=params.get('lang');
  const currentLang=requested==='tr'||(!requested&&localStorage.getItem('og_lang')==='tr')?'tr':'ar';
  const txt=(ar,tr)=>currentLang==='tr'?tr:ar;
+ document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='tr'?'ltr':'rtl';
+ const loadingCopy=document.querySelector('.copy');if(loadingCopy)loadingCopy.hidden=true;
+ if(currentLang==='tr'){document.title='Ürün detayları | Online Gifts';const h=document.querySelector('.info h1');if(h)h.textContent='Ürün yükleniyor…';if($('buyBtn'))$('buyBtn').textContent='Yükleniyor…'}
  const localizedName=p=>{
   const s=p?.storefront||{};
   return currentLang==='tr'?(s.nameTr||p.name||''):(s.nameAr||p.name||'');
@@ -126,7 +129,9 @@
     history.replaceState({},'', '/products/'+id+'/'+suffix);
    }
   }catch(error){
-   console.error('Product load failed',error)
+   console.error('Product load failed',error);
+   if($('liveStock'))$('liveStock').textContent=txt('تعذر تحميل المنتج. حاول مجدداً.','Ürün yüklenemedi. Lütfen tekrar dene.');
+   const info=document.querySelector('.info');if(info&&!info.querySelector('.retry-product')){const button=document.createElement('button');button.className='buy retry-product';button.textContent=txt('إعادة المحاولة','Tekrar dene');button.onclick=()=>{button.remove();refresh()};info.append(button)}
   }
  }
  function add(){
