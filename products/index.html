@@ -690,11 +690,12 @@ function renderCategoryCampaign(){
  if(banner){
    link.href='/products/?'+(lang()==='tr'?'lang=tr&':'')+(state.category==='all'?'':'category='+encodeURIComponent(state.category));
    img.removeAttribute('srcset');img.removeAttribute('sizes');
-   img.src=API+banner;
+   img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';
+   img.src=new URL(banner,API).href;
    img.alt=categoryLabel(state.category);
    link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');return
  }
- if(lang()==='tr'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
+ if(meta||lang()==='tr'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
  const cfg=categoryCampaigns[state.category];
  if(!cfg){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
  link.href=cfg.href;OGImages.setAsset(img,cfg.src,'(max-width: 760px) calc(100vw - 18px), (max-width: 1280px) 92vw, 1180px');img.alt=cfg.alt;link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');
@@ -711,6 +712,7 @@ function renderCategoryVisual(){
  if(sticker)sticker.className='fa-solid fa-'+OGThemes.info(state.category).icon;
 }
 function renderCategories(){
+ if(state.category!=='all'&&state.categoryOrder.length&&!state.categoryMeta[state.category]){state.category='all';const url=new URL(location.href);url.searchParams.delete('category');history.replaceState({},'',url)}
  const theme=OGThemes.apply(state.category);
  const hero=document.querySelector('#products .section-head');
  hero.querySelector('h1').textContent=state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
@@ -719,7 +721,7 @@ function renderCategories(){
  const set=[];
  state.categoryOrder.forEach(c=>{if(c!=='all'&&!set.includes(c))set.push(c)});
  state.products.forEach(p=>categoryList(p).forEach(c=>{if(!set.includes(c)&&(!Object.keys(state.categoryMeta).length||state.categoryMeta[c]))set.push(c)}));
- categories.innerHTML='<button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+txt('الكل','Tümü')+'</button>'+
+ categories.innerHTML='<button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+esc(categoryLabel('all'))+'</button>'+
   set.map(c=>'<button class="cat-btn '+(!state.favoritesOnly&&state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
  categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.favoritesOnly=false;state.category=b.dataset.cat;const url=new URL(location.href);url.searchParams.delete('favorites');if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}));categories.querySelector('[data-favorites]')?.addEventListener('click',()=>{state.favoritesOnly=true;state.category='all';const url=new URL(location.href);url.searchParams.delete('category');url.searchParams.set('favorites','1');history.pushState({},'',url);renderCategories();renderProducts()})
  renderCategoryCampaign()
@@ -1006,6 +1008,11 @@ async function loadProducts(){
   grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>'+txt('تعذر تحميل المنتجات حالياً. تقدر تطلب مباشرة عبر واتساب.','Ürünler şu anda yüklenemedi. WhatsApp üzerinden sipariş verebilirsiniz.')+'</div>'
  }
 }
+async function refreshCategorySettings(){
+ try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;state.categoryMeta=Object.fromEntries(data.categories.map(c=>[c.key,c]));state.categoryOrder=data.categories.map(c=>c.key);renderCategories();renderProducts()}catch{}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.catalogLoaded)refreshCategorySettings()});
+window.addEventListener('pageshow',event=>{if(event.persisted)refreshCategorySettings()});
 function checkoutError(message){
  const result=$('checkoutResult');result.className='checkout-result show err';result.textContent=message
 }
