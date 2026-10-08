@@ -576,6 +576,27 @@ const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
 const txt=(ar,tr)=>lang()==='tr'?tr:ar;
+function refreshLocationLabels(){
+ const city=$('checkoutCity'),district=$('checkoutDistrict');
+ if(city?.options[0])city.options[0].textContent=txt('اختر الولاية','İl seçiniz');
+ if(district?.options[0])district.options[0].textContent=txt('اختر المنطقة','İlçe seçiniz');
+}
+function initLocationSelectors(){
+ const city=$('checkoutCity'),district=$('checkoutDistrict'),data=window.OG_TR_LOCATIONS||{};
+ if(!city||!district||!Object.keys(data).length)return;
+ const names=Object.keys(data).sort((a,b)=>a.localeCompare(b,'tr'));
+ city.innerHTML='<option value=""></option>'+names.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+ const fillDistricts=(keep=false)=>{
+  const old=keep?district.value:'',names=Array.isArray(data[city.value])?data[city.value]:[];
+  district.innerHTML='<option value=""></option>'+names.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+  district.disabled=!city.value;
+  if(old&&names.includes(old))district.value=old;
+  refreshLocationLabels();
+ };
+ city.addEventListener('change',()=>fillDistricts(false));
+ fillDistricts(false);refreshLocationLabels();
+}
+initLocationSelectors();
 const productName=p=>{const s=p?.storefront||{};return lang()==='tr'?(s.nameTr||p.name||''):(s.nameAr||p.name||'')};
 const productDescription=p=>{const s=p?.storefront||{};return lang()==='tr'?(s.shortDescriptionTr||s.descriptionTr||p.description||''):(s.shortDescriptionAr||s.descriptionAr||p.description||'')};
 function productHref(p){const q=new URLSearchParams();if(lang()==='tr')q.set('lang','tr');if(state.category!=='all')q.set('category',state.category);q.set('id',p.id);return '/products/detail/?'+q.toString()}
@@ -958,6 +979,7 @@ function applyLanguage(l){
  document.querySelectorAll('.trn-placeholder').forEach(el=>{el.placeholder=el.dataset[l+'Placeholder']||el.placeholder});
  try{localStorage.setItem('og_lang',l)}catch{}
  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:productName(p)}:x});saveCart();
+ refreshLocationLabels();
  renderCategories();renderProducts();renderCart();renderPayment();renderAccount()
 }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
