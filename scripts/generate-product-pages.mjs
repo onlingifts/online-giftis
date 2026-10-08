@@ -8,6 +8,7 @@ const SITE = 'https://onlinegiftis.com';
 const BACKEND = 'https://api.onlinegiftis.com';
 const IMAGE_DIR = 'product-images';
 const today = new Date().toISOString().slice(0,10);
+// Product SEO pages always mirror the current independent retail catalog.
 
 function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function clean(v=''){return String(v).replace(/\s+/g,' ').trim()}
