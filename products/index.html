@@ -928,7 +928,7 @@ async function checkout(){
  if(!state.catalogLoaded){checkoutError(txt('انتظر تحميل المنتجات قبل تثبيت الطلب.','Sipariş vermeden önce ürünlerin yüklenmesini bekleyin.'));return}
  if(!state.cart.length)return;
  const required=['checkoutName','checkoutPhone','checkoutCity','checkoutDistrict','checkoutAddress'];
- if(required.some(id=>!$(id).value.trim())){checkoutError(txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والعنوان الكامل.','Lütfen ad soyad, telefon, il ve açık adres alanlarını doldurun.'));return}
+ if(required.some(id=>!$(id).value.trim())){checkoutError(txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والمنطقة والعنوان الكامل.','Lütfen ad soyad, telefon, il, ilçe ve açık adres alanlarını doldurun.'));return}
  for(const x of state.cart){
   if(x.requiresCustomizationText&&!String(x.customizationText||'').trim()){checkoutError(txt('اكتب النص المطلوب للمنتج: ','Ürün için metni girin: ')+x.name);return}
   if(x.requiresCustomizationImage&&!state.uploads.get(x.productId)){checkoutError(txt('ارفع ملف التخصيص للمنتج: ','Ürün için kişiselleştirme dosyasını yükleyin: ')+x.name);return}
