@@ -1,11 +1,11 @@
 (()=>{
  const API='https://api.onlinegiftis.com';
  const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
- const id=Number(document.body.dataset.productId||0);
+ const params=new URLSearchParams(location.search);
+ const id=Number(document.body.dataset.productId||params.get('id')||0);
  let product=null;
  const $=x=>document.getElementById(x);
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
- const params=new URLSearchParams(location.search);
  const requested=params.get('lang');
  const currentLang=requested==='tr'||(!requested&&localStorage.getItem('og_lang')==='tr')?'tr':'ar';
  const txt=(ar,tr)=>currentLang==='tr'?tr:ar;
@@ -62,6 +62,16 @@
   product=p;
   if(window.OGThemes)OGThemes.apply(OGThemes.productCategory(p,params.get('category')));
   applyLanguageShell(p);
+  const media=document.querySelector('.media');
+  if(media){
+   if(p.hasImage&&p.imageUrl){
+    let img=media.querySelector('img');
+    if(!img){media.innerHTML='<img alt="" decoding="async" fetchpriority="high">';img=media.querySelector('img')}
+    img.src=API+p.imageUrl;img.alt=localizedName(p);
+   }else if(!media.querySelector('.no-image')){
+    media.innerHTML='<div class="no-image"><i class="fa-solid fa-gift"></i></div>';
+   }
+  }
   if($('livePrice'))$('livePrice').textContent=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
   if($('liveStock'))$('liveStock').textContent=p.stockQuantity>0?txt('متوفر حالياً: ','Stokta: ')+p.stockQuantity:txt('غير متوفر حالياً','Şu anda stokta yok');
   const btn=$('buyBtn');
@@ -69,11 +79,25 @@
  }
  async function refresh(){
   try{
-   const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
-   if(!r.ok||!Array.isArray(d.products))return;
+   if(!id)throw new Error('missing_product_id');
+   const r=await fetch(API+'/api/store/products?ts='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}}),d=await r.json();
+   if(!r.ok||!Array.isArray(d.products))throw new Error('products');
    const p=d.products.find(x=>Number(x.id)===id);
-   if(p)setProduct(p)
-  }catch{}
+   if(!p){
+    const main=document.querySelector('main');
+    if(main)main.innerHTML='<section class="copy"><div class="container"><article class="panel"><h2>'+txt('المنتج غير موجود','Ürün bulunamadı')+'</h2><p>'+txt('قد يكون المنتج محذوفاً أو غير منشور.','Ürün silinmiş veya yayından kaldırılmış olabilir.')+'</p></article></div></section>';
+    return
+   }
+   setProduct(p);
+   if(document.body.dataset.dynamicProduct==='1'){
+    const q=new URLSearchParams(location.search);
+    q.delete('id');
+    const suffix=q.toString()?'?'+q.toString():'';
+    history.replaceState({},'', '/products/'+id+'/'+suffix);
+   }
+  }catch(error){
+   console.error('Product load failed',error)
+  }
  }
  function add(){
   if(!product||!product.orderable)return;
