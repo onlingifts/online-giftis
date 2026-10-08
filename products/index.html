@@ -544,7 +544,7 @@ img{max-width:100%}
 (()=>{
 const API='https://api.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login'};
+const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login'};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -561,7 +561,16 @@ function categoryList(p){
  if(typeof raw==='string')return raw.split(',').map(x=>x.trim()).filter(Boolean);
  return [];
 }
-function categoryLabel(c){const i=OGThemes.info(c);return txt(i.ar,i.tr)}
+function categoryLabel(c){
+ const m=state.categoryMeta[c];
+ if(m)return lang()==='tr'?(m.nameTr||m.nameAr||c):(m.nameAr||m.nameTr||c);
+ const i=OGThemes.info(c);return txt(i.ar,i.tr)
+}
+function categoryDescription(c){
+ const m=state.categoryMeta[c];
+ if(!m)return txt('تفاصيل تحمل ذوقك. اكتشف مجموعتنا واختر هديتك، مع توصيل مجاني داخل تركيا.','Seni yansıtan detaylar. Koleksiyonumuzu keşfet, hediyeni seç; Türkiye genelinde ücretsiz teslimat.');
+ return lang()==='tr'?(m.descriptionTr||m.descriptionAr||''):(m.descriptionAr||m.descriptionTr||'');
+}
 function contactHref(p){
  const m=txt('مرحبا، أريد طلب المنتج: ','Merhaba, şu ürünü sipariş etmek istiyorum: ')+productName(p);
  const join=WA.includes('?')?'&':'?';
@@ -606,6 +615,14 @@ const categoryCampaigns={
 };
 function renderCategoryCampaign(){
  const link=$('categoryCampaign'),img=$('categoryCampaignImg');if(!link||!img)return;
+ const meta=state.categoryMeta[state.category];
+ if(meta?.bannerUrl){
+   link.href='/products/?'+(lang()==='tr'?'lang=tr&':'')+(state.category==='all'?'':'category='+encodeURIComponent(state.category));
+   img.removeAttribute('srcset');img.removeAttribute('sizes');
+   img.src=API+meta.bannerUrl;
+   img.alt=categoryLabel(state.category);
+   link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');return
+ }
  if(lang()==='tr'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
  const cfg=categoryCampaigns[state.category];
  if(!cfg){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return}
@@ -626,9 +643,10 @@ function renderCategories(){
  const theme=OGThemes.apply(state.category);
  const hero=document.querySelector('#products .section-head');
  hero.querySelector('h1').textContent=state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
- hero.querySelector('p').textContent=txt('تفاصيل تحمل ذوقك. اكتشف مجموعتنا واختر هديتك، مع توصيل مجاني داخل تركيا.','Seni yansıtan detaylar. Koleksiyonumuzu keşfet, hediyeni seç; Türkiye genelinde ücretsiz teslimat.');
+ hero.querySelector('p').textContent=state.favoritesOnly?txt('المنتجات التي حفظتها في المفضلة.','Favorilerine kaydettiğin ürünler.'):categoryDescription(state.category);
  let icon=hero.querySelector('.theme-icon');if(!icon){icon=document.createElement('i');hero.firstElementChild.prepend(icon)}icon.className='theme-icon fa-solid fa-'+theme.icon;icon.setAttribute('aria-hidden','true');
  const set=[];
+ state.categoryOrder.forEach(c=>{if(c!=='all'&&!set.includes(c))set.push(c)});
  state.products.forEach(p=>categoryList(p).forEach(c=>{if(!set.includes(c))set.push(c)}));
  categories.innerHTML='<button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+txt('الكل','Tümü')+'</button>'+
   set.map(c=>'<button class="cat-btn '+(!state.favoritesOnly&&state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
@@ -829,9 +847,16 @@ async function loadConfig(){
 async function loadProducts(){
  grid.innerHTML='<div class="products-state"><i class="fa-solid fa-spinner fa-spin"></i><br><br>'+txt('جاري تحميل المنتجات...','Ürünler yükleniyor...')+'</div>';
  try{
-  const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
-  if(!r.ok||!Array.isArray(d.products))throw new Error('products');
+  const [pr,cr]=await Promise.all([
+    fetch(API+'/api/store/products?ts='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}}),
+    fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}})
+  ]);
+  const [d,cd]=await Promise.all([pr.json(),cr.json()]);
+  if(!pr.ok||!Array.isArray(d.products))throw new Error('products');
   state.products=d.products;
+  const rows=cr.ok&&Array.isArray(cd.categories)?cd.categories:[];
+  state.categoryMeta=Object.fromEntries(rows.map(x=>[x.key,x]));
+  state.categoryOrder=rows.map(x=>x.key);
   const deduped=[];
   for(const old of state.cart){
     const p=state.products.find(p=>p.id===old.productId);if(!p||!p.orderable)continue;
