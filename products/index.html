@@ -585,6 +585,7 @@ img{max-width:100%}
  </div>
 </div>
 
+<script src="/assets/product-design.js" defer></script>
 <script src="/assets/customer-auth.js"></script>
 <script src="/assets/tr-location-data.js"></script>
 <script>
@@ -750,7 +751,7 @@ function uploadBlock(x){
  if(!needsFile)return '';
  const selected=state.uploads.get(x.productId);
  const label=x.requiresCustomizationImage?txt('ارفع صورة/ملف التخصيص *','Kişiselleştirme dosyası *'):txt('ارفع صورة/ملف (أو اكتب التفاصيل)','Görsel/dosya yükle (veya detay yaz)');
- return '<div class="cart-upload"><label>'+label+'</label><input type="file" data-upload="'+x.productId+'" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf"><small data-upload-name="'+x.productId+'">'+(selected?txt('تم اختيار: ','Seçildi: ')+esc(selected.name):txt('الحد الأقصى 10 MB','En fazla 10 MB'))+'</small></div>'
+ return '<div class="cart-upload"><label>'+label+'</label><button type="button" class="og-design-trigger" data-open-design="'+x.productId+'">'+txt('🎨 صمّم هديتك هنا','🎨 Hediyeni burada tasarla')+'</button><input type="file" data-upload="'+x.productId+'" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf"><small data-upload-name="'+x.productId+'">'+(selected?txt('تم اختيار: ','Seçildi: ')+esc(selected.name):txt('الحد الأقصى 10 MB','En fazla 10 MB'))+'</small></div>'
 }
 function textBlock(x){
  if(!x.requiresCustomizationText&&!x.requiresDesignInput)return '';
@@ -908,6 +909,16 @@ function renderCart(){
    if(file&&file.size>10*1024*1024){input.value='';state.uploads.delete(id);if(name)name.textContent=txt('الملف أكبر من 10 MB','Dosya 10 MB sınırını aşıyor');return}
    if(file)state.uploads.set(id,file);else state.uploads.delete(id);
    if(name)name.textContent=file?txt('تم اختيار: ','Seçildi: ')+file.name:txt('الحد الأقصى 10 MB','En fazla 10 MB')
+ }));
+ $('cartItems').querySelectorAll('[data-open-design]').forEach(b=>b.addEventListener('click',()=>{
+  const id=Number(b.dataset.openDesign);
+  const item=state.cart.find(x=>x.productId===id);
+  if(!item||!window.OGProductDesign)return;
+  OGProductDesign.open(item,(file,label)=>{
+   state.uploads.set(id,file);
+   if(label){item.customizationText=label.slice(0,500);saveCart()}
+   renderCart()
+  });
  }));
  $('cartItems').querySelectorAll('[data-minus]').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.minus),x=state.cart[i];if(x.quantity>1)x.quantity--;else{state.uploads.delete(x.productId);state.cart.splice(i,1)}saveCart();renderCart()}));
  $('cartItems').querySelectorAll('[data-plus]').forEach(b=>b.addEventListener('click',()=>{const x=state.cart[Number(b.dataset.plus)];if(x.quantity<x.stock)x.quantity++;saveCart();renderCart()}));
