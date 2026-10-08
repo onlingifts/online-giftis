@@ -105,6 +105,11 @@
    }
   }
   renderGallery(p);
+  if(p.requiresDesignInput||p.requiresCustomizationText||p.requiresCustomizationImage){
+   let button=$('designBtn');if(!button){button=document.createElement('button');button.id='designBtn';button.type='button';button.className='og-design-trigger';document.querySelector('.actions')?.before(button)}
+   button.textContent=txt('🎨 صمّم هديتك هنا','🎨 Hediyeni burada tasarla');button.disabled=!p.orderable;
+   button.onclick=()=>{if(!window.OGProductDesign)return;OGProductDesign.open({...p,name:localizedName(p)},async(file,label)=>{await OGProductDesign.saveAttachment(id,file);add(label,true)})}
+  }
   if($('livePrice'))$('livePrice').textContent=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
   const oldPrice=Number(p.storefront?.compareAtPrice);if(oldPrice>Number(p.price)&&p.price!==null){const el=document.createElement('del');el.className='compare-price';el.textContent=money(oldPrice);$('livePrice')?.after(el)}
   if($('liveStock'))$('liveStock').textContent=p.stockQuantity>0?txt('متوفر حالياً: ','Stokta: ')+p.stockQuantity:txt('غير متوفر حالياً','Şu anda stokta yok');
@@ -135,22 +140,22 @@
    const info=document.querySelector('.info');if(info&&!info.querySelector('.retry-product')){const button=document.createElement('button');button.className='buy retry-product';button.textContent=txt('إعادة المحاولة','Tekrar dene');button.onclick=()=>{button.remove();refresh()};info.append(button)}
   }
  }
- function add(){
+ function add(customOverride,skipPrompt=false){
   if(!product||!product.orderable)return;
-  let custom='';
+  let custom=typeof customOverride==='string'?customOverride:'';
   const needsText=Boolean(product.requiresCustomizationText??(product.customizationType==='text'||product.customizationType==='text_and_image'));
-  if(needsText){
+  if(needsText&&!skipPrompt){
    custom=prompt(txt('اكتب الاسم أو النص المطلوب لهذا المنتج:','Bu ürün için isim veya istediğiniz metni yazın:'))?.trim()||'';
    if(!custom)return
   }
   let cart=[];
   try{cart=JSON.parse(localStorage.getItem('og_cart_v1')||'[]');if(!Array.isArray(cart))cart=[]}catch{}
-  const existing=cart.find(x=>Number(x.productId)===id&&String(x.customizationText||'')===custom);
-  if(existing){if(existing.quantity<product.stockQuantity)existing.quantity+=1;else return}
+  const existing=cart.find(x=>Number(x.productId)===id);
+  if(existing){if(skipPrompt){existing.customizationText=custom}else{if(existing.quantity<product.stockQuantity)existing.quantity+=1;else return;if(custom)existing.customizationText=custom}}
   else cart.push({productId:id,name:localizedName(product),price:product.price,quantity:1,stock:product.stockQuantity,customizationText:custom});
   localStorage.setItem('og_cart_v1',JSON.stringify(cart));
   location.href=currentLang==='tr'?'/products/?lang=tr&cart=1':'/products/?cart=1'
  }
- $('buyBtn')?.addEventListener('click',add);
+ $('buyBtn')?.addEventListener('click',()=>add());
  refresh()
 })();

@@ -586,7 +586,7 @@ img{max-width:100%}
  </div>
 </div>
 
-<script src="/assets/product-design.js" defer></script>
+<script src="/assets/product-design.js?v=20261008-designer1" defer></script>
 <script src="/assets/customer-auth.js"></script>
 <script src="/assets/tr-location-data.js"></script>
 <script>
@@ -749,7 +749,7 @@ function renderProducts(){
  }))
 }
 function uploadBlock(x){
- const needsFile=x.requiresCustomizationImage||x.requiresDesignInput;
+ const needsFile=x.requiresCustomizationImage||x.requiresDesignInput||x.requiresCustomizationText;
  if(!needsFile)return '';
  const selected=state.uploads.get(x.productId);
  const label=x.requiresCustomizationImage?txt('ارفع صورة/ملف التخصيص *','Kişiselleştirme dosyası *'):txt('ارفع صورة/ملف (أو اكتب التفاصيل)','Görsel/dosya yükle (veya detay yaz)');
@@ -847,7 +847,8 @@ function renderAccount(){
  gift.classList.toggle('earned',Boolean(weekly.giftEarned));
  if(!$('checkoutName').value&&customer.displayName)$('checkoutName').value=customer.displayName;
  if(!$('checkoutPhone').value&&customer.phone)$('checkoutPhone').value=customer.phone;
- renderPayment()
+ renderPayment();
+ if(window.OGProductDesign)for(const item of state.cart){if(state.uploads.has(item.productId))continue;OGProductDesign.getAttachment(item.productId).then(file=>{if(file&&state.cart.some(x=>x.productId===item.productId)&&!state.uploads.has(item.productId)){state.uploads.set(item.productId,file);const el=$('cartItems').querySelector('[data-upload-name="'+item.productId+'"]');if(el)el.textContent=txt('تم إرفاق التصميم: ','Tasarım eklendi: ')+file.name}}).catch(()=>{})}
 }
 async function loadCustomerAccount(){
  if(!window.OGCustomerAuth)return;
@@ -909,22 +910,23 @@ function renderCart(){
  $('cartItems').querySelectorAll('[data-upload]').forEach(input=>input.addEventListener('change',()=>{
    const id=Number(input.dataset.upload),file=input.files?.[0]||null,name=$('cartItems').querySelector('[data-upload-name="'+id+'"]');
    if(file&&file.size>10*1024*1024){input.value='';state.uploads.delete(id);if(name)name.textContent=txt('الملف أكبر من 10 MB','Dosya 10 MB sınırını aşıyor');return}
-   if(file)state.uploads.set(id,file);else state.uploads.delete(id);
+   if(file){state.uploads.set(id,file);OGProductDesign?.saveAttachment(id,file).catch(()=>{})}else{state.uploads.delete(id);OGProductDesign?.removeAttachment(id).catch(()=>{})}
    if(name)name.textContent=file?txt('تم اختيار: ','Seçildi: ')+file.name:txt('الحد الأقصى 10 MB','En fazla 10 MB')
  }));
  $('cartItems').querySelectorAll('[data-open-design]').forEach(b=>b.addEventListener('click',()=>{
   const id=Number(b.dataset.openDesign);
   const item=state.cart.find(x=>x.productId===id);
   if(!item||!window.OGProductDesign)return;
-  OGProductDesign.open(item,(file,label)=>{
+  OGProductDesign.open({...item,designType:state.products.find(p=>Number(p.id)===id)?.designType},async(file,label)=>{
+   await OGProductDesign.saveAttachment(id,file);
    state.uploads.set(id,file);
    if(label){item.customizationText=label.slice(0,500);saveCart()}
    renderCart()
   });
  }));
- $('cartItems').querySelectorAll('[data-minus]').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.minus),x=state.cart[i];if(x.quantity>1)x.quantity--;else{state.uploads.delete(x.productId);state.cart.splice(i,1)}saveCart();renderCart()}));
+ $('cartItems').querySelectorAll('[data-minus]').forEach(b=>b.addEventListener('click',()=>{const i=Number(b.dataset.minus),x=state.cart[i];if(x.quantity>1)x.quantity--;else{state.uploads.delete(x.productId);OGProductDesign?.removeAttachment(x.productId).catch(()=>{});state.cart.splice(i,1)}saveCart();renderCart()}));
  $('cartItems').querySelectorAll('[data-plus]').forEach(b=>b.addEventListener('click',()=>{const x=state.cart[Number(b.dataset.plus)];if(x.quantity<x.stock)x.quantity++;saveCart();renderCart()}));
- $('cartItems').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{const x=state.cart[Number(b.dataset.remove)];state.uploads.delete(x.productId);state.cart.splice(Number(b.dataset.remove),1);saveCart();renderCart()}));
+ $('cartItems').querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{const x=state.cart[Number(b.dataset.remove)];state.uploads.delete(x.productId);OGProductDesign?.removeAttachment(x.productId).catch(()=>{});state.cart.splice(Number(b.dataset.remove),1);saveCart();renderCart()}));
  renderPayment()
 }
 function renderPayment(){
@@ -992,6 +994,7 @@ async function loadProducts(){
     if(existing)existing.quantity=Math.min(existing.stock,existing.quantity+item.quantity);else deduped.push(item)
   }
   state.cart=deduped;saveCart();
+  if(window.OGProductDesign)await Promise.all(state.cart.map(async item=>{try{const file=await OGProductDesign.getAttachment(item.productId);if(file&&!state.uploads.has(item.productId))state.uploads.set(item.productId,file)}catch{}}));
   renderCategories();renderProducts();renderCart()
  }catch{
   grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>'+txt('تعذر تحميل المنتجات حالياً. تقدر تطلب مباشرة عبر واتساب.','Ürünler şu anda yüklenemedi. WhatsApp üzerinden sipariş verebilirsiniz.')+'</div>'
@@ -1048,7 +1051,7 @@ async function checkout(){
   openModal($('orderSuccessModal'));
   $('orderSuccessClose').focus();
   if(d.memberBenefits)state.benefits=d.memberBenefits;
-  state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
+  for(const x of state.cart)OGProductDesign?.removeAttachment(x.productId).catch(()=>{});state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
   if(state.customer)await loadCustomerAccount();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
  }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}

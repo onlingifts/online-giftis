@@ -2,7 +2,7 @@
 'use strict';
 // Lightweight visual design attachment: produces an image file for order preparation.
 // This is a request preview, not a manufacturing-accurate product mockup.
-let overlay=null, resolveCallback=null, imageBitmap=null, productLabel='';
+let overlay=null, resolveCallback=null, imageBitmap=null, productLabel='',template='generic';
 const $=id=>overlay?.querySelector('#'+id);
 const tr=()=>document.documentElement.lang==='tr';
 const t=(ar,tk)=>tr()?tk:ar;
@@ -21,7 +21,7 @@ function ensure(){
    <div class="og-design-body">
     <div class="og-design-tools">
       <label id="ogDesignLabelText" for="ogDesignText"></label>
-      <input id="ogDesignText" maxlength="200" autocomplete="off">
+      <input id="ogDesignText" maxlength="200" autocomplete="off"><label id="ogDesignSecondLabel" for="ogDesignSecondText"></label><input id="ogDesignSecondText" maxlength="80" autocomplete="off">
       <label id="ogDesignLabelPhoto" for="ogDesignPhoto"></label>
       <input id="ogDesignPhoto" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif">
       <p id="ogDesignNote"></p>
@@ -35,7 +35,7 @@ function ensure(){
  $('ogDesignClose').onclick=close;
  $('ogDesignCancel').onclick=close;
  overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
- $('ogDesignText').addEventListener('input',draw);
+ $('ogDesignText').addEventListener('input',draw);$('ogDesignSecondText').addEventListener('input',draw);
  $('ogDesignPhoto').addEventListener('change',async()=>{
   const file=$('ogDesignPhoto').files?.[0];
   if(imageBitmap){imageBitmap.close?.();imageBitmap=null}
@@ -47,49 +47,39 @@ function ensure(){
   }
   draw()
  });
- $('ogDesignClear').onclick=()=>{$('ogDesignText').value='';$('ogDesignPhoto').value='';if(imageBitmap){imageBitmap.close?.();imageBitmap=null}draw()};
+ $('ogDesignClear').onclick=()=>{$('ogDesignText').value='';$('ogDesignSecondText').value='';$('ogDesignPhoto').value='';if(imageBitmap){imageBitmap.close?.();imageBitmap=null}draw()};
  $('ogDesignApply').onclick=()=>{
-   const canvas=$('ogDesignCanvas'),label=$('ogDesignText').value.trim();
+   const canvas=$('ogDesignCanvas'),label=[$('ogDesignText').value.trim(),$('ogDesignSecondText').value.trim()].filter(Boolean).join(' · ');
+   if(template==='name_lamp'&&!$('ogDesignText').value.trim()){alert(t('أدخل الاسم الأول للأباجور.','Lamba için birinci ismi yazın.'));return}
+   if(template==='mirror_heart'&&!imageBitmap){alert(t('اختر الصورة اللي بدك تطبعها على المراية.','Aynaya basılacak fotoğrafı seçin.'));return}
    if(!label&&!imageBitmap){alert(t('أدخل نصًا أو اختر صورة للتصميم.','Tasarım için metin yazın veya görsel seçin.'));return}
    $('ogDesignApply').disabled=true;
-   canvas.toBlob(blob=>{
+   canvas.toBlob(async blob=>{
     $('ogDesignApply').disabled=false;
     if(!blob){alert(t('تعذر حفظ التصميم.','Tasarım kaydedilemedi.'));return}
-    const file=new File([blob],'online-gifts-design-'+Date.now()+'.png',{type:'image/png'});
+    const file=new File([blob],'online-gifts-'+template+'-design-'+Date.now()+'.png',{type:'image/png'});
     const save=resolveCallback;
-    close();
-    save?.(file,label)
+    try{await save?.(file,label);close()}catch(error){alert(t('تعذر إرفاق التصميم. جرّب مرة تانية.','Tasarım eklenemedi. Lütfen tekrar deneyin.'))}
    },'image/png')
  };
  document.addEventListener('keydown',e=>{if(!overlay?.hidden&&e.key==='Escape')close()});
 }
 function draw(){
- const canvas=$('ogDesignCanvas'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
- if(!ctx)return;
- ctx.fillStyle='#faf1ef';ctx.fillRect(0,0,w,h);
- ctx.fillStyle='#fff';ctx.fillRect(70,70,w-140,h-140);
- ctx.strokeStyle='#e0b2b4';ctx.lineWidth=9;ctx.strokeRect(70,70,w-140,h-140);
- ctx.fillStyle='#fff9f8';ctx.fillRect(110,120,860,670);
- if(imageBitmap){
-  const iw=imageBitmap.width,ih=imageBitmap.height;
-  const scale=Math.min(860/iw,670/ih);
-  const dw=iw*scale,dh=ih*scale;
-  ctx.drawImage(imageBitmap,540-dw/2,455-dh/2,dw,dh);
- }else{
-  ctx.fillStyle='#f0e5e6';ctx.beginPath();ctx.arc(540,455,125,0,Math.PI*2);ctx.fill();
-  ctx.font='bold 80px Arial';ctx.fillStyle='#b47a80';ctx.textAlign='center';ctx.fillText('♡',540,480)
+ const canvas=$('ogDesignCanvas'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;if(!ctx)return;
+ ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+ const text=$('ogDesignText').value.trim(),second=$('ogDesignSecondText').value.trim();
+ const fit=(value,y,start=100)=>{let size=start;ctx.font='bold '+size+'px Cairo, Arial';while(size>24&&ctx.measureText(value).width>900){size-=3;ctx.font='bold '+size+'px Cairo, Arial'}ctx.fillStyle='#222';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(value,w/2,y,900)};
+ if(template==='name_lamp'){
+  fit(text||t('الاسم الأول','Birinci isim'),second?410:540,140);
+  if(second){fit('♡',540,100);fit(second,680,140)}
+  return
  }
- const value=$('ogDesignText').value.trim();
- if(value){
-  ctx.fillStyle='#39282a';
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  let size=64;
-  ctx.font='bold '+size+'px Cairo, Arial';
-  while(size>24 && ctx.measureText(value).width>840){size-=3;ctx.font='bold '+size+'px Cairo, Arial'}
-  ctx.fillText(value,540,858,840)
+ ctx.save();
+ if(template==='mirror_heart'){
+  ctx.beginPath();ctx.moveTo(540,840);ctx.bezierCurveTo(120,580,30,230,295,160);ctx.bezierCurveTo(420,125,515,210,540,290);ctx.bezierCurveTo(565,210,660,125,785,160);ctx.bezierCurveTo(1050,230,960,580,540,840);ctx.closePath();ctx.clip()
  }
- ctx.fillStyle='#9e7e7a';ctx.textAlign='center';ctx.textBaseline='alphabetic';
- ctx.font='28px Cairo, Arial';ctx.fillText(productLabel.slice(0,90),540,951,830)
+ if(imageBitmap){const scale=template==='mirror_heart'?Math.max(900/imageBitmap.width,720/imageBitmap.height):Math.min(900/imageBitmap.width,720/imageBitmap.height);const dw=imageBitmap.width*scale,dh=imageBitmap.height*scale;ctx.drawImage(imageBitmap,540-dw/2,490-dh/2,dw,dh)}else{ctx.fillStyle='#fff0f5';ctx.fillRect(90,130,900,720);ctx.font='120px Arial';ctx.fillStyle='#d65582';ctx.textAlign='center';ctx.fillText('♡',540,500)}
+ ctx.restore();if(text)fit(text,940,64)
 }
 function close(){
  if(!overlay)return;
@@ -99,17 +89,18 @@ function close(){
 }
 function open(product,onSave){
  ensure();
- productLabel=String(product?.name||'').slice(0,100);
+ productLabel=String(product?.name||'').slice(0,100);template=product?.designType||product?.storefront?.details?.designTemplate||'generic';
  resolveCallback=onSave;
- $('ogDesignTitle').textContent=t('صمّم هديتك','Hediyeni tasarla');
- $('ogDesignLabelText').textContent=t('الاسم أو العبارة على الهدية','Hediye üzerindeki isim veya yazı');
- $('ogDesignLabelPhoto').textContent=t('ارفع صورتك للتصميم (اختياري)','Tasarım için görsel yükle (isteğe bağlı)');
+ $('ogDesignTitle').textContent=template==='name_lamp'?t('صمّم أباجور الأسماء','İsim lambanı tasarla'):template==='mirror_heart'?t('صمّم صورتك للمراية','Ayna fotoğrafını tasarla'):t('صمّم هديتك','Hediyeni tasarla');
+ $('ogDesignLabelText').textContent=template==='name_lamp'?t('الاسم الأول *','Birinci isim *'):t('الاسم أو العبارة — اختياري','İsim veya yazı — isteğe bağlı');
+ $('ogDesignSecondLabel').textContent=t('الاسم الثاني — اختياري','İkinci isim — isteğe bağlı');$('ogDesignSecondLabel').hidden=template!=='name_lamp';$('ogDesignSecondText').hidden=template!=='name_lamp';$('ogDesignSecondText').value='';
+ $('ogDesignLabelPhoto').textContent=template==='mirror_heart'?t('اختر الصورة للمراية *','Ayna fotoğrafını seç *'):t('ارفع صورتك للتصميم (اختياري)','Tasarım için görsel yükle (isteğe bağlı)');
  $('ogDesignNote').textContent=t('هذه معاينة لتوضيح طلبك وليست شكل المنتج النهائي. سيتم إرفاق التصميم بالطلب.','Bu görsel sipariş tercihinizin önizlemesidir; nihai ürünün birebir görünümü değildir. Dosya siparişe eklenecektir.');
  $('ogDesignClear').textContent=t('مسح التصميم','Tasarımı temizle');
  $('ogDesignCancel').textContent=t('إلغاء','İptal');
  $('ogDesignApply').textContent=t('اعتماد التصميم وإرفاقه بالطلب','Tasarımı kaydet ve siparişe ekle');
- $('ogDesignText').value=String(product?.customizationText||'');
- $('ogDesignPhoto').value='';
+ const existing=String(product?.customizationText||'');const names=existing.split(' · ');$('ogDesignText').value=template==='name_lamp'?names[0]:existing;$('ogDesignText').maxLength=template==='name_lamp'?80:200;if(template==='name_lamp')$('ogDesignSecondText').value=names.slice(1).join(' · ');
+ $('ogDesignPhoto').value='';$('ogDesignPhoto').hidden=template==='name_lamp';$('ogDesignLabelPhoto').hidden=template==='name_lamp';
  if(imageBitmap){imageBitmap.close?.();imageBitmap=null}
  overlay.hidden=false;document.body.classList.add('og-design-open');
  draw();$('ogDesignText').focus()
@@ -137,5 +128,8 @@ css.textContent=`
 @media(max-width:640px){.og-design-body{grid-template-columns:1fr}.og-design-header h2{font-size:18px}.og-design-actions{flex-direction:column-reverse}}
 `;
 document.head.appendChild(css);
-window.OGProductDesign={open};
+async function attachment(action,id,file){
+ return new Promise((resolve,reject)=>{const request=indexedDB.open('og-order-designs',1);request.onupgradeneeded=()=>request.result.createObjectStore('attachments');request.onerror=()=>reject(request.error);request.onsuccess=()=>{const db=request.result,tx=db.transaction('attachments',action==='get'?'readonly':'readwrite'),store=tx.objectStore('attachments');let operation=action==='get'?store.get(String(id)):action==='delete'?store.delete(String(id)):store.put({blob:file,name:file.name,type:file.type},String(id));let value;operation.onsuccess=()=>{value=operation.result};tx.oncomplete=()=>{db.close();resolve(action==='get'&&value?new File([value.blob],value.name,{type:value.type}):value)};tx.onerror=()=>{db.close();reject(tx.error)}}})
+}
+window.OGProductDesign={open,saveAttachment:(id,file)=>attachment('put',id,file),getAttachment:id=>attachment('get',id),removeAttachment:id=>attachment('delete',id)};
 })();
