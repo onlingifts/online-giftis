@@ -591,7 +591,7 @@ img{max-width:100%}
 (()=>{
 const API='https://api.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false};
+const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false,notifications:[],notificationUnread:0};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -769,6 +769,49 @@ function setAccountMode(mode){
  if(label)label.textContent=state.accountMode==='register'?txt('إنشاء الحساب','Hesap oluştur'):txt('تسجيل الدخول','Giriş yap');
  accountMessage('')
 }
+function renderMemberNotices(){
+ const host=$('memberNotices');
+ if(!host)return;
+ $('memberNoticeCount').hidden=!state.notificationUnread;
+ $('memberNoticeCount').textContent=String(state.notificationUnread||0);
+ if(!state.notifications.length){
+  host.innerHTML='<p>'+txt('لا توجد إشعارات في حسابك حالياً.','Henüz bildirimin bulunmuyor.')+'</p>';
+  return
+ }
+ host.innerHTML=state.notifications.map(n=>{
+  const title=lang()==='tr'?(n.titleTr||n.titleAr):(n.titleAr||n.titleTr);
+  const body=lang()==='tr'?(n.bodyTr||n.bodyAr):(n.bodyAr||n.bodyTr);
+  const type=({important:txt('هام','Önemli'),offer:txt('عرض','Teklif'),update:txt('تحديث','Güncelleme'),general:txt('عام','Genel')})[n.type]||'';
+  return '<article class="member-notice '+(n.isRead?'':'unread')+'"><strong>'+esc(title)+'</strong>'+
+   '<p>'+esc(body)+'</p><small>'+esc(type)+' • '+esc(String(n.createdAt||'').replace('T',' ').slice(0,16))+'</small>'+
+   (n.isRead?'':' <button type="button" data-mark-notice="'+n.id+'">'+txt('تحديد كمقروء','Okundu olarak işaretle')+'</button>')+'</article>'
+ }).join('');
+ host.querySelectorAll('[data-mark-notice]').forEach(b=>b.addEventListener('click',async()=>{
+  const id=Number(b.dataset.markNotice),token=await OGCustomerAuth?.getAccessToken();
+  if(!token)return;
+  b.disabled=true;
+  try{
+   const response=await fetch(API+'/api/store/notifications',{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({id})});
+   if(!response.ok)throw new Error('notification_update_failed');
+   await loadMemberNotifications()
+  }catch{b.disabled=false}
+ }));
+}
+async function loadMemberNotifications(){
+ if(!state.customer){state.notifications=[];state.notificationUnread=0;renderMemberNotices();return}
+ const token=await OGCustomerAuth?.getAccessToken();
+ if(!token)return;
+ try{
+  const response=await fetch(API+'/api/store/notifications',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+  if(!response.ok)throw new Error('notifications_unavailable');
+  const data=await response.json();
+  state.notifications=Array.isArray(data.notifications)?data.notifications:[];
+  state.notificationUnread=Number(data.unreadCount||0);
+  renderMemberNotices()
+ }catch{
+  $('memberNotices').textContent=txt('تعذر تحميل الإشعارات. حاول التحديث.','Bildirimler yüklenemedi. Lütfen yenileyin.');
+ }
+}
 function renderAccount(){
  const logged=Boolean(state.customer);
  $('accountGuestView').hidden=logged;
@@ -795,6 +838,7 @@ function renderAccount(){
  $('weeklyItemsProgress').textContent=itemCount+' / 5';
  $('weeklyOrdersBar').style.width=(orderCount*20)+'%';
  $('weeklyItemsBar').style.width=(itemCount*20)+'%';
+ renderMemberNotices();
  const gift=$('weeklyGiftState');
  gift.textContent=weekly.giftEarned?txt('الهدية صارت إلك ✓','Hediyen hazır ✓'):txt('قيد التقدم','Devam ediyor');
  gift.classList.toggle('earned',Boolean(weekly.giftEarned));
@@ -813,7 +857,8 @@ async function loadCustomerAccount(){
    if(r.status===401)await OGCustomerAuth.signOut();
    throw new Error(d.error||'account')
   }
-  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount()
+  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount();
+  if(state.customer)await loadMemberNotifications()
  }catch{
   state.customer=null;state.benefits=null;renderAccount()
  }
@@ -1020,12 +1065,13 @@ $('cartClose').addEventListener('click',()=>closeModal(cartModal));
 $('productClose').addEventListener('click',()=>closeModal(productModal));
 $('orderSuccessClose').addEventListener('click',()=>closeModal($('orderSuccessModal')));
 $('orderSuccessModal').addEventListener('click',e=>{if(e.target===$('orderSuccessModal'))closeModal($('orderSuccessModal'))});
-$('customerAccountBtn').addEventListener('click',()=>openModal(accountModal));
+$('customerAccountBtn').addEventListener('click',()=>{openModal(accountModal);if(state.customer)loadMemberNotifications()});
 $('accountClose').addEventListener('click',()=>closeModal(accountModal));
+$('memberNoticeRefresh').addEventListener('click',loadMemberNotifications);
 document.querySelectorAll('[data-account-mode]').forEach(b=>b.addEventListener('click',()=>setAccountMode(b.dataset.accountMode)));
 $('accountSubmit').addEventListener('click',submitAccount);
 $('googleLoginBtn').addEventListener('click',()=>OGCustomerAuth?.googleSignIn());
-$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;renderAccount();setAccountMode('login')});
+$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;state.notifications=[];state.notificationUnread=0;renderAccount();setAccountMode('login')});
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
 accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
