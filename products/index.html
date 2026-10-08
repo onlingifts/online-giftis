@@ -275,6 +275,18 @@ img{max-width:100%}
 .checkout-result.show{display:block}
 .checkout-result.ok{background:#e8f8ef;color:#126a3a}
 .checkout-result.err{background:#fff0f0;color:#9b1d2a}
+.member-notices-card{padding:15px;background:#f9f7f4;border:1px solid rgba(0,0,0,.09);border-radius:17px;margin:15px 0}
+.member-notices-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.member-notices-head strong{font-size:13px}
+.member-notices-count{min-width:22px;text-align:center;padding:2px 6px;border-radius:99px;color:white;background:#b72c51;font-size:11px}
+.member-notices-refresh{margin-inline-start:auto;background:#fff;border:1px solid #e5ded8;border-radius:9px;padding:7px 12px;font-size:11px;cursor:pointer}
+.member-notices-list{display:grid;gap:9px;max-height:300px;overflow:auto}
+.member-notice{padding:11px;background:white;border:1px solid #e8e0da;border-radius:12px}
+.member-notice.unread{border-color:#db9f65;background:#fffaf1}
+.member-notice strong{display:block;font-size:12px;margin-bottom:5px}
+.member-notice p{font-size:11px;line-height:1.8;margin:0 0 8px;white-space:pre-wrap}
+.member-notice button{border:0;padding:6px 9px;border-radius:8px;background:#eee7de;cursor:pointer;font-size:10px}
+.member-notice small{font-size:10px;color:#756a60}
 .order-success-sheet{max-width:560px;width:min(100%,540px)}
 .order-success-content{text-align:center;padding:36px 22px 30px}
 .order-success-icon{width:84px;height:84px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:#e1f6e9;color:#198c4b;font-size:38px}
@@ -550,6 +562,14 @@ img{max-width:100%}
    </div>
    <div id="accountMemberView" hidden>
     <div class="member-profile-card"><div class="member-avatar"><i class="fa-solid fa-user"></i></div><div><span class="trn" data-ar="أهلاً في عضويتك" data-tr="Üyeliğine hoş geldin">أهلاً في عضويتك</span><strong id="memberDisplayName"></strong><small id="memberEmail"></small></div></div>
+    <section class="member-notices-card">
+      <div class="member-notices-head">
+        <strong><i class="fa-regular fa-bell"></i> <span class="trn" data-ar="إشعارات حسابي" data-tr="Bildirimlerim">إشعارات حسابي</span></strong>
+        <span id="memberNoticeCount" class="member-notices-count" hidden></span>
+        <button type="button" id="memberNoticeRefresh" class="member-notices-refresh trn" data-ar="تحديث" data-tr="Yenile">تحديث</button>
+      </div>
+      <div id="memberNotices" class="member-notices-list"></div>
+    </section>
     <div class="member-first-order" id="memberFirstOrderCard"><i class="fa-solid fa-ticket"></i><div><strong class="trn" data-ar="خصم أول طلب: 200₺" data-tr="İlk sipariş indirimi: 200₺">خصم أول طلب: 200₺</strong><p class="trn" data-ar="سيُطبَّق تلقائياً عند تثبيت أول طلب من هذا الحساب." data-tr="Bu hesaptan vereceğin ilk siparişte otomatik uygulanır.">سيُطبَّق تلقائياً عند تثبيت أول طلب من هذا الحساب.</p></div></div>
     <div class="weekly-progress-card">
      <div class="weekly-progress-head"><div><strong class="trn" data-ar="خلي هديتك علينا" data-tr="Hediyen bizden olsun">خلي هديتك علينا</strong><p class="trn" data-ar="يكفي تحقيق أحد الشرطين خلال نفس الأسبوع." data-tr="Aynı hafta içinde iki koşuldan birini tamamlaman yeterli.">يكفي تحقيق أحد الشرطين خلال نفس الأسبوع.</p></div><span id="weeklyGiftState"></span></div>
@@ -571,7 +591,7 @@ img{max-width:100%}
 (()=>{
 const API='https://api.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false};
+const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false,notifications:[],notificationUnread:0};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -749,6 +769,49 @@ function setAccountMode(mode){
  if(label)label.textContent=state.accountMode==='register'?txt('إنشاء الحساب','Hesap oluştur'):txt('تسجيل الدخول','Giriş yap');
  accountMessage('')
 }
+function renderMemberNotices(){
+ const host=$('memberNotices');
+ if(!host)return;
+ $('memberNoticeCount').hidden=!state.notificationUnread;
+ $('memberNoticeCount').textContent=String(state.notificationUnread||0);
+ if(!state.notifications.length){
+  host.innerHTML='<p>'+txt('لا توجد إشعارات في حسابك حالياً.','Henüz bildirimin bulunmuyor.')+'</p>';
+  return
+ }
+ host.innerHTML=state.notifications.map(n=>{
+  const title=lang()==='tr'?(n.titleTr||n.titleAr):(n.titleAr||n.titleTr);
+  const body=lang()==='tr'?(n.bodyTr||n.bodyAr):(n.bodyAr||n.bodyTr);
+  const type=({important:txt('هام','Önemli'),offer:txt('عرض','Teklif'),update:txt('تحديث','Güncelleme'),general:txt('عام','Genel')})[n.type]||'';
+  return '<article class="member-notice '+(n.isRead?'':'unread')+'"><strong>'+esc(title)+'</strong>'+
+   '<p>'+esc(body)+'</p><small>'+esc(type)+' • '+esc(String(n.createdAt||'').replace('T',' ').slice(0,16))+'</small>'+
+   (n.isRead?'':' <button type="button" data-mark-notice="'+n.id+'">'+txt('تحديد كمقروء','Okundu olarak işaretle')+'</button>')+'</article>'
+ }).join('');
+ host.querySelectorAll('[data-mark-notice]').forEach(b=>b.addEventListener('click',async()=>{
+  const id=Number(b.dataset.markNotice),token=await OGCustomerAuth?.getAccessToken();
+  if(!token)return;
+  b.disabled=true;
+  try{
+   const response=await fetch(API+'/api/store/notifications',{method:'PATCH',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({id})});
+   if(!response.ok)throw new Error('notification_update_failed');
+   await loadMemberNotifications()
+  }catch{b.disabled=false}
+ }));
+}
+async function loadMemberNotifications(){
+ if(!state.customer){state.notifications=[];state.notificationUnread=0;renderMemberNotices();return}
+ const token=await OGCustomerAuth?.getAccessToken();
+ if(!token)return;
+ try{
+  const response=await fetch(API+'/api/store/notifications',{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+  if(!response.ok)throw new Error('notifications_unavailable');
+  const data=await response.json();
+  state.notifications=Array.isArray(data.notifications)?data.notifications:[];
+  state.notificationUnread=Number(data.unreadCount||0);
+  renderMemberNotices()
+ }catch{
+  $('memberNotices').textContent=txt('تعذر تحميل الإشعارات. حاول التحديث.','Bildirimler yüklenemedi. Lütfen yenileyin.');
+ }
+}
 function renderAccount(){
  const logged=Boolean(state.customer);
  $('accountGuestView').hidden=logged;
@@ -775,6 +838,7 @@ function renderAccount(){
  $('weeklyItemsProgress').textContent=itemCount+' / 5';
  $('weeklyOrdersBar').style.width=(orderCount*20)+'%';
  $('weeklyItemsBar').style.width=(itemCount*20)+'%';
+ renderMemberNotices();
  const gift=$('weeklyGiftState');
  gift.textContent=weekly.giftEarned?txt('الهدية صارت إلك ✓','Hediyen hazır ✓'):txt('قيد التقدم','Devam ediyor');
  gift.classList.toggle('earned',Boolean(weekly.giftEarned));
@@ -793,7 +857,8 @@ async function loadCustomerAccount(){
    if(r.status===401)await OGCustomerAuth.signOut();
    throw new Error(d.error||'account')
   }
-  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount()
+  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount();
+  if(state.customer)await loadMemberNotifications()
  }catch{
   state.customer=null;state.benefits=null;renderAccount()
  }
@@ -1000,12 +1065,13 @@ $('cartClose').addEventListener('click',()=>closeModal(cartModal));
 $('productClose').addEventListener('click',()=>closeModal(productModal));
 $('orderSuccessClose').addEventListener('click',()=>closeModal($('orderSuccessModal')));
 $('orderSuccessModal').addEventListener('click',e=>{if(e.target===$('orderSuccessModal'))closeModal($('orderSuccessModal'))});
-$('customerAccountBtn').addEventListener('click',()=>openModal(accountModal));
+$('customerAccountBtn').addEventListener('click',()=>{openModal(accountModal);if(state.customer)loadMemberNotifications()});
 $('accountClose').addEventListener('click',()=>closeModal(accountModal));
+$('memberNoticeRefresh').addEventListener('click',loadMemberNotifications);
 document.querySelectorAll('[data-account-mode]').forEach(b=>b.addEventListener('click',()=>setAccountMode(b.dataset.accountMode)));
 $('accountSubmit').addEventListener('click',submitAccount);
 $('googleLoginBtn').addEventListener('click',()=>OGCustomerAuth?.googleSignIn());
-$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;renderAccount();setAccountMode('login')});
+$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;state.notifications=[];state.notificationUnread=0;renderAccount();setAccountMode('login')});
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
 accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
