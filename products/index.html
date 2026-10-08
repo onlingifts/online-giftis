@@ -266,7 +266,7 @@ img{max-width:100%}
 .field{display:grid;gap:5px}
 .field.full{grid-column:1/-1}
 .field label{font-size:9.5px;font-weight:900}
-.field input,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:10px 11px;outline:none;font-size:10.5px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:10px 11px;outline:none;font-size:10.5px}
 .field textarea{min-height:78px;resize:vertical}
 .checkout-submit{width:100%;min-height:50px;margin-top:11px;border:0;border-radius:15px;background:var(--green);color:#fff;font-size:11px;font-weight:900}
 .checkout-submit:disabled{opacity:.55}
@@ -275,6 +275,17 @@ img{max-width:100%}
 .checkout-result.show{display:block}
 .checkout-result.ok{background:#e8f8ef;color:#126a3a}
 .checkout-result.err{background:#fff0f0;color:#9b1d2a}
+.order-success-sheet{max-width:560px;width:min(100%,540px)}
+.order-success-content{text-align:center;padding:36px 22px 30px}
+.order-success-icon{width:84px;height:84px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:#e1f6e9;color:#198c4b;font-size:38px}
+.order-success-content h2{font-size:clamp(26px,5vw,35px);line-height:1.35;margin:0 0 12px;color:#17261b}
+.order-success-content p{font-size:16px;line-height:1.7;margin:0 0 16px;color:#4f665a}
+.order-success-number{padding:14px;border-radius:14px;background:#f4f7f4;font-size:26px;letter-spacing:1px;font-weight:900;margin:10px 0 16px;user-select:text}
+#orderSuccessExtras{font-size:14px;line-height:1.8;color:#256a44;margin-bottom:14px}
+.order-success-primary,.order-success-secondary{display:flex;justify-content:center;align-items:center;width:100%;min-height:52px;border-radius:13px;font-size:15px;font-weight:900;margin-top:10px;text-decoration:none}
+.order-success-primary{background:#202c24;color:white}
+.order-success-secondary{border:1px solid #d8e4db;background:white;color:#24382a;cursor:pointer}
+
 .product-modal-card{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .product-modal-media{aspect-ratio:1/1;border-radius:22px;overflow:hidden;background:#eee6dd}
 .product-modal-media img{width:100%;height:100%;object-fit:cover}
@@ -469,8 +480,8 @@ img{max-width:100%}
    <div class="checkout-grid">
     <div class="field"><label class="trn" data-ar="الاسم الكامل *" data-tr="Ad soyad *">الاسم الكامل *</label><input id="checkoutName" autocomplete="name"></div>
     <div class="field"><label class="trn" data-ar="رقم الهاتف *" data-tr="Telefon *">رقم الهاتف *</label><input id="checkoutPhone" type="tel" autocomplete="tel"></div>
-    <div class="field"><label class="trn" data-ar="الولاية *" data-tr="İl *">الولاية *</label><input id="checkoutCity" placeholder="İstanbul"></div>
-    <div class="field"><label class="trn" data-ar="المنطقة" data-tr="İlçe">المنطقة</label><input id="checkoutDistrict" placeholder="Esenyurt"></div>
+    <div class="field"><label class="trn" data-ar="الولاية *" data-tr="İl *">الولاية *</label><select id="checkoutCity" required><option value="">اختر الولاية / İl seçiniz</option></select></div>
+    <div class="field"><label class="trn" data-ar="المنطقة" data-tr="İlçe">المنطقة</label><select id="checkoutDistrict" required disabled><option value="">اختر المنطقة / İlçe seçiniz</option></select></div>
     <div class="field full"><label class="trn" data-ar="العنوان الكامل *" data-tr="Açık adres *">العنوان الكامل *</label><textarea id="checkoutAddress"></textarea></div>
     <div class="field full"><label class="trn" data-ar="ملاحظات" data-tr="Notlar">ملاحظات</label><textarea id="checkoutNotes"></textarea></div>
    </div>
@@ -490,6 +501,20 @@ img{max-width:100%}
    <button class="checkout-submit" id="checkoutSubmit" type="button"><i class="fa-solid fa-check"></i> <span id="checkoutSubmitLabel" class="trn" data-ar="تثبيت الطلب" data-tr="Siparişi tamamla">تثبيت الطلب</span></button>
    <p class="checkout-help trn" data-ar="راجع تفاصيل هديتك وعنوانك قبل تثبيت الطلب." data-tr="Siparişi tamamlamadan önce hediye detaylarını ve adresini kontrol et.">راجع تفاصيل هديتك وعنوانك قبل تثبيت الطلب.</p>
    <div class="checkout-result" id="checkoutResult" role="status" aria-live="polite" tabindex="-1"></div>
+  </div>
+ </div>
+</div>
+
+<div class="modal-backdrop" id="orderSuccessModal" aria-hidden="true">
+ <div class="sheet order-success-sheet" role="dialog" aria-modal="true" aria-labelledby="orderSuccessTitle">
+  <div class="sheet-body order-success-content">
+   <div class="order-success-icon" aria-hidden="true"><i class="fa-solid fa-check"></i></div>
+   <h2 id="orderSuccessTitle"></h2>
+   <p id="orderSuccessDetails"></p>
+   <div class="order-success-number" id="orderSuccessNumber" dir="ltr"></div>
+   <div id="orderSuccessExtras"></div>
+   <a id="orderSuccessTrack" class="order-success-primary" href="/track/"></a>
+   <button id="orderSuccessClose" class="order-success-secondary" type="button"></button>
   </div>
  </div>
 </div>
@@ -541,6 +566,7 @@ img{max-width:100%}
 </div>
 
 <script src="/assets/customer-auth.js"></script>
+<script src="/assets/tr-location-data.js"></script>
 <script>
 (()=>{
 const API='https://api.onlinegiftis.com';
@@ -550,6 +576,27 @@ const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
 const txt=(ar,tr)=>lang()==='tr'?tr:ar;
+function refreshLocationLabels(){
+ const city=$('checkoutCity'),district=$('checkoutDistrict');
+ if(city?.options[0])city.options[0].textContent=txt('اختر الولاية','İl seçiniz');
+ if(district?.options[0])district.options[0].textContent=txt('اختر المنطقة','İlçe seçiniz');
+}
+function initLocationSelectors(){
+ const city=$('checkoutCity'),district=$('checkoutDistrict'),data=window.OG_TR_LOCATIONS||{};
+ if(!city||!district||!Object.keys(data).length)return;
+ const names=Object.keys(data).sort((a,b)=>a.localeCompare(b,'tr'));
+ city.innerHTML='<option value=""></option>'+names.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+ const fillDistricts=(keep=false)=>{
+  const old=keep?district.value:'',names=Array.isArray(data[city.value])?data[city.value]:[];
+  district.innerHTML='<option value=""></option>'+names.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+  district.disabled=!city.value;
+  if(old&&names.includes(old))district.value=old;
+  refreshLocationLabels();
+ };
+ city.addEventListener('change',()=>fillDistricts(false));
+ fillDistricts(false);refreshLocationLabels();
+}
+initLocationSelectors();
 const productName=p=>{const s=p?.storefront||{};return lang()==='tr'?(s.nameTr||p.name||''):(s.nameAr||p.name||'')};
 const productDescription=p=>{const s=p?.storefront||{};return lang()==='tr'?(s.shortDescriptionTr||s.descriptionTr||p.description||''):(s.shortDescriptionAr||s.descriptionAr||p.description||'')};
 function productHref(p){const q=new URLSearchParams();if(lang()==='tr')q.set('lang','tr');if(state.category!=='all')q.set('category',state.category);q.set('id',p.id);return '/products/detail/?'+q.toString()}
@@ -880,8 +927,8 @@ async function checkout(){
  if(state.submitting)return;
  if(!state.catalogLoaded){checkoutError(txt('انتظر تحميل المنتجات قبل تثبيت الطلب.','Sipariş vermeden önce ürünlerin yüklenmesini bekleyin.'));return}
  if(!state.cart.length)return;
- const required=['checkoutName','checkoutPhone','checkoutCity','checkoutAddress'];
- if(required.some(id=>!$(id).value.trim())){checkoutError(txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والعنوان الكامل.','Lütfen ad soyad, telefon, il ve açık adres alanlarını doldurun.'));return}
+ const required=['checkoutName','checkoutPhone','checkoutCity','checkoutDistrict','checkoutAddress'];
+ if(required.some(id=>!$(id).value.trim())){checkoutError(txt('رجاءً عبّي الاسم ورقم الهاتف والولاية والمنطقة والعنوان الكامل.','Lütfen ad soyad, telefon, il, ilçe ve açık adres alanlarını doldurun.'));return}
  for(const x of state.cart){
   if(x.requiresCustomizationText&&!String(x.customizationText||'').trim()){checkoutError(txt('اكتب النص المطلوب للمنتج: ','Ürün için metni girin: ')+x.name);return}
   if(x.requiresCustomizationImage&&!state.uploads.get(x.productId)){checkoutError(txt('ارفع ملف التخصيص للمنتج: ','Ürün için kişiselleştirme dosyasını yükleyin: ')+x.name);return}
@@ -912,7 +959,16 @@ async function checkout(){
   if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: ')+esc(money(d.order.discountAmount))+'</strong>';
   if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
   result.innerHTML=success+'<br><a href="'+(lang()==='tr'?'/track/?lang=tr':'/track/')+'" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
-  result.focus();result.scrollIntoView({block:'nearest',behavior:'smooth'});
+  $('orderSuccessTitle').textContent=txt('تم تثبيت الطلب بنجاح','Siparişiniz başarıyla alındı');
+  $('orderSuccessDetails').textContent=txt('تم تسجيل طلبك في Online Gifts. احتفظ برقم الطلب لتتبعه.','Siparişin kaydedildi. Takip için sipariş numaranı sakla.');
+  $('orderSuccessNumber').textContent=d.order.orderNumber;
+  $('orderSuccessExtras').textContent=Number(d.order.discountAmount||0)>0?txt('خصم العضوية: ','Üyelik indirimi: ')+money(d.order.discountAmount):'';
+  $('orderSuccessTrack').href=lang()==='tr'?'/track/?lang=tr':'/track/';
+  $('orderSuccessTrack').textContent=txt('تتبع طلبي','Siparişimi takip et');
+  $('orderSuccessClose').textContent=txt('العودة للتسوق','Alışverişe devam et');
+  closeModal(cartModal);
+  openModal($('orderSuccessModal'));
+  $('orderSuccessClose').focus();
   if(d.memberBenefits)state.benefits=d.memberBenefits;
   state.cart=[];state.uploads.clear();state.receipt=null;state.paymentMethod='cod';saveCart();$('transferReceipt').value='';renderCart();await loadProducts();
   if(state.customer)await loadCustomerAccount();
@@ -932,6 +988,7 @@ function applyLanguage(l){
  document.querySelectorAll('.trn-placeholder').forEach(el=>{el.placeholder=el.dataset[l+'Placeholder']||el.placeholder});
  try{localStorage.setItem('og_lang',l)}catch{}
  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:productName(p)}:x});saveCart();
+ refreshLocationLabels();
  renderCategories();renderProducts();renderCart();renderPayment();renderAccount()
 }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
@@ -941,6 +998,8 @@ $('cartFab').addEventListener('click',()=>openModal(cartModal));
 $('navCart').addEventListener('click',()=>openModal(cartModal));
 $('cartClose').addEventListener('click',()=>closeModal(cartModal));
 $('productClose').addEventListener('click',()=>closeModal(productModal));
+$('orderSuccessClose').addEventListener('click',()=>closeModal($('orderSuccessModal')));
+$('orderSuccessModal').addEventListener('click',e=>{if(e.target===$('orderSuccessModal'))closeModal($('orderSuccessModal'))});
 $('customerAccountBtn').addEventListener('click',()=>openModal(accountModal));
 $('accountClose').addEventListener('click',()=>closeModal(accountModal));
 document.querySelectorAll('[data-account-mode]').forEach(b=>b.addEventListener('click',()=>setAccountMode(b.dataset.accountMode)));
@@ -950,7 +1009,7 @@ $('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.sign
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
 accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(cartModal);closeModal(productModal);closeModal(accountModal)}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(cartModal);closeModal(productModal);closeModal(accountModal);closeModal($('orderSuccessModal'))}});
 document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{state.paymentMethod=r.value;renderPayment()}));
 $('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
