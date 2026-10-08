@@ -4,6 +4,7 @@
  const params=new URLSearchParams(location.search);
  const id=Number(document.body.dataset.productId||params.get('id')||0);
  let product=null;
+ let categoryMeta={};
  const $=x=>document.getElementById(x);
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
  const requested=params.get('lang');
@@ -55,7 +56,7 @@
   setText('.info .desc',description);const desc=document.querySelector('.info .desc');if(desc)desc.hidden=!description;
   const media=document.querySelector('.media img');if(media)media.alt=name;
   const cat=document.querySelector('.product-options a');
-  if(cat&&window.OGThemes){const key=OGThemes.productCategory(p,params.get('category'));const info=OGThemes.info(key);cat.textContent=currentLang==='tr'?info.tr:info.ar;cat.href='/products/?'+(currentLang==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(key)}
+  if(cat&&window.OGThemes){const key=OGThemes.productCategory(p,params.get('category'));const info=OGThemes.info(key);const meta=categoryMeta[key];cat.textContent=currentLang==='tr'?(meta?.nameTr||info.tr):(meta?.nameAr||info.ar);cat.href='/products/?'+(currentLang==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(key)}
   const options=document.querySelector('.product-options span');
   if(options)options.textContent=currentLang==='tr'?(options.dataset.tr||options.textContent):(options.dataset.ar||options.textContent);
   const wa=document.querySelector('.nav-actions .wa');if(wa){const message=txt('مرحبا، أريد طلب المنتج: ','Merhaba, şu ürünü sipariş etmek istiyorum: ')+name+' - '+location.href;wa.href=WA+(WA.includes('?')?'&':'?')+'text='+encodeURIComponent(message)}
@@ -113,7 +114,7 @@
  async function refresh(){
   try{
    if(!id)throw new Error('missing_product_id');
-   const r=await fetch(API+'/api/store/products?ts='+Date.now(),{cache:'no-store'}),d=await r.json();
+   const [r,cr]=await Promise.all([fetch(API+'/api/store/products?ts='+Date.now(),{cache:'no-store'}),fetch(API+'/api/store/categories',{cache:'no-store'}).catch(()=>null)]);const d=await r.json();if(cr?.ok){try{const data=await cr.json();categoryMeta=Object.fromEntries((data.categories||[]).map(c=>[c.key,c]))}catch{}}
    if(!r.ok||!Array.isArray(d.products))throw new Error('products');
    const p=d.products.find(x=>Number(x.id)===id);
    if(!p){
