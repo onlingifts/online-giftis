@@ -954,7 +954,7 @@ function renderPayment(){
  }
  const subtotal=state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0);
  const memberDiscount=state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
- const hasItems=state.cart.length>0;
+ const hasItems=state.cart.some(item=>Number(item.quantity)>0);
  const deliveryFee=hasItems&&!state.config?.freeDelivery?Math.max(0,Number(state.config?.deliveryFee||0)):0;
  const codFee=hasItems&&state.paymentMethod==='cod'?Number(state.config?.codFee??75):0;
  const grandTotal=Math.round((Math.max(0,subtotal-memberDiscount)+deliveryFee+codFee)*100)/100;
