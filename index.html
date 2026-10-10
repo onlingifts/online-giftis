@@ -317,7 +317,7 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 .pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:1200/572;object-fit:cover}
 </style><!-- storefront-critical:end -->
 
-<link rel="stylesheet" href="/assets/home-refinements.css?v=20261010-sidebar3"></head><body class="pink-home">
+<link rel="stylesheet" href="/assets/home-refinements.css?v=20261010-drawer1"></head><body class="pink-home">
 <a class="skip-link" href="#main">انتقل للمحتوى</a>
 
 <header class="pink-header" aria-label="رأس الموقع">
@@ -357,7 +357,8 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
   </a>
  </section>
 
- <div class="pink-store-layout"><aside class="pink-category-sidebar"><details class="pink-category-menu" open><summary>أقسام المنتجات</summary>
+ <button class="pink-category-trigger" type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-bars" aria-hidden="true"></i><span>أقسام المنتجات</span></button>
+ <dialog id="homeCategoryDrawer" class="pink-category-drawer" aria-labelledby="homeCategoryTitle"><div class="pink-category-drawer-head"><h2 id="homeCategoryTitle">أقسام المنتجات</h2><button type="button" data-close-categories aria-label="إغلاق الأقسام"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
  <nav class="pink-categories" aria-label="أقسام الهدايا">
   <a href="/products/"><span class="pink-cat-icon cat-gift"><i class="fa-solid fa-gift"></i></span><strong>كل الهدايا</strong></a>
   <a href="/products/?category=drinkware"><span class="pink-cat-icon cat-cup"><i class="fa-solid fa-mug-hot"></i></span><strong>أكواب مخصصة</strong></a>
@@ -365,7 +366,9 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
   <a href="/products/?category=nfc"><span class="pink-cat-icon cat-nfc"><i class="fa-solid fa-wifi"></i></span><strong>منتجات NFC</strong></a>
   <a href="/products/?category=family"><span class="pink-cat-icon cat-family"><i class="fa-solid fa-people-roof"></i></span><strong>هدايا العائلة</strong></a>
   <a href="/products/?category=kids"><span class="pink-cat-icon cat-kids"><i class="fa-solid fa-child-reaching"></i></span><strong>هدايا الأطفال</strong></a>
- </nav></details></aside><div class="pink-store-content">
+ </nav></dialog>
+ <div class="pink-category-hint"><div><strong>اختار هديتك حسب القسم</strong><span>اضغط على زر أقسام المنتجات الجانبي</span></div><button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-bars" aria-hidden="true"></i> تصفح الأقسام</button></div>
+ <div class="pink-store-layout"><div class="pink-store-content">
 
  <section class="pink-section" id="personalized" aria-labelledby="personalizedTitle">
   <div class="pink-section-head">
@@ -430,6 +433,6 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 
 <script src="/assets/image-manifest.js" defer></script>
 <script src="/assets/responsive-images.js" defer></script>
-<script src="/assets/home.js?v=20261010-sidebar1" defer></script>
+<script src="/assets/home.js?v=20261010-drawer1" defer></script>
 </body></html>
 

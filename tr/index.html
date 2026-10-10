@@ -332,7 +332,7 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 .pink-occasion-card[data-banner-colors] .occasion-art{background:var(--home-secondary)!important;color:var(--home-primary)!important}
 
 
-</style><link rel="stylesheet" href="/assets/home-refinements.css?v=20261010-sidebar3"></head><body class="pink-home">
+</style><link rel="stylesheet" href="/assets/home-refinements.css?v=20261010-drawer1"></head><body class="pink-home">
 <a class="skip-link" href="#main">İçeriğe geç</a>
 
 <header class="pink-header" aria-label="Site başlığı">
@@ -368,7 +368,8 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 <main id="main" class="pink-main">
  <section class="pink-hero pink-hero-localized" aria-label="Sana özel hediyeler"><a class="pink-hero-link" href="/products/?lang=tr"><div class="localized-hero-copy"><small>HER GÜZEL ANA</small><h1>Bir hediye,<br>bin güzel duygu.</h1><p>Sevdiklerin için isim, fotoğraf ve anılarla kişiselleştirilen hediyeler.</p><span>Hediyeleri keşfet →</span></div><div class="localized-hero-art" aria-hidden="true"><i class="fa-solid fa-gift"></i><i class="fa-solid fa-heart"></i></div><img hidden src="/assets/brand-logo.webp" alt="Sana özel hediyeler"></a></section>
 
- <div class="pink-store-layout"><aside class="pink-category-sidebar"><details class="pink-category-menu" open><summary>Ürün kategorileri</summary>
+ <button class="pink-category-trigger" type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-bars" aria-hidden="true"></i><span>Ürün kategorileri</span></button>
+ <dialog id="homeCategoryDrawer" class="pink-category-drawer" aria-labelledby="homeCategoryTitle"><div class="pink-category-drawer-head"><h2 id="homeCategoryTitle">Ürün kategorileri</h2><button type="button" data-close-categories aria-label="Kapat"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
  <nav class="pink-categories" aria-label="Hediye kategorileri">
   <a href="/products/?lang=tr"><span class="pink-cat-icon cat-gift"><i class="fa-solid fa-gift"></i></span><strong>Tüm hediyeler</strong></a>
   <a href="/products/?lang=tr&category=drinkware"><span class="pink-cat-icon cat-cup"><i class="fa-solid fa-mug-hot"></i></span><strong>Kişiye özel kupalar</strong></a>
@@ -376,7 +377,9 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
   <a href="/products/?lang=tr&category=nfc"><span class="pink-cat-icon cat-nfc"><i class="fa-solid fa-wifi"></i></span><strong>NFC ürünleri</strong></a>
   <a href="/products/?lang=tr&category=family"><span class="pink-cat-icon cat-family"><i class="fa-solid fa-people-roof"></i></span><strong>Aile hediyeleri</strong></a>
   <a href="/products/?lang=tr&category=kids"><span class="pink-cat-icon cat-kids"><i class="fa-solid fa-child-reaching"></i></span><strong>Çocuk hediyeleri</strong></a>
- </nav></details></aside><div class="pink-store-content">
+ </nav></dialog>
+ <div class="pink-category-hint"><div><strong>Hediyeni kategoriye göre bul</strong><span>Yan taraftaki kategori düğmesine dokun</span></div><button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-bars" aria-hidden="true"></i> Kategorileri keşfet</button></div>
+ <div class="pink-store-layout"><div class="pink-store-content">
 
  <section class="pink-section" id="personalized" aria-labelledby="personalizedTitle">
   <div class="pink-section-head">
@@ -441,6 +444,6 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 
 <script src="/assets/image-manifest.js" defer></script>
 <script src="/assets/responsive-images.js" defer></script>
-<script src="/assets/home.js?v=20261010-sidebar1" defer></script>
+<script src="/assets/home.js?v=20261010-drawer1" defer></script>
 </body></html>
 
