@@ -402,8 +402,8 @@ img{max-width:100%}
 @media(max-width:760px){.customer-account-btn{width:44px;padding:0;justify-content:center}.customer-account-btn span{display:none}.account-sheet{border-radius:25px 25px 16px 16px}.membership-promo-card,.membership-weekly-card{padding:13px}}
 
 </style>
-<link rel="stylesheet" href="/assets/themes.css">
-<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js"></script><script src="/assets/themes.js"></script>
+<link rel="stylesheet" href="/assets/themes.css?v=20261010-colors1">
+<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
 </head>
 <body>
 <div class="topbar">
@@ -713,7 +713,8 @@ function renderCategoryVisual(){
 }
 function renderCategories(){
  if(state.category!=='all'&&state.categoryOrder.length&&!state.categoryMeta[state.category]){state.category='all';const url=new URL(location.href);url.searchParams.delete('category');history.replaceState({},'',url)}
- const theme=OGThemes.apply(state.category);
+ const meta=state.categoryMeta[state.category];
+ const theme=OGThemes.apply(state.category,meta?.customColors?meta.colors:null);
  const hero=document.querySelector('#products .section-head');
  hero.querySelector('h1').textContent=state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
  hero.querySelector('p').textContent=state.favoritesOnly?txt('المنتجات التي حفظتها في المفضلة.','Favorilerine kaydettiğin ürünler.'):categoryDescription(state.category);
@@ -1123,3 +1124,4 @@ Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const
 </script>
 </body>
 </html>
+

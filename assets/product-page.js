@@ -91,7 +91,7 @@
  }
  function setProduct(p){
   product=p;
-  if(window.OGThemes)OGThemes.apply(OGThemes.productCategory(p,params.get('category')));
+  if(window.OGThemes){const key=OGThemes.productCategory(p,params.get('category')),meta=categoryMeta[key];OGThemes.apply(key,meta?.customColors?meta.colors:null);}
   applyLanguageShell(p);
   renderProductContent(p);
   const media=document.querySelector('.media');
@@ -159,3 +159,4 @@
  $('buyBtn')?.addEventListener('click',()=>add());
  refresh()
 })();
+

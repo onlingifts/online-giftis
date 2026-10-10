@@ -9,6 +9,9 @@
  const href=id=>'/products/detail/?id='+id+(language==='tr'?'&lang=tr':'');
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+ const colorKeys=['bg','surface','primary','secondary','text','muted','accent','onPrimary'];
+ const colorStyle=colors=>colorKeys.filter(k=>/^#[0-9a-fA-F]{6}$/.test(colors?.[k]||'')).map(k=>'--home-'+k+':'+colors[k]).join(';');
+ function applyHomeColors(meta){const el=document.documentElement;for(const key of colorKeys)el.style.removeProperty('--home-'+key);el.toggleAttribute('data-home-colors',Boolean(meta?.customColors));if(meta?.customColors)for(const key of colorKeys)if(/^#[0-9a-fA-F]{6}$/.test(meta.colors?.[key]||''))el.style.setProperty('--home-'+key,meta.colors[key]);}
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(Number(v||0))+' TL';
  const categories=p=>{const raw=p?.categories??p?.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).map(x=>String(x).trim()).filter(Boolean)};
  let favorites=new Set();
@@ -65,7 +68,7 @@
  }
  async function loadCategories(){
   try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;
-   const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;
+   const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
    const banner=main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
    const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');
    if(hero){hero.style.display=banner?'':'none';if(img&&banner){img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');hero.classList.add('has-custom-banner')}}
@@ -78,7 +81,7 @@
      const image=language==='tr'?b.bannerUrlTr:b.bannerUrlAr;
      const query=language==='tr'?b.queryTr:b.queryAr;
      const target='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category.key):query?'q='+encodeURIComponent(query):'');
-     return '<a class="pink-occasion-card" href="'+esc(target)+'" data-site-banner="'+esc(b.id)+'">'+(image?'<img src="'+esc(new URL(image,API).href)+'" alt="'+esc(title)+'" loading="lazy" decoding="async">':'<span class="occasion-art"><i class="fa-solid fa-gift"></i></span>')+'<strong>'+esc(title)+'</strong></a>';
+     return '<a class="pink-occasion-card" href="'+esc(target)+'" data-site-banner="'+esc(b.id)+'"'+(b.customColors?' data-banner-colors style="'+esc(colorStyle(b.colors))+'"':'')+'>'+(image?'<img src="'+esc(new URL(image,API).href)+'" alt="'+esc(title)+'" loading="lazy" decoding="async">':'<span class="occasion-art"><i class="fa-solid fa-gift"></i></span>')+'<strong>'+esc(title)+'</strong></a>';
     }).join('');
     const section=bannerGrid.closest('section');if(section)section.hidden=!data.banners.length;
    }

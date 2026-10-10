@@ -317,6 +317,20 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 
 .pink-hero-exact .pink-hero-link{background:#ffdbe5}
 .pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:1200/572;object-fit:cover}
+
+/* Saved colors for the homepage and individual promotional banners. */
+html[data-home-colors]{--pink:var(--home-primary);--pink-deep:var(--home-primary);--rose:var(--home-primary);--wine:var(--home-text);--ink:var(--home-text);--muted:var(--home-muted);--cream:var(--home-bg);--soft:var(--home-secondary);--gold:var(--home-accent);--line:color-mix(in srgb,var(--home-text) 15%,transparent)}
+html[data-home-colors] body.pink-home{background:var(--home-bg);color:var(--home-text)}
+html[data-home-colors] .pink-header,html[data-home-colors] .pink-search,html[data-home-colors] .pink-product-card,html[data-home-colors] .pink-occasion-card,html[data-home-colors] .pink-cat-icon{background:var(--home-surface);color:var(--home-text);border-color:var(--line)}
+html[data-home-colors] .pink-product-media,html[data-home-colors] .pink-hero-link,html[data-home-colors] .pink-benefit-card,html[data-home-colors] .pink-how-card{background:var(--home-secondary)}
+html[data-home-colors] .pink-search input,html[data-home-colors] .pink-section h2,html[data-home-colors] .pink-product-name,html[data-home-colors] .pink-brand-copy strong,html[data-home-colors] .pink-occasion-card strong{color:var(--home-text);background:transparent}
+html[data-home-colors] .pink-search button,html[data-home-colors] .pink-product-open,html[data-home-colors] .pink-hero-copy b,html[data-home-colors] .pink-count{background:var(--home-primary);color:var(--home-onPrimary)}
+html[data-home-colors] .pink-brand-copy small,html[data-home-colors] .pink-section p{color:var(--home-muted)}
+html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)}
+.pink-occasion-card[data-banner-colors]{background:var(--home-bg)!important;border-color:var(--home-accent)!important;color:var(--home-text)!important}
+.pink-occasion-card[data-banner-colors] strong{background:var(--home-surface)!important;color:var(--home-text)!important;border-top:3px solid var(--home-primary)}
+.pink-occasion-card[data-banner-colors] .occasion-art{background:var(--home-secondary)!important;color:var(--home-primary)!important}
+
 </style><link rel="stylesheet" href="/assets/home-refinements.css?v=20261008-catalog1"></head><body class="pink-home">
 <a class="skip-link" href="#main">İçeriğe geç</a>
 
@@ -424,6 +438,6 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 
 <script src="/assets/image-manifest.js" defer></script>
 <script src="/assets/responsive-images.js" defer></script>
-<script src="/assets/home.js?v=20261010-banners3" defer></script>
+<script src="/assets/home.js?v=20261010-colors1" defer></script>
 </body></html>
 

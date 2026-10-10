@@ -7,7 +7,7 @@ function key(value){const v=String(value||'all');return aliases[v]||Object.keys(
 function info(value){const k=key(value);return categories[k]||{ar:k,tr:k,theme:'default',icon:'gift'}}
 function list(p){const raw=p.categories??p.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim())}
 function productCategory(p,requested){const c=list(p);if(requested&&c.includes(requested))return requested;return c.find(x=>!['gifts','misc'].includes(x))||c[0]||'all'}
-function apply(category){const c=info(category);document.documentElement.dataset.theme=c.theme;return c}
+function apply(category,colors){const c=info(category),el=document.documentElement;el.dataset.theme=c.theme;const keys={bg:'bg',surface:'surface',primary:'primary',secondary:'secondary',text:'text',muted:'muted',accent:'accent',onPrimary:'on-primary'};for(const [key,token] of Object.entries(keys)){el.style.removeProperty('--theme-'+token);if(colors&&/^#[0-9a-fA-F]{6}$/.test(colors[key]||''))el.style.setProperty('--theme-'+token,colors[key])}return c}
 root.OGThemes={categories,key,info,list,productCategory,apply};
 if(typeof document!=='undefined'){
  const p=document.body?.dataset.productCategories;
@@ -15,3 +15,4 @@ if(typeof document!=='undefined'){
  document.addEventListener('DOMContentLoaded',()=>{if(!document.body.dataset.productId)return;const language=document.documentElement.lang;if(language==='tr'){document.querySelectorAll('.product-options [data-tr]').forEach(el=>{el.textContent=el.dataset.tr});const link=document.querySelector('.product-options a');if(link)link.textContent=info(new URL(link.href).searchParams.get('category')).tr}});
 }
 })(typeof window==='undefined'?globalThis:window);
+
