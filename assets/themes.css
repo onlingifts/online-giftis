@@ -514,3 +514,6 @@ html[data-has-campaign="true"] .visual-c{height:94px;width:88px}
 @media(max-width:760px){
  .catalog-favorite{top:11px;right:11px;width:29px;height:29px;font-size:13px}
 }
+
+/* Keep only the category image banner when it is available. */
+html[data-has-campaign="true"] #products>.container>.section-head.premium-shop-hero{display:none!important}
