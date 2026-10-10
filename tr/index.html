@@ -331,6 +331,19 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 .pink-occasion-card[data-banner-colors] strong{background:var(--home-surface)!important;color:var(--home-text)!important;border-top:3px solid var(--home-primary)}
 .pink-occasion-card[data-banner-colors] .occasion-art{background:var(--home-secondary)!important;color:var(--home-primary)!important}
 
+
+/* Category menu beside the storefront content. */
+.pink-store-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;margin-top:24px;align-items:start}
+.pink-category-sidebar{position:sticky;top:125px;border:1px solid var(--line);border-radius:20px;background:var(--home-surface,#fff);padding:12px;min-width:0}
+.pink-category-menu>summary{font-size:15px;font-weight:800;cursor:pointer;padding:10px;color:var(--ink)}
+.pink-category-sidebar .pink-categories{display:flex!important;flex-direction:column!important;gap:5px!important;margin:8px 0 0!important;padding:0!important;overflow:visible!important}
+.pink-category-sidebar .pink-categories>a{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;padding:10px;border-radius:12px;text-align:start;min-width:0;border:1px solid transparent}
+.pink-category-sidebar .pink-categories>a:hover{background:var(--home-secondary,#fff2f5);border-color:var(--line)}
+.pink-category-sidebar .pink-cat-icon{width:32px!important;height:32px!important;flex-shrink:0;margin:0!important;border-radius:10px!important;font-size:15px!important}
+.pink-category-sidebar .pink-categories strong{font-size:11px!important;line-height:1.6;margin:0!important;color:var(--ink)}
+.pink-store-content{min-width:0}.pink-store-content>.pink-section:first-child{margin-top:0}
+@media(max-width:760px){.pink-store-layout{grid-template-columns:1fr;gap:18px;margin-top:16px}.pink-category-sidebar{position:static;padding:8px}.pink-category-sidebar .pink-categories>a{min-height:44px}.pink-category-sidebar .pink-categories strong{font-size:12px!important}}
+
 </style><link rel="stylesheet" href="/assets/home-refinements.css?v=20261008-catalog1"></head><body class="pink-home">
 <a class="skip-link" href="#main">İçeriğe geç</a>
 
@@ -367,6 +380,7 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 <main id="main" class="pink-main">
  <section class="pink-hero pink-hero-localized" aria-label="Sana özel hediyeler"><a class="pink-hero-link" href="/products/?lang=tr"><div class="localized-hero-copy"><small>HER GÜZEL ANA</small><h1>Bir hediye,<br>bin güzel duygu.</h1><p>Sevdiklerin için isim, fotoğraf ve anılarla kişiselleştirilen hediyeler.</p><span>Hediyeleri keşfet →</span></div><div class="localized-hero-art" aria-hidden="true"><i class="fa-solid fa-gift"></i><i class="fa-solid fa-heart"></i></div><img hidden src="/assets/brand-logo.webp" alt="Sana özel hediyeler"></a></section>
 
+ <div class="pink-store-layout"><aside class="pink-category-sidebar"><details class="pink-category-menu" open><summary>Ürün kategorileri</summary>
  <nav class="pink-categories" aria-label="Hediye kategorileri">
   <a href="/products/?lang=tr"><span class="pink-cat-icon cat-gift"><i class="fa-solid fa-gift"></i></span><strong>Tüm hediyeler</strong></a>
   <a href="/products/?lang=tr&category=drinkware"><span class="pink-cat-icon cat-cup"><i class="fa-solid fa-mug-hot"></i></span><strong>Kişiye özel kupalar</strong></a>
@@ -374,7 +388,7 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
   <a href="/products/?lang=tr&category=nfc"><span class="pink-cat-icon cat-nfc"><i class="fa-solid fa-wifi"></i></span><strong>NFC ürünleri</strong></a>
   <a href="/products/?lang=tr&category=family"><span class="pink-cat-icon cat-family"><i class="fa-solid fa-people-roof"></i></span><strong>Aile hediyeleri</strong></a>
   <a href="/products/?lang=tr&category=kids"><span class="pink-cat-icon cat-kids"><i class="fa-solid fa-child-reaching"></i></span><strong>Çocuk hediyeleri</strong></a>
- </nav>
+ </nav></details></aside><div class="pink-store-content">
 
  <section class="pink-section" id="personalized" aria-labelledby="personalizedTitle">
   <div class="pink-section-head">
@@ -420,6 +434,7 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
    <article><span>3</span><strong>Siparişini tamamla</strong><p>Teslimat ve ödeme bilgilerini tamamla, siparişini takip et.</p></article>
   </div>
  </section>
+</div></div>
 </main>
 
 <footer class="pink-footer" id="about">
@@ -438,6 +453,6 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 
 <script src="/assets/image-manifest.js" defer></script>
 <script src="/assets/responsive-images.js" defer></script>
-<script src="/assets/home.js?v=20261010-colors1" defer></script>
+<script src="/assets/home.js?v=20261010-sidebar1" defer></script>
 </body></html>
 

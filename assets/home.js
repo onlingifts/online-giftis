@@ -94,6 +94,7 @@
    });
   }catch{}
  }
+ const menu=document.querySelector('.pink-category-menu');if(menu){const media=window.matchMedia('(min-width: 761px)');menu.open=media.matches;media.addEventListener('change',event=>{menu.open=event.matches})}
  const y=$('year');if(y)y.textContent=new Date().getFullYear();
  try{localStorage.setItem('og_lang',language)}catch{}
  syncBadges();loadProducts();loadCategories();

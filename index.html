@@ -315,6 +315,19 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 
 .pink-hero-exact .pink-hero-link{background:#ffdbe5}
 .pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:1200/572;object-fit:cover}
+
+/* Category menu beside the storefront content. */
+.pink-store-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;margin-top:24px;align-items:start}
+.pink-category-sidebar{position:sticky;top:125px;border:1px solid var(--line);border-radius:20px;background:var(--home-surface,#fff);padding:12px;min-width:0}
+.pink-category-menu>summary{font-size:15px;font-weight:800;cursor:pointer;padding:10px;color:var(--ink)}
+.pink-category-sidebar .pink-categories{display:flex!important;flex-direction:column!important;gap:5px!important;margin:8px 0 0!important;padding:0!important;overflow:visible!important}
+.pink-category-sidebar .pink-categories>a{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;padding:10px;border-radius:12px;text-align:start;min-width:0;border:1px solid transparent}
+.pink-category-sidebar .pink-categories>a:hover{background:var(--home-secondary,#fff2f5);border-color:var(--line)}
+.pink-category-sidebar .pink-cat-icon{width:32px!important;height:32px!important;flex-shrink:0;margin:0!important;border-radius:10px!important;font-size:15px!important}
+.pink-category-sidebar .pink-categories strong{font-size:11px!important;line-height:1.6;margin:0!important;color:var(--ink)}
+.pink-store-content{min-width:0}.pink-store-content>.pink-section:first-child{margin-top:0}
+@media(max-width:760px){.pink-store-layout{grid-template-columns:1fr;gap:18px;margin-top:16px}.pink-category-sidebar{position:static;padding:8px}.pink-category-sidebar .pink-categories>a{min-height:44px}.pink-category-sidebar .pink-categories strong{font-size:12px!important}}
+
 </style><!-- storefront-critical:end -->
 
 <link rel="stylesheet" href="/assets/home-refinements.css?v=20261008-catalog1"></head><body class="pink-home">
@@ -357,6 +370,7 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
   </a>
  </section>
 
+ <div class="pink-store-layout"><aside class="pink-category-sidebar"><details class="pink-category-menu" open><summary>أقسام المنتجات</summary>
  <nav class="pink-categories" aria-label="أقسام الهدايا">
   <a href="/products/"><span class="pink-cat-icon cat-gift"><i class="fa-solid fa-gift"></i></span><strong>كل الهدايا</strong></a>
   <a href="/products/?category=drinkware"><span class="pink-cat-icon cat-cup"><i class="fa-solid fa-mug-hot"></i></span><strong>أكواب مخصصة</strong></a>
@@ -364,7 +378,7 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
   <a href="/products/?category=nfc"><span class="pink-cat-icon cat-nfc"><i class="fa-solid fa-wifi"></i></span><strong>منتجات NFC</strong></a>
   <a href="/products/?category=family"><span class="pink-cat-icon cat-family"><i class="fa-solid fa-people-roof"></i></span><strong>هدايا العائلة</strong></a>
   <a href="/products/?category=kids"><span class="pink-cat-icon cat-kids"><i class="fa-solid fa-child-reaching"></i></span><strong>هدايا الأطفال</strong></a>
- </nav>
+ </nav></details></aside><div class="pink-store-content">
 
  <section class="pink-section" id="personalized" aria-labelledby="personalizedTitle">
   <div class="pink-section-head">
@@ -410,6 +424,7 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
    <article><span>3</span><strong>ثبّت الطلب</strong><p>كمّل الشحن والدفع وتابع طلبك من الموقع.</p></article>
   </div>
  </section>
+</div></div>
 </main>
 
 <footer class="pink-footer" id="about">
@@ -428,6 +443,6 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 
 <script src="/assets/image-manifest.js" defer></script>
 <script src="/assets/responsive-images.js" defer></script>
-<script src="/assets/home.js?v=20261010-colors1" defer></script>
+<script src="/assets/home.js?v=20261010-sidebar1" defer></script>
 </body></html>
 
