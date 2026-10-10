@@ -6,6 +6,7 @@
  const language=document.documentElement.lang==='tr'?'tr':'ar';
  const txt=(ar,tr)=>language==='tr'?tr:ar;
  const name=p=>language==='tr'?(p.storefront?.nameTr||p.name):(p.storefront?.nameAr||p.name);
+ const productImage=p=>language==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
  const href=id=>'/products/detail/?id='+id+(language==='tr'?'&lang=tr':'');
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -30,7 +31,7 @@
   if(button){const active=favorites.has(key);button.classList.toggle('is-favorite',active);button.setAttribute('aria-pressed',String(active));const i=button.querySelector('i');if(i)i.className=active?'fa-solid fa-heart':'fa-regular fa-heart'}
  }
  function productCard(p){
-  const id=Number(p.id),image=p.hasImage&&p.imageUrl?API+p.imageUrl:'',price=p.price!==null&&p.price!==undefined?money(p.price):txt('عرض المنتج','Ürünü görüntüle');
+  const id=Number(p.id),image=p.hasImage&&productImage(p)?API+productImage(p):'',price=p.price!==null&&p.price!==undefined?money(p.price):txt('عرض المنتج','Ürünü görüntüle');
   const active=favorites.has(String(id));
   return '<article class="pink-product-card">'+
    '<button class="pink-favorite'+(active?' is-favorite':'')+'" type="button" data-favorite-id="'+id+'" aria-label="'+txt('إضافة للمفضلة','Favorilere ekle')+'" aria-pressed="'+active+'"><i class="'+(active?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
@@ -43,7 +44,7 @@
  function applyOccasionImages(products){
   const map={birthday:'occasions',love:'love',family:'family',kids:'kids'};
   document.querySelectorAll('[data-occasion]').forEach(card=>{
-   const p=pickByCategory(products,map[card.dataset.occasion]);if(!p?.imageUrl)return;
+   const p=pickByCategory(products,map[card.dataset.occasion]);if(!p||!productImage(p))return;
    const img=card.querySelector('img');if(img)OGImages.setProduct(img,p,'(max-width: 900px) calc((100vw - 36px) / 4), 280px')
   })
  }

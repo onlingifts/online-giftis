@@ -403,7 +403,7 @@ img{max-width:100%}
 
 </style>
 <link rel="stylesheet" href="/assets/themes.css?v=20261010-single-banner1">
-<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
+<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js?v=20261010-product-images1"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
 </head>
 <body>
 <div class="topbar">
@@ -733,10 +733,11 @@ function renderProducts(){
  if(!list.length){grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-'+(state.favoritesOnly?'solid fa-heart':'solid fa-box-open')+'"></i></div>'+ (state.favoritesOnly?txt('ما عندك منتجات بالمفضلة لسا','Henüz favori ürünün yok'):txt('ما لقينا منتجات مطابقة','Eşleşen ürün bulunamadı'))+'</div>';return}
  grid.innerHTML=list.map(p=>{
   const name=productName(p),description=productDescription(p);
-  const image=p.hasImage?API+p.imageUrl:'';
+  const imageUrl=lang()==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
+  const image=p.hasImage&&imageUrl?API+imageUrl:'';
   const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
   const cats=categoryList(p),flags=productFlags(p),liked=fav.has(String(p.id));
-  const extraBadges=(flags.requiresPrepayment?'<span class="badge stock">'+txt('دفع مسبق','Ön ödemeli')+'</span>':'')+
+  const extraBadges=(flags.requiresPrepayment?'<span class="badge stock">'+txt('حوالة بنكية','Banka havalesi')+'</span>':'')+
    ((flags.requiresCustomizationImage||flags.requiresCustomizationText||flags.requiresDesignInput)?'<span class="badge stock">'+txt('مخصص','Kişiye özel')+'</span>':'');
   return '<div class="product-card-wrap"><button type="button" class="catalog-favorite '+(liked?'is-favorite':'')+'" data-fav="'+p.id+'" aria-label="'+txt('إضافة للمفضلة','Favorilere ekle')+'" aria-pressed="'+liked+'"><i class="'+(liked?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
    '<a class="product-card-link" href="'+productHref(p)+'" aria-label="'+txt('فتح المنتج: ','Ürünü aç: ')+esc(name)+'"><article class="product-card"><div class="product-media">'+
@@ -945,7 +946,7 @@ function renderPayment(){
  bank.checked=state.paymentMethod==='bank_transfer';
  details.classList.toggle('show',state.paymentMethod==='bank_transfer');
  let msg='';
- if(mustPrepay)msg=txt('السلة تحتوي منتجاً يتطلب الدفع المسبق؛ تم اختيار التحويل البنكي تلقائياً.','Sepette ön ödeme gerektiren ürün var; banka havalesi otomatik seçildi.');
+ if(mustPrepay)msg=txt('السلة تحتوي منتجاً يقبل الدفع بحوالة بنكية فقط؛ تم اختيار التحويل البنكي تلقائياً.','Sepette yalnızca banka havalesi kabul eden bir ürün var; banka havalesi otomatik seçildi.');
  if(mustPrepay&&!bankReady)msg=txt('الدفع البنكي غير متاح حالياً. تواصل معنا لإكمال الطلب.','Banka havalesi şu anda kullanılamıyor. Siparişi tamamlamak için bizimle iletişime geçin.');
  warning.textContent=msg;warning.classList.toggle('show',Boolean(msg));
  if(info){

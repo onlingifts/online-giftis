@@ -83,7 +83,9 @@
  }
  function renderGallery(p){
   const media=document.querySelector('.media');if(!media)return;
-  const gallery=p.storefront?.gallery||[];
+  const localized=p.localizedImages?.[currentLang];
+  const shared=p.storefront?.gallery||[];
+  const gallery=localized?[{imageUrl:localized,altAr:localizedName(p),altTr:localizedName(p),isPrimary:true},...shared.map(im=>({...im,isPrimary:false}))]:shared;
   if(gallery.length<2)return;
   let host=document.querySelector('.product-gallery');if(!host){host=document.createElement('div');host.className='product-gallery';media.after(host)}
   host.innerHTML=gallery.map((im,i)=>'<button type="button" data-image-index="'+i+'" aria-label="'+txt('عرض الصورة ','Görseli göster ')+(i+1)+'" aria-pressed="'+Boolean(im.isPrimary||i===0)+'"><img src="'+API+escapeHtml(im.imageUrl)+'" alt="'+escapeHtml(currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p))+'" loading="lazy"></button>').join('');
@@ -96,10 +98,11 @@
   renderProductContent(p);
   const media=document.querySelector('.media');
   if(media){
-   if(p.hasImage&&p.imageUrl){
+   const imageUrl=currentLang==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
+   if(p.hasImage&&imageUrl){
     let img=media.querySelector('img');
     if(!img){media.innerHTML='<img alt="" decoding="async" fetchpriority="high">';img=media.querySelector('img')}
-    img.src=API+p.imageUrl;img.alt=localizedName(p);
+    img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=API+imageUrl;img.alt=localizedName(p);
    }else if(!media.querySelector('.no-image')){
     media.innerHTML='<div class="no-image"><i class="fa-solid fa-gift"></i></div>';
    }
