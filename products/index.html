@@ -490,14 +490,6 @@ img{max-width:100%}
     <div class="checkout-cost-row" id="codFeeRow"><span class="trn" data-ar="أجرة الدفع عند الاستلام" data-tr="Kapıda ödeme ücreti">أجرة الدفع عند الاستلام</span><strong id="codFeeAmount">75 ₺</strong></div>
     <div class="checkout-cost-row total"><span class="trn" data-ar="الإجمالي النهائي" data-tr="Genel toplam">الإجمالي النهائي</span><strong id="checkoutGrandTotal">0 ₺</strong></div>
    </div>
-   <div class="checkout-grid">
-    <div class="field"><label class="trn" data-ar="الاسم الكامل *" data-tr="Ad soyad *">الاسم الكامل *</label><input id="checkoutName" autocomplete="name"></div>
-    <div class="field"><label class="trn" data-ar="رقم الهاتف *" data-tr="Telefon *">رقم الهاتف *</label><input id="checkoutPhone" type="tel" autocomplete="tel"></div>
-    <div class="field"><label class="trn" data-ar="الولاية *" data-tr="İl *">الولاية *</label><select id="checkoutCity" required><option value="">اختر الولاية / İl seçiniz</option></select></div>
-    <div class="field"><label class="trn" data-ar="المنطقة" data-tr="İlçe">المنطقة</label><select id="checkoutDistrict" required disabled><option value="">اختر المنطقة / İlçe seçiniz</option></select></div>
-    <div class="field full"><label class="trn" data-ar="العنوان الكامل *" data-tr="Açık adres *">العنوان الكامل *</label><textarea id="checkoutAddress"></textarea></div>
-    <div class="field full"><label class="trn" data-ar="ملاحظات" data-tr="Notlar">ملاحظات</label><textarea id="checkoutNotes"></textarea></div>
-   </div>
    <div class="payment-box">
     <div class="payment-title trn" data-ar="طريقة الدفع" data-tr="Ödeme yöntemi">طريقة الدفع</div>
     <div class="payment-options">
@@ -510,6 +502,15 @@ img{max-width:100%}
      <div id="bankInfo"></div>
      <div class="receipt-upload"><label class="trn" data-ar="إرفاق إشعار الحوالة *" data-tr="Havale dekontu *">إرفاق إشعار الحوالة *</label><input id="transferReceipt" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf"></div>
     </div>
+   </div>
+   <h3 class="payment-title trn" data-ar="معلومات الشحن" data-tr="Teslimat bilgileri">معلومات الشحن</h3>
+   <div class="checkout-grid">
+    <div class="field"><label class="trn" data-ar="الاسم الكامل *" data-tr="Ad soyad *">الاسم الكامل *</label><input id="checkoutName" autocomplete="name"></div>
+    <div class="field"><label class="trn" data-ar="رقم الهاتف *" data-tr="Telefon *">رقم الهاتف *</label><input id="checkoutPhone" type="tel" autocomplete="tel"></div>
+    <div class="field"><label class="trn" data-ar="الولاية *" data-tr="İl *">الولاية *</label><select id="checkoutCity" required><option value="">اختر الولاية / İl seçiniz</option></select></div>
+    <div class="field"><label class="trn" data-ar="المنطقة" data-tr="İlçe">المنطقة</label><select id="checkoutDistrict" required disabled><option value="">اختر المنطقة / İlçe seçiniz</option></select></div>
+    <div class="field full"><label class="trn" data-ar="العنوان الكامل *" data-tr="Açık adres *">العنوان الكامل *</label><textarea id="checkoutAddress"></textarea></div>
+    <div class="field full"><label class="trn" data-ar="ملاحظات" data-tr="Notlar">ملاحظات</label><textarea id="checkoutNotes"></textarea></div>
    </div>
    <button class="checkout-submit" id="checkoutSubmit" type="button"><i class="fa-solid fa-check"></i> <span id="checkoutSubmitLabel" class="trn" data-ar="تثبيت الطلب" data-tr="Siparişi tamamla">تثبيت الطلب</span></button>
    <p class="checkout-help trn" data-ar="راجع تفاصيل هديتك وعنوانك قبل تثبيت الطلب." data-tr="Siparişi tamamlamadan önce hediye detaylarını ve adresini kontrol et.">راجع تفاصيل هديتك وعنوانك قبل تثبيت الطلب.</p>
@@ -954,7 +955,7 @@ function renderPayment(){
    info.innerHTML=(c.bankName?'<div class="bank-row"><span>'+txt('البنك','Banka')+'</span><span>'+esc(c.bankName)+'</span></div>':'')+
     (c.bankAccountName?'<div class="bank-row"><span>'+txt('اسم الحساب','Hesap sahibi')+'</span><span>'+esc(c.bankAccountName)+'</span></div>':'')+
     (c.iban?'<div class="bank-row"><span>IBAN</span><span>'+esc(c.iban)+'</span></div>':'')+
-    (c.bankNote?'<div class="bank-row"><span>'+txt('ملاحظة','Not')+'</span><span>'+esc(c.bankNote)+'</span></div>':'')
+    (c.bankNote?'<div class="bank-row"><span>'+txt('ملاحظة','Not')+'</span><span>'+esc(lang()==='tr'?(c.bankNoteTr||(String(c.bankNote||'').trim()==='يرجى ارفاق اشعار الحوالة بلطلب'?'Lütfen havale dekontunu siparişe ekleyin.':c.bankNote)):c.bankNote)+'</span></div>':'')
  }
  const subtotal=state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0);
  const memberDiscount=state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
