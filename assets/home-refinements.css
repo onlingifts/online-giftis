@@ -19,3 +19,5 @@
 .pink-category-drawer .pink-categories strong{font-size:13px!important;line-height:1.6;margin:0!important;color:var(--ink)}
 html:has(.pink-category-drawer[open]){overflow:hidden}
 @media(max-width:760px){.pink-store-layout{margin-top:18px}.pink-category-trigger{top:42%;max-width:75px;padding:12px 8px}.pink-category-trigger span{font-size:10px}.pink-category-trigger i{font-size:19px}.pink-category-hint{padding:13px 12px;gap:8px}.pink-category-hint strong{font-size:12px}.pink-category-hint span{font-size:10px}.pink-category-hint button{padding:10px;font-size:10px}.pink-category-drawer{padding:16px 12px}}
+
+.pink-bottom-nav button[data-open-categories]{height:60px;min-width:0;padding:0;border:0;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:transparent;color:#6f7a90;font-family:inherit;font-size:8.5px;font-weight:800;cursor:pointer}.pink-bottom-nav button[data-open-categories]:focus-visible{outline:2px solid #ff3f73;outline-offset:-2px}
