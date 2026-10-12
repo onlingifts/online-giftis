@@ -4,7 +4,7 @@ import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 const source=readFileSync(new URL('../assets/home.js',import.meta.url),'utf8');
 async function render(data,lang='ar'){
- const image={style:{},removeAttribute(){}};const nav={innerHTML:''};const hero={style:{},querySelector(){return image},querySelectorAll(){return []},classList:{add(){}}};
+ const image={style:{},removeAttribute(){}};const nav={innerHTML:''};const hero={style:{},querySelector(){return image},querySelectorAll(){return []},classList:{add(){},toggle(){},contains(){return false}}};
  const document={documentElement:{lang,style:{removeProperty(){},setProperty(){}},toggleAttribute(){}},getElementById(){return null},addEventListener(){},querySelector(selector){return selector==='.pink-hero'?hero:selector==='.pink-categories'?nav:null},querySelectorAll(){return []}};
  vm.runInNewContext(source,{document,window:{addEventListener(){}},localStorage:{getItem(){return null},setItem(){}},fetch:async()=>Response.json(data),URL,URLSearchParams,location:{search:'',hash:''},Intl,Date});
  await new Promise(resolve=>setImmediate(resolve));
@@ -20,3 +20,4 @@ test('independent main image wins over the all-category banner and deletion keep
  const deleted=await render({categories,homeBanner:{configured:true,bannerUrlAr:null}});assert.equal(deleted.hero.style.display,'none');assert.equal(deleted.image.src,undefined);
  const turkish=await render({categories,homeBanner:{bannerUrlAr:'/ar.webp',bannerUrlTr:'/tr.webp'}},'tr');assert.equal(turkish.image.src,'https://api.onlinegiftis.com/tr.webp');
 });
+
