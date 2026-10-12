@@ -15,7 +15,7 @@
     isDefault=managed?meta['bannerSource'+suffix]==='default':window.OGBoutique?!window.OGBoutique.savedAsset({...meta,key:'home'}):!asset;
     if(!managed&&isDefault&&!meta.configured)asset='/assets/boutique-hero-desktop.webp';
    }else{asset=window.OGBoutique?.campaign(meta).asset;}
-   if(!asset)return null;return {...item,source:slide.source,asset:new URL(asset,'https://api.onlinegiftis.com').href,isDefault};
+   if(!asset)return null;return {...item,source:slide.source,asset:asset.startsWith('/assets/')?asset:new URL(asset,'https://api.onlinegiftis.com').href,isDefault};
   }).filter(Boolean);
   return rows;
  }
