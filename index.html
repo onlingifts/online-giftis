@@ -317,122 +317,26 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 .pink-hero-exact .pink-hero-link>img{display:block;width:100%;height:auto;aspect-ratio:1200/572;object-fit:cover}
 </style><!-- storefront-critical:end -->
 
-<link rel="stylesheet" href="/assets/home-refinements.css?v=20261012-featured-four1"><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script></head><body class="pink-home">
+<link rel="stylesheet" href="/assets/home-refinements.css?v=20261012-featured-four1"><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261012-preview1">
+</head><body class="pink-home boutique-home">
 <a class="skip-link" href="#main">انتقل للمحتوى</a>
-
-<header class="pink-header" aria-label="رأس الموقع">
- <div class="pink-header-row">
-  <a class="pink-icon-button pink-notification" href="#offers" aria-label="العروض والإشعارات الجديدة">
-   <i class="fa-regular fa-bell"></i><span class="pink-notification-dot"></span>
-  </a>
-
-  <a class="pink-brand" href="/" aria-label="Online Gifts - الرئيسية">
-   <span class="pink-brand-mark"><i class="fa-solid fa-gift"></i></span>
-   <span class="pink-brand-copy"><strong>Online Gifts</strong><small>هدايا تصنع أجمل اللحظات</small></span>
-  </a>
-
-  <div class="pink-header-actions">
-   <a class="pink-icon-button" href="/products/?favorites=1" aria-label="المفضلة">
-    <i class="fa-regular fa-heart"></i><span class="pink-count" id="homeFavoriteCount" hidden>0</span>
-   </a>
-   <a class="pink-icon-button" href="/products/?cart=1" aria-label="سلة التسوق">
-    <i class="fa-solid fa-cart-shopping"></i><span class="pink-count" id="homeCartCount" hidden>0</span>
-   </a>
-  </div>
- </div>
-
- <form class="pink-search home-search" action="/products/" method="get" role="search">
-  <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-  <label class="sr-only" for="homeSearch">ابحث عن هدية</label>
-  <input id="homeSearch" name="q" type="search" placeholder="ابحث عن الهدية المثالية ..." maxlength="150">
-  <a class="pink-scan-link" href="/products/?category=nfc" aria-label="منتجات NFC"><i class="fa-solid fa-qrcode"></i></a>
-  <button class="pink-search-submit" type="submit" aria-label="بحث"><i class="fa-solid fa-arrow-left"></i></button>
- </form>
-</header>
-
-<main id="main" class="pink-main">
- <section class="pink-hero pink-hero-exact" aria-label="كل لحظة أجمل مع هدية مميزة">
-  <a class="pink-hero-link" href="/products/" aria-label="تسوّق الآن">
-   <img src="/assets/pink-hero-hq.webp" data-responsive-asset data-image-sizes="(max-width: 900px) calc(100vw - 18px), (max-width: 1208px) calc(100vw - 28px), 1180px" fetchpriority="high" alt="كل لحظة أجمل مع هدية مميزة - هدايا فريدة لكل من تحب" srcset="/assets/previews/pink-hero-hq-0f7f2168b1432854-320.webp 320w, /assets/previews/pink-hero-hq-0f7f2168b1432854-480.webp 480w, /assets/previews/pink-hero-hq-0f7f2168b1432854-768.webp 768w, /assets/previews/pink-hero-hq-0f7f2168b1432854-1200.webp 1200w" sizes="(max-width: 900px) calc(100vw - 18px), (max-width: 1208px) calc(100vw - 28px), 1180px" width="1200" height="572">
-  </a>
- </section>
-
- <button class="pink-category-trigger" type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>أقسام المنتجات</span></button>
- <dialog id="homeCategoryDrawer" class="pink-category-drawer" aria-labelledby="homeCategoryTitle"><div class="pink-category-drawer-head"><h2 id="homeCategoryTitle">أقسام المنتجات</h2><button type="button" data-close-categories aria-label="إغلاق الأقسام"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
- <nav class="pink-categories" aria-label="أقسام الهدايا">
-  <a href="/products/"><span class="pink-cat-icon cat-gift"><i class="fa-solid fa-gift"></i></span><strong>كل الهدايا</strong></a>
-  <a href="/products/?category=drinkware"><span class="pink-cat-icon cat-cup"><i class="fa-solid fa-mug-hot"></i></span><strong>أكواب مخصصة</strong></a>
-  <a href="/products/?q=صورة"><span class="pink-cat-icon cat-photo"><i class="fa-regular fa-image"></i></span><strong>هدايا الصور</strong></a>
-  <a href="/products/?category=nfc"><span class="pink-cat-icon cat-nfc"><i class="fa-solid fa-wifi"></i></span><strong>منتجات NFC</strong></a>
-  <a href="/products/?category=family"><span class="pink-cat-icon cat-family"><i class="fa-solid fa-people-roof"></i></span><strong>هدايا العائلة</strong></a>
-  <a href="/products/?category=kids"><span class="pink-cat-icon cat-kids"><i class="fa-solid fa-child-reaching"></i></span><strong>هدايا الأطفال</strong></a>
- </nav></dialog>
- <div class="pink-category-hint"><div><strong>اختار هديتك حسب القسم</strong><span>كل الأقسام بمكان واحد — افتح قائمة الأقسام</span></div><button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg> تصفح الأقسام</button></div>
- <div class="pink-store-layout"><div class="pink-store-content">
-
- <section class="pink-section" id="personalized" aria-labelledby="personalizedTitle">
-  <div class="pink-section-head">
-   <div><h2 id="personalizedTitle">هدايا مخصصة لك <i class="fa-solid fa-wand-magic-sparkles"></i></h2><p>اجعل هديتك أكثر تميزاً بلمستك الخاصة</p></div>
-   <a href="/products/">عرض الكل <i class="fa-solid fa-chevron-left"></i></a>
-  </div>
-  <div class="pink-product-grid" id="homeFeaturedProducts">
-   <div class="pink-product-skeleton"></div><div class="pink-product-skeleton"></div><div class="pink-product-skeleton"></div>
-  </div>
- </section>
-
- <section class="pink-section pink-occasion-section" id="occasions" aria-labelledby="occasionsTitle">
-  <div class="pink-section-head">
-   <div><h2 id="occasionsTitle">تصفح حسب المناسبة <i class="fa-solid fa-gift"></i></h2><p>هدايا لكل لحظة في حياتك</p></div>
-   <a href="/products/">عرض الكل <i class="fa-solid fa-chevron-left"></i></a>
-  </div>
-  <div class="pink-occasion-grid">
-   <a class="pink-occasion-card" href="/products/?q=ميلاد" data-occasion="birthday"><img src="/assets/campaign-main.webp" alt="" data-responsive-asset data-image-sizes="(max-width: 900px) calc((100vw - 36px) / 4), 280px" decoding="async" loading="lazy" srcset="/assets/previews/campaign-main-0f7f2168b1432854-320.webp 320w, /assets/previews/campaign-main-0f7f2168b1432854-480.webp 480w, /assets/previews/campaign-main-0f7f2168b1432854-768.webp 768w, /assets/previews/campaign-main-0f7f2168b1432854-1200.webp 1200w" sizes="(max-width: 900px) calc((100vw - 36px) / 4), 280px" width="1200" height="572"><strong>أعياد الميلاد</strong></a>
-   <a class="pink-occasion-card" href="/products/?category=love" data-occasion="love"><img src="/assets/campaign-love.webp" alt="" data-responsive-asset data-image-sizes="(max-width: 900px) calc((100vw - 36px) / 4), 280px" decoding="async" loading="lazy" srcset="/assets/previews/campaign-love-00a4b073b8a400c6-320.webp 320w, /assets/previews/campaign-love-00a4b073b8a400c6-360.webp 360w" sizes="(max-width: 900px) calc((100vw - 36px) / 4), 280px" width="360" height="203"><strong>هدايا الحب</strong></a>
-   <a class="pink-occasion-card" href="/products/?category=family" data-occasion="family"><img src="/assets/brand-logo.webp" alt="" decoding="async" loading="lazy" width="900" height="900"><strong>هدايا العائلة</strong></a>
-   <a class="pink-occasion-card" href="/products/?category=kids" data-occasion="kids"><img src="/assets/brand-logo.webp" alt="" decoding="async" loading="lazy" width="900" height="900"><strong>هدايا الأطفال</strong></a>
-  </div>
- </section>
-
- <section class="pink-offers" id="offers" aria-label="عروض العضوية">
-  <div class="pink-offer-icon"><i class="fa-solid fa-gift"></i></div>
-  <div><small>عرض العضوية</small><h2>خصم 200₺ على أول طلب</h2><p>سجّل حسابك وثبّت أول طلب من عضويتك، والخصم ينحسب تلقائياً عند الدفع.</p></div>
-  <a href="/products/?account=1">سجّل الآن <i class="fa-solid fa-arrow-left"></i></a>
- </section>
-
- <section class="pink-offers" aria-label="هدية العضوية الأسبوعية"><div class="pink-offer-icon"><i class="fa-solid fa-star"></i></div><div><small>ميزة العضوية</small><h2>هديتك علينا</h2><p>خلال نفس الأسبوع: 5 طلبات أو مجموع 5 منتجات = هدية من متجرنا. هدية واحدة أسبوعياً من الخيارات المتاحة.</p></div><a href="/products/?account=1">اكتشف عضويتك</a></section>
- <section class="pink-trust" aria-label="مزايا Online Gifts">
-  <article><i class="fa-solid fa-truck-fast"></i><strong>التوصيل برسوم</strong><small>تظهر الأجرة عند الطلب</small></article>
-  <article><i class="fa-solid fa-wand-magic-sparkles"></i><strong>تخصيص حقيقي</strong><small>اسم، صورة أو تفاصيلك</small></article>
-  <article><i class="fa-solid fa-shield-heart"></i><strong>طلب واضح</strong><small>سعر ودفع وتتبّع</small></article>
- </section>
-
- <section class="pink-how" id="how-it-works">
-  <div class="pink-section-head"><div><h2>اطلبها بثلاث خطوات</h2><p>مسار بسيط وواضح من أول اختيار لحد وصول الهدية.</p></div></div>
-  <div class="pink-how-grid">
-   <article><span>1</span><strong>اختار المنتج</strong><p>افتح المنتج وشوف السعر والتفاصيل.</p></article>
-   <article><span>2</span><strong>خصص هديتك</strong><p>ضيف الاسم أو الصورة إذا المنتج بيدعم التخصيص.</p></article>
-   <article><span>3</span><strong>ثبّت الطلب</strong><p>كمّل الشحن والدفع وتابع طلبك من الموقع.</p></article>
-  </div>
- </section>
-</div></div>
-</main>
-
-<footer class="pink-footer" id="about">
- <div><strong>Online Gifts</strong><span>هدايا مخصصة في تركيا منذ 2016</span></div>
- <nav><a href="/products/">المتجر</a><a href="/track/">تتبع الطلب</a><a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">واتساب</a><a href="/tr/" lang="tr">Türkçe</a></nav>
- <small>© <span id="year">2026</span> Online Gifts</small>
-</footer>
-
-<nav class="pink-bottom-nav" aria-label="التنقل السريع">
- <a href="/" class="active"><i class="fa-solid fa-house"></i><span>الرئيسية</span></a>
- <button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>الأقسام</span></button>
- <a href="#offers"><i class="fa-solid fa-gift"></i><span>عروضنا</span></a>
- <a href="/products/?favorites=1"><i class="fa-regular fa-heart"></i><span>المفضلة</span></a>
- <a href="/products/?account=1"><i class="fa-regular fa-user"></i><span>حسابي</span></a>
-</nav>
-
-<script src="/assets/image-manifest.js" defer></script>
-<script src="/assets/responsive-images.js?v=20261010-product-images1" defer></script>
-<script src="/assets/home.js?v=20261012-featured-four1" defer></script>
-</body></html>
-
+<header class="pink-header"><div class="pink-header-row">
+<button class="boutique-menu" type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog" aria-label="الأقسام"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+<a class="pink-brand" href="/"><span class="pink-brand-mark"><i class="fa-solid fa-gift"></i></span><span class="pink-brand-copy"><strong>ONLINE GIFTS</strong><small>هدايا، ورود، طباعة خاصة</small></span></a>
+<nav class="boutique-desktop-links"><a href="/">الرئيسية</a><a href="/products/?category=love">الورود</a><a href="/products/?category=gifts">الهدايا</a><a href="/products/?category=drinkware">الطباعة المخصصة</a><a href="#occasions">المناسبات</a><a href="#about">من نحن</a></nav>
+<div class="pink-header-actions"><a class="pink-icon-button" href="/products/?account=1" aria-label="حسابي"><i class="fa-regular fa-user"></i></a><a class="pink-icon-button" href="/products/?favorites=1" aria-label="المفضلة"><i class="fa-regular fa-heart"></i><span class="pink-count" id="homeFavoriteCount" hidden>0</span></a><a class="pink-icon-button" href="/products/?cart=1" aria-label="سلة التسوق"><i class="fa-solid fa-bag-shopping"></i><span class="pink-count" id="homeCartCount" hidden>0</span></a></div>
+<form class="pink-search home-search" action="/products/" method="get" role="search"><label class="sr-only" for="homeSearch">ابحث عن هدية</label><input id="homeSearch" name="q" type="search" placeholder="ابحث عن هدية مميزة ..." maxlength="150"><button class="pink-search-submit" type="submit" aria-label="بحث"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+</div></header>
+<main id="main" class="pink-main"><section class="pink-hero boutique-hero"><a class="pink-hero-link" href="/products/?"><picture><source media="(max-width:760px)" srcset="/assets/boutique-hero-mobile.webp"><img src="/assets/boutique-hero-desktop.webp" alt="ورود حمراء وهدايا بتغليف فاخر" width="2048" height="683" fetchpriority="high"></picture><div class="boutique-hero-copy"><small>GIFTS · FLOWERS · CUSTOM PRINTING</small><h1><span class="desktop-heading">هدايا وورود<br>بطابع فاخر</span><span class="mobile-heading">لكل مناسبة…<br>هدية تروي حكايتك</span></h1><p>هدايا مميزة · ورود طبيعية · طباعة خاصة<br><span class="desktop-tagline">لأن كل مناسبة تستحق أكثر من مجرد هدية… بل ذكرى تدوم.</span></p><span class="boutique-cta">تسوّق الآن <i class="fa-solid fa-arrow-left"></i></span><div class="hero-benefits"><span><i class="fa-solid fa-medal"></i>منتجات مختارة بعناية</span><span><i class="fa-solid fa-gift"></i>تغليف بلمسة خاصة</span><span><i class="fa-solid fa-truck-fast"></i>توصيل داخل تركيا</span></div></div></a></section>
+<section class="boutique-category-grid" aria-label="الأقسام"><a class="boutique-category boutique-rose" href="/products/?category=love"><span class="category-photo"></span><div><strong>الورود</strong><p>لمسة خاصة لكل مناسبة</p><b>تسوّق الآن <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-gift" href="/products/?category=gifts"><span class="category-photo"></span><div><strong>الهدايا</strong><p>لمسة خاصة لكل مناسبة</p><b>تسوّق الآن <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-print" href="/products/?category=drinkware"><span class="category-photo"></span><div><strong>الطباعة المخصصة</strong><p>لمسة خاصة لكل مناسبة</p><b>تسوّق الآن <i class="fa-solid fa-arrow-left"></i></b></div></a></section>
+<section class="pink-trust boutique-mobile-trust"><article><i class="fa-solid fa-truck-fast"></i><strong>توصيل سريع</strong></article><article><i class="fa-solid fa-shield-heart"></i><strong>طلب آمن</strong></article><article><i class="fa-solid fa-gift"></i><strong>تغليف فاخر</strong></article><article><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#8c552a" stroke-width="1.5" aria-hidden="true"><path d="M4 13V11a8 8 0 0 1 16 0v6q0 4-7 4"/><rect x="3" y="11" width="4" height="7" rx="2"/><rect x="17" y="11" width="4" height="7" rx="2"/></svg><strong>خدمة العملاء</strong></article></section>
+<dialog id="homeCategoryDrawer" class="pink-category-drawer" aria-labelledby="homeCategoryTitle"><div class="pink-category-drawer-head"><h2 id="homeCategoryTitle">الأقسام</h2><button type="button" data-close-categories aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button></div><nav class="pink-categories"><a href="/products/?category=love"><span class="pink-cat-icon"><i class="fa-solid fa-gift"></i></span><strong>الورود</strong></a><a href="/products/?category=gifts"><span class="pink-cat-icon"><i class="fa-solid fa-gift"></i></span><strong>الهدايا</strong></a><a href="/products/?category=drinkware"><span class="pink-cat-icon"><i class="fa-solid fa-gift"></i></span><strong>الطباعة المخصصة</strong></a></nav></dialog>
+<section class="pink-section" id="personalized"><div class="pink-section-head"><h2>منتجات مميزة</h2><a href="/products/?">عرض جميع المنتجات <i class="fa-solid fa-arrow-left"></i></a></div><div class="pink-product-grid" id="homeFeaturedProducts"><div class="pink-product-skeleton"></div><div class="pink-product-skeleton"></div></div></section>
+<section class="boutique-reviews" id="reviews"><h2>ماذا يقول عملاؤنا؟</h2><p>اطّلع على تجارب عملائنا وشاركنا تجربة هديتك.</p><a class="boutique-review-link" href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener"><i class="fa-regular fa-star"></i> تقييمات العملاء على Google</a></section>
+<details class="boutique-more"><summary>اكتشف المناسبات وعروض العضوية</summary><section class="pink-section pink-occasion-section" id="occasions"><div class="pink-section-head"><h2>لكل مناسبة هدية</h2></div><div class="pink-occasion-grid"><a class="boutique-category boutique-rose" href="/products/?category=love"><span class="category-photo"></span><div><strong>الورود</strong><p>لمسة خاصة لكل مناسبة</p><b>تسوّق الآن <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-gift" href="/products/?category=gifts"><span class="category-photo"></span><div><strong>الهدايا</strong><p>لمسة خاصة لكل مناسبة</p><b>تسوّق الآن <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-print" href="/products/?category=drinkware"><span class="category-photo"></span><div><strong>الطباعة المخصصة</strong><p>لمسة خاصة لكل مناسبة</p><b>تسوّق الآن <i class="fa-solid fa-arrow-left"></i></b></div></a></div></section>
+<section class="pink-offers" id="offers"><div class="pink-offer-icon"><i class="fa-solid fa-gift"></i></div><div><h2>خصم 200₺ على أول طلب</h2><p>سجّل حسابك لتستفيد من خصم العضوية وهدايا الأسبوع.</p></div><a href="/products/?account=1">سجّل الآن</a></section>
+<section class="pink-how" id="how-it-works"><h2>هدية بلمستك في ثلاث خطوات</h2><div class="pink-how-grid"><article><span>1</span><strong>اختر المنتج</strong></article><article><span>2</span><strong>أضف تفاصيل التخصيص</strong></article><article><span>3</span><strong>أكمل الطلب وتابعه</strong></article></div></section>
+</details></main>
+<footer class="pink-footer" id="about"><div class="boutique-footer-brand"><strong>Online Gifts</strong><span>المزيد من الجمال في كل مناسبة</span><small>هدايا مخصصة في تركيا منذ 2016</small></div><nav><strong>روابط سريعة</strong><a href="/products/?">المنتجات</a><a href="/track/">تتبع الطلب</a><a href="/products/?account=1">حسابي</a></nav><nav><strong>خدمة العملاء</strong><a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">WhatsApp</a><a href="https://bayi.onlinegiftis.com/">العمل معنا</a><a href="/tr/" lang="tr">Türkçe</a></nav><div class="boutique-footer-note"><strong>صُنعت لتترك ذكرى</strong><p>هدايا · ورود · طباعة خاصة</p><small>© <span id="year">2026</span> Online Gifts</small></div></footer>
+<nav class="pink-bottom-nav" aria-label="التنقل السريع"><a href="/" class="active"><i class="fa-solid fa-house"></i><span>الرئيسية</span></a><button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-table-cells-large"></i><span>الأقسام</span></button><a href="/products/?favorites=1"><i class="fa-regular fa-heart"></i><span>المفضلة</span></a><a href="/products/?cart=1"><i class="fa-solid fa-cart-shopping"></i><span>السلة</span></a><a href="/products/?account=1"><i class="fa-regular fa-user"></i><span>حسابي</span></a></nav>
+<script src="/assets/image-manifest.js" defer></script><script src="/assets/responsive-images.js?v=20261010-product-images1" defer></script><script src="/assets/home.js?v=20261012-boutique2" defer></script></body></html>

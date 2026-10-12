@@ -22,7 +22,7 @@ const assert=require('node:assert/strict');
   throw Error('Unexpected API route: '+url.pathname);
  });
  const base='http://localhost:8765';
- for(const width of [360,390,430,768,1440]){
+ for(const width of [320,360,390,430,768,1440]){
   await page.setViewportSize({width,height:900});
   for(const path of ['/','/tr/','/products/','/products/?lang=tr&category=laser','/products/detail/?id=9001&lang=tr']){
    await page.goto(base+path);await page.waitForTimeout(100);
@@ -35,9 +35,9 @@ const assert=require('node:assert/strict');
  await page.locator('.product-card-link').first().click();await page.waitForFunction(()=>!document.getElementById('buyBtn').disabled);
  assert.equal(await page.locator('h1').innerText(),'Yeni hediye');assert.match(await page.locator('.media img').getAttribute('src'),/api\.onlinegiftis\.com/);
  await page.locator('#buyBtn').click();await page.locator('#cartModal.open').waitFor();await page.locator('[data-custom-text]').fill('Ömer');
- await page.locator('#checkoutName').fill('Test Buyer');await page.locator('#checkoutPhone').fill('05340000000');await page.locator('#checkoutCity').fill('İstanbul');await page.locator('#checkoutAddress').fill('Test Address');
+ await page.locator('#checkoutNext').click();await page.locator('#checkoutName').fill('Test Buyer');await page.locator('#checkoutPhone').fill('05340000000');await page.locator('#checkoutCity').selectOption({label:'İstanbul'});await page.locator('#checkoutDistrict').selectOption({label:'Kadıköy'});await page.locator('#checkoutAddress').fill('Test Address');
  assert.equal(await page.locator('#checkoutGrandTotal').innerText(),'575 ₺');
- await page.locator('#checkoutSubmit').click();await page.locator('#checkoutResult.ok').waitFor();assert.equal(orderCalls,1);assert.match(await page.locator('#checkoutResult').innerText(),/webTEST/);
+ await page.locator('#checkoutNext').click();await page.locator('#checkoutSubmit').click();await page.locator('#orderSuccessModal.open').waitFor();assert.equal(orderCalls,1);assert.match(await page.locator('#orderSuccessNumber').innerText(),/webTEST/);
  assert.ok(await page.locator('#checkoutSubmit').isDisabled());assert.equal(await page.locator('#checkoutResult').evaluate(el=>parseFloat(getComputedStyle(el).fontSize)),16);
  // A catalogue outage must leave ordering disabled. Category failures must not hide products.
  categoryFailure=true;await page.goto(base+'/products/');await page.locator('.product-card-link').first().waitFor();categoryFailure=false;
@@ -45,7 +45,7 @@ const assert=require('node:assert/strict');
  products=[];
  await page.evaluate(()=>localStorage.setItem('og_cart_v1',JSON.stringify([{productId:9001,name:'old',price:500,quantity:1,stock:3}])));
  await page.goto(base+'/products/?cart=1');await page.waitForFunction(()=>JSON.parse(localStorage.getItem('og_cart_v1')).length===0);assert.equal(await page.locator('#navCartCount').innerText(),'0');
- await page.goto(base+'/products/detail/?id=9001&lang=tr');await page.waitForFunction(()=>document.getElementById('liveStock').textContent.includes('mevcut değil'));assert.ok(await page.locator('#buyBtn').isDisabled());
+ await page.goto(base+'/products/detail/?id=9001&lang=tr');await page.getByRole('heading',{name:'Ürün bulunamadı'}).waitFor();assert.equal(await page.locator('#buyBtn:not([disabled])').count(),0);
  for(const path of ['/','/tr/']){await page.goto(base+path);await page.evaluate(()=>document.querySelectorAll('img').forEach(img=>img.loading='eager'));await page.waitForFunction(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0));for(const img of await page.locator('img').all())assert.ok(await img.evaluate(el=>el.complete&&el.naturalWidth>0),'Broken home image '+path)}
- assert.deepEqual(errors,[]);await browser.close();console.log('Passed: 25 responsive views, Turkish search, new product routes/images, design details, checkout totals, stale cart removal, deleted product, registration tabs and category outage.');
+ assert.deepEqual(errors,[]);await browser.close();console.log('Passed: 30 responsive views, Turkish search, new product routes/images, design details, checkout totals, stale cart removal, deleted product, registration tabs and category outage.');
 })().catch(e=>{console.error(e);process.exit(1)});

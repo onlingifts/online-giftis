@@ -4,9 +4,9 @@ import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 const source=readFileSync(new URL('../assets/home.js',import.meta.url),'utf8');
 async function render(data,lang='ar'){
- const image={style:{},removeAttribute(){}};const nav={innerHTML:''};const hero={style:{},querySelector(){return image},classList:{add(){}}};
- const document={documentElement:{lang},getElementById(){return null},addEventListener(){},querySelector(selector){return selector==='.pink-hero'?hero:selector==='.pink-categories'?nav:null},querySelectorAll(){return []}};
- vm.runInNewContext(source,{document,window:{addEventListener(){}},localStorage:{getItem(){return null},setItem(){}},fetch:async()=>Response.json(data),URL,Intl,Date});
+ const image={style:{},removeAttribute(){}};const nav={innerHTML:''};const hero={style:{},querySelector(){return image},querySelectorAll(){return []},classList:{add(){}}};
+ const document={documentElement:{lang,style:{removeProperty(){},setProperty(){}},toggleAttribute(){}},getElementById(){return null},addEventListener(){},querySelector(selector){return selector==='.pink-hero'?hero:selector==='.pink-categories'?nav:null},querySelectorAll(){return []}};
+ vm.runInNewContext(source,{document,window:{addEventListener(){}},localStorage:{getItem(){return null},setItem(){}},fetch:async()=>Response.json(data),URL,URLSearchParams,location:{search:'',hash:''},Intl,Date});
  await new Promise(resolve=>setImmediate(resolve));
  return {image,nav,hero};
 }

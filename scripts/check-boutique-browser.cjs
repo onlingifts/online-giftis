@@ -1,0 +1,84 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const base=process.env.OG_BASE_URL||'http://localhost:8765';
+const output=process.env.OG_SCREENSHOT_DIR||'/tmp/og-boutique';
+fs.mkdirSync(output,{recursive:true});
+const sample={id:9001,sku:'PREVIEW',name:'هدية المعاينة',description:'هدية مخصصة للمعاينة فقط',price:500,stockQuantity:3,hasImage:true,imageUrl:'/api/store/products/image?id=9001',orderable:true,categories:['gifts','drinkware'],requiresDesignInput:true,storefront:{nameAr:'هدية المعاينة',nameTr:'Önizleme hediyesi',descriptionAr:'هدية مخصصة للمعاينة فقط',descriptionTr:'Önizleme için kişiye özel hediye',gallery:[{imageUrl:'/api/store/products/image?id=9001'},{imageUrl:'/api/store/products/image?id=9002'}]}};
+const categories=[{key:'all',nameAr:'كل المنتجات',nameTr:'Tüm ürünler'},{key:'gifts',nameAr:'الهدايا',nameTr:'Hediyeler'},{key:'love',nameAr:'الورود',nameTr:'Çiçekler'},{key:'drinkware',nameAr:'الطباعة المخصصة',nameTr:'Özel baskı'}];
+const catalogue=fs.existsSync('/tmp/og-products.json')?JSON.parse(fs.readFileSync('/tmp/og-products.json')).products:[sample];
+const savedCategories=fs.existsSync('/tmp/og-categories.json')?JSON.parse(fs.readFileSync('/tmp/og-categories.json')):{categories};
+const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
+(async()=>{
+ const browser=await chromium.launch({headless:true,...(process.env.OG_BROWSER_PATH?{executablePath:process.env.OG_BROWSER_PATH,args:['--no-sandbox']}: {})});
+ async function newPage(language='ar',width=390){
+  const context=await browser.newContext({viewport:{width,height:844},reducedMotion:'reduce',locale:language==='tr'?'tr-TR':'ar'});
+  const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+  // Every remote request is intercepted: screenshots and purchase/auth tests cannot touch production data.
+  await page.route('https://**/*',async route=>{
+   const req=route.request(),url=new URL(req.url());
+   if(url.hostname==='api.onlinegiftis.com'){
+    if(url.pathname==='/api/store/products')return route.fulfill({json:{products:mode==='visual'?catalogue:[sample]}});
+    if(url.pathname==='/api/store/categories')return route.fulfill({json:mode==='visual'?savedCategories:{categories}});
+    if(url.pathname==='/api/store/config')return route.fulfill({json:{config:{bankConfigured:true,bankName:'Preview Bank',bankAccountName:'Preview account',iban:'TR00 PREVIEW ONLY',deliveryFee:150,freeDelivery:false,codFee:75}}});
+    if(url.pathname==='/api/store/orders'){
+     assert.equal(mode,'flow');assert.equal(req.method(),'POST');orderCalls++;assert.match(req.postData(),/"quantity":2/);assert.match(req.postData(),/"district":"Kadıköy"/);assert.match(req.postData(),/"paymentMethod":"bank_transfer"/);assert.match(req.postData(),/transferReceipt/);
+     await new Promise(resolve=>setTimeout(resolve,150));return route.fulfill({json:{order:{orderNumber:'PREVIEW-ONLY',saleTotal:1150}}});
+    }
+    if(url.pathname==='/api/store/account')return route.fulfill({json:{customer:{displayName:'Preview Member',email:'preview@example.test',phone:'05340000000'},benefits:{firstOrderDiscountAvailable:true,weekly:{orderCount:2,itemCount:3}}}});
+    if(url.pathname.includes('notifications'))return route.fulfill({json:{notifications:[],unreadCount:0}});
+    const id=url.searchParams.get('id');const files=fs.readdirSync('assets/previews').filter(f=>f.startsWith(id+'-')&&f.endsWith('-480.webp'));
+    if(req.method()==='GET')return route.fulfill({contentType:'image/webp',body:fs.readFileSync(files.length?'assets/previews/'+files[0]:'assets/boutique-hero-mobile.webp')});
+    throw Error('Unexpected remote mutation '+req.method()+' '+url.pathname);
+   }
+   if(url.hostname.endsWith('supabase.co')){
+    if(url.pathname.endsWith('/settings'))return route.fulfill({json:{external:{google:false}}});
+    if(url.pathname.endsWith('/token')){assert.equal(mode,'flow');authCalls++;return route.fulfill({json:{access_token:'preview-token',refresh_token:'preview-refresh',expires_in:3600,user:{id:'preview-user',email:'preview@example.test'}}});}
+    if(url.pathname.endsWith('/logout'))return route.fulfill({json:{}});
+    throw Error('Unexpected auth request '+url.pathname);
+   }
+   return route.abort();
+  });return {page,context};
+ }
+ async function screenshot(page,name){
+  await page.evaluate(()=>document.querySelectorAll('img').forEach(img=>img.loading='eager'));
+  await page.waitForFunction(()=>[...document.images].filter(img=>img.getAttribute('src')).every(img=>img.complete));await page.evaluate(()=>document.fonts.ready);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Overflow '+name);
+  await page.screenshot({path:path.join(output,name+'.png'),fullPage:true});
+  await page.screenshot({path:path.join(output,name+'-viewport.png'),fullPage:false});
+ }
+ // Both languages at the actual acceptance widths. Use separate sessions so no saved language leaks across cases.
+ for(const language of ['ar','tr']){
+  for(const width of [320,390,1440]){
+   const {page,context}=await newPage(language,width),suffix='-'+width+'-'+language;
+   await page.goto(base+(language==='tr'?'/tr/':'/'));await page.locator('#homeFeaturedProducts .pink-product-card').first().waitFor();await screenshot(page,'home'+suffix);
+   if(width===390){await page.locator('.boutique-menu').click();await page.locator('#homeCategoryDrawer[open]').waitFor();await screenshot(page,'home-categories'+suffix);await page.keyboard.press('Escape');}
+   await page.goto(base+'/products/?lang='+language);await page.locator('.product-card-link').first().waitFor();await screenshot(page,'catalogue'+suffix);
+   if(width===390){await page.locator('body > .boutique-bottom-nav a').nth(1).click();await page.locator('#boutiqueCategories[open]').waitFor();await screenshot(page,'categories'+suffix);await page.keyboard.press('Escape');}
+   const first=catalogue.find(p=>p.id===104)||catalogue[0];await page.goto(base+'/products/detail/?id='+first.id+'&lang='+language);await page.waitForFunction(()=>document.getElementById('buyBtn')&&!document.getElementById('buyBtn').disabled);await screenshot(page,'product'+suffix);
+   if(width===390){await page.locator('.boutique-accordion').last().locator('summary').click();assert.ok(await page.locator('.boutique-accordion').last().getAttribute('open')!==null);}
+   await context.close();
+  }
+ }
+ mode='flow';
+ for(const language of ['ar','tr']){
+  const {page,context}=await newPage(language);
+  await page.goto(base+'/products/detail/?id=9001&lang='+language);await page.waitForFunction(()=>!document.getElementById('buyBtn').disabled);
+  await page.locator('[data-quantity-plus]').click();assert.equal(await page.locator('#productQuantity').innerText(),'2');
+  await page.locator('.boutique-detail-favorite').click();assert.equal(await page.locator('.boutique-detail-favorite').getAttribute('aria-pressed'),'true');
+  await page.locator('.product-gallery button').last().click();assert.match(await page.locator('.media img').getAttribute('src'),/9002/);
+  await page.locator('#buyBtn').click();await page.locator('#cartModal.open').waitFor();assert.match(await page.locator('.cart-item-main').innerText(),/500/);
+  await page.locator('[data-custom-text]').fill('Preview personalisation');await screenshot(page,'cart-390-'+language);
+  await page.locator('#checkoutNext').click();await page.locator('#checkoutNext').click();assert.equal(await page.locator('#cartModal').getAttribute('data-checkout-stage'),'1');assert.ok(await page.locator('#checkoutResult.err').isVisible());
+  await page.locator('#checkoutName').fill('Preview Buyer');await page.locator('#checkoutPhone').fill('05340000000');await page.locator('#checkoutCity').selectOption({label:'İstanbul'});await page.locator('#checkoutDistrict').selectOption({label:'Kadıköy'});await page.locator('#checkoutAddress').fill('Preview address only');await screenshot(page,'address-390-'+language);
+  await page.locator('#checkoutNext').click();await page.locator('#payBank').check();assert.equal(await page.locator('#checkoutGrandTotal').innerText(),'1.150 ₺');await screenshot(page,'payment-390-'+language);
+  await page.locator('#checkoutSubmit').click();assert.ok(await page.locator('#checkoutResult.err').isVisible());
+  await page.locator('#transferReceipt').setInputFiles({name:'preview-receipt.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4 preview fixture')});
+  await page.locator('#checkoutSubmit').dblclick();await page.locator('#orderSuccessModal.open').waitFor();await screenshot(page,'success-390-'+language);assert.equal(orderCalls,language==='ar'?1:2);
+  await page.locator('#orderSuccessClose').click();await page.locator('body > .boutique-bottom-nav a').last().click();await page.locator('[data-account-mode="register"]').click();await screenshot(page,'register-390-'+language);await page.locator('[data-account-mode="login"]').click();await screenshot(page,'login-390-'+language);
+  await page.locator('#accountEmail').fill('preview@example.test');await page.locator('#accountPassword').fill('PreviewPasswordOnly');await page.locator('#accountSubmit').click();await page.locator('#accountMemberView:not([hidden])').waitFor();await screenshot(page,'account-390-'+language);await page.locator('#accountLogout').click();await page.locator('#accountGuestView:not([hidden])').waitFor();
+  await context.close();
+ }
+ assert.equal(authCalls,2);assert.deepEqual(errors,[]);await browser.close();console.log('Boutique passed: bilingual visual views, categories, gallery, quantity, favorites, 3 checkout stages, required fields, bank receipt, single order submission and mocked member login/logout. Screenshots: '+output);
+})().catch(e=>{console.error(e);process.exit(1)});

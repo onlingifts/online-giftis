@@ -332,118 +332,26 @@ html[data-home-colors] .pink-occasion-card strong{background:var(--home-surface)
 .pink-occasion-card[data-banner-colors] .occasion-art{background:var(--home-secondary)!important;color:var(--home-primary)!important}
 
 
-</style><link rel="stylesheet" href="/assets/home-refinements.css?v=20261012-featured-four1"><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script></head><body class="pink-home">
+</style><link rel="stylesheet" href="/assets/home-refinements.css?v=20261012-featured-four1"><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261012-preview1">
+</head><body class="pink-home boutique-home">
 <a class="skip-link" href="#main">İçeriğe geç</a>
-
-<header class="pink-header" aria-label="Site başlığı">
- <div class="pink-header-row">
-  <a class="pink-icon-button pink-notification" href="#offers" aria-label="Yeni fırsatlar ve bildirimler">
-   <i class="fa-regular fa-bell"></i><span class="pink-notification-dot"></span>
-  </a>
-
-  <a class="pink-brand" href="/tr/" aria-label="Online Gifts - Ana sayfa">
-   <span class="pink-brand-mark"><i class="fa-solid fa-gift"></i></span>
-   <span class="pink-brand-copy"><strong>Online Gifts</strong><small>Güzel anlara özel hediyeler</small></span>
-  </a>
-
-  <div class="pink-header-actions">
-   <a class="pink-icon-button" href="/products/?lang=tr&favorites=1" aria-label="Favoriler">
-    <i class="fa-regular fa-heart"></i><span class="pink-count" id="homeFavoriteCount" hidden>0</span>
-   </a>
-   <a class="pink-icon-button" href="/products/?lang=tr&cart=1" aria-label="Alışveriş sepeti">
-    <i class="fa-solid fa-cart-shopping"></i><span class="pink-count" id="homeCartCount" hidden>0</span>
-   </a>
-  </div>
- </div>
-
- <form class="pink-search home-search" action="/products/" method="get" role="search">
-  <input type="hidden" name="lang" value="tr"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-  <label class="sr-only" for="homeSearch">Hediye ara</label>
-  <input id="homeSearch" name="q" type="search" placeholder="En güzel hediyeyi ara…" maxlength="150">
-  <a class="pink-scan-link" href="/products/?lang=tr&category=nfc" aria-label="NFC ürünleri"><i class="fa-solid fa-qrcode"></i></a>
-  <button class="pink-search-submit" type="submit" aria-label="Ara"><i class="fa-solid fa-arrow-right"></i></button>
- </form>
-</header>
-
-<main id="main" class="pink-main">
- <section class="pink-hero pink-hero-localized" aria-label="Sana özel hediyeler"><a class="pink-hero-link" href="/products/?lang=tr"><div class="localized-hero-copy"><small>HER GÜZEL ANA</small><h1>Bir hediye,<br>bin güzel duygu.</h1><p>Sevdiklerin için isim, fotoğraf ve anılarla kişiselleştirilen hediyeler.</p><span>Hediyeleri keşfet →</span></div><div class="localized-hero-art" aria-hidden="true"><i class="fa-solid fa-gift"></i><i class="fa-solid fa-heart"></i></div><img hidden src="/assets/brand-logo.webp" alt="Sana özel hediyeler"></a></section>
-
- <button class="pink-category-trigger" type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Ürün kategorileri</span></button>
- <dialog id="homeCategoryDrawer" class="pink-category-drawer" aria-labelledby="homeCategoryTitle"><div class="pink-category-drawer-head"><h2 id="homeCategoryTitle">Ürün kategorileri</h2><button type="button" data-close-categories aria-label="Kapat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
- <nav class="pink-categories" aria-label="Hediye kategorileri">
-  <a href="/products/?lang=tr"><span class="pink-cat-icon cat-gift"><i class="fa-solid fa-gift"></i></span><strong>Tüm hediyeler</strong></a>
-  <a href="/products/?lang=tr&category=drinkware"><span class="pink-cat-icon cat-cup"><i class="fa-solid fa-mug-hot"></i></span><strong>Kişiye özel kupalar</strong></a>
-  <a href="/products/?lang=tr&q=fotoğraf"><span class="pink-cat-icon cat-photo"><i class="fa-regular fa-image"></i></span><strong>Fotoğraflı hediyeler</strong></a>
-  <a href="/products/?lang=tr&category=nfc"><span class="pink-cat-icon cat-nfc"><i class="fa-solid fa-wifi"></i></span><strong>NFC ürünleri</strong></a>
-  <a href="/products/?lang=tr&category=family"><span class="pink-cat-icon cat-family"><i class="fa-solid fa-people-roof"></i></span><strong>Aile hediyeleri</strong></a>
-  <a href="/products/?lang=tr&category=kids"><span class="pink-cat-icon cat-kids"><i class="fa-solid fa-child-reaching"></i></span><strong>Çocuk hediyeleri</strong></a>
- </nav></dialog>
- <div class="pink-category-hint"><div><strong>Hediyeni kategoriye göre bul</strong><span>Tüm kategoriler bir arada — kategori menüsünü aç</span></div><button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg> Kategorileri keşfet</button></div>
- <div class="pink-store-layout"><div class="pink-store-content">
-
- <section class="pink-section" id="personalized" aria-labelledby="personalizedTitle">
-  <div class="pink-section-head">
-   <div><h2 id="personalizedTitle">Sana özel hediyeler <i class="fa-solid fa-wand-magic-sparkles"></i></h2><p>Kendi dokunuşunla hediyeni özel kıl</p></div>
-   <a href="/products/?lang=tr">Tümünü gör <i class="fa-solid fa-chevron-right"></i></a>
-  </div>
-  <div class="pink-product-grid" id="homeFeaturedProducts">
-   <div class="pink-product-skeleton"></div><div class="pink-product-skeleton"></div><div class="pink-product-skeleton"></div>
-  </div>
- </section>
-
- <section class="pink-section pink-occasion-section" id="occasions" aria-labelledby="occasionsTitle">
-  <div class="pink-section-head">
-   <div><h2 id="occasionsTitle">Her özel ana bir hediye <i class="fa-solid fa-gift"></i></h2><p>Hayatındaki güzel anlar için</p></div>
-   <a href="/products/?lang=tr">Tümünü gör <i class="fa-solid fa-chevron-right"></i></a>
-  </div>
-  <div class="pink-occasion-grid">
-   <a class="pink-occasion-card" href="/products/?lang=tr&q=doğum" data-occasion="birthday"><span class="occasion-art"><i class="fa-solid fa-cake-candles"></i></span><strong>Doğum günü</strong></a>
-   <a class="pink-occasion-card" href="/products/?lang=tr&category=love" data-occasion="love"><span class="occasion-art"><i class="fa-solid fa-heart"></i></span><strong>Sevgiliye hediyeler</strong></a>
-   <a class="pink-occasion-card" href="/products/?lang=tr&category=family" data-occasion="family"><span class="occasion-art"><i class="fa-solid fa-people-roof"></i></span><strong>Aile hediyeleri</strong></a>
-   <a class="pink-occasion-card" href="/products/?lang=tr&category=kids" data-occasion="kids"><span class="occasion-art"><i class="fa-solid fa-gift"></i></span><strong>Çocuk hediyeleri</strong></a>
-  </div>
- </section>
-
- <section class="pink-offers" id="offers" aria-label="Üyelik fırsatları">
-  <div class="pink-offer-icon"><i class="fa-solid fa-gift"></i></div>
-  <div><small>Üyelik fırsatı</small><h2>İlk siparişinde 200₺ indirim</h2><p>Hesabını oluştur, üye olarak ilk siparişini ver. İndirim ödeme sırasında otomatik uygulanır.</p></div>
-  <a href="/products/?lang=tr&account=1">Üye ol <i class="fa-solid fa-arrow-right"></i></a>
- </section>
-
- <section class="pink-offers" aria-label="Haftalık üyelik hediyesi"><div class="pink-offer-icon"><i class="fa-solid fa-star"></i></div><div><small>Üyelik avantajı</small><h2>Hediyen bizden olsun</h2><p>Aynı hafta içinde 5 sipariş veya toplam 5 ürün = mağazamızdan bir hediye. Haftada bir hediye, mevcut seçeneklerden.</p></div><a href="/products/?lang=tr&account=1">Üyeliğini keşfet</a></section>
- <section class="pink-trust" aria-label="Online Gifts avantajları">
-  <article><i class="fa-solid fa-truck-fast"></i><strong>Ücretsiz teslimat</strong><small>Türkiye genelinde</small></article>
-  <article><i class="fa-solid fa-wand-magic-sparkles"></i><strong>Sana özel tasarım</strong><small>İsim, fotoğraf ya da fikrin</small></article>
-  <article><i class="fa-solid fa-shield-heart"></i><strong>Kolay sipariş</strong><small>Fiyat, ödeme ve takip</small></article>
- </section>
-
- <section class="pink-how" id="how-it-works">
-  <div class="pink-section-head"><div><h2>Üç adımda sipariş ver</h2><p>Hediye seçiminden teslimata kadar kolay bir süreç.</p></div></div>
-  <div class="pink-how-grid">
-   <article><span>1</span><strong>Ürününü seç</strong><p>Ürünü aç, fiyatını ve detaylarını incele.</p></article>
-   <article><span>2</span><strong>Hediyeni kişiselleştir</strong><p>Ürün destekliyorsa isim veya fotoğrafını ekle.</p></article>
-   <article><span>3</span><strong>Siparişini tamamla</strong><p>Teslimat ve ödeme bilgilerini tamamla, siparişini takip et.</p></article>
-  </div>
- </section>
-</div></div>
-</main>
-
-<footer class="pink-footer" id="about">
- <div><strong>Online Gifts</strong><span>2016’dan beri Türkiye’de kişiye özel hediyeler</span></div>
- <nav><a href="/products/?lang=tr">Mağaza</a><a href="/track/?lang=tr">Sipariş takibi</a><a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">WhatsApp</a><a href="/" lang="ar">العربية</a></nav>
- <small>© <span id="year">2026</span> Online Gifts</small>
-</footer>
-
-<nav class="pink-bottom-nav" aria-label="Hızlı gezinme">
- <a href="/tr/" class="active"><i class="fa-solid fa-house"></i><span>Ana sayfa</span></a>
- <button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Kategoriler</span></button>
- <a href="#offers"><i class="fa-solid fa-gift"></i><span>Fırsatlar</span></a>
- <a href="/products/?lang=tr&favorites=1"><i class="fa-regular fa-heart"></i><span>Favoriler</span></a>
- <a href="/products/?lang=tr&account=1"><i class="fa-regular fa-user"></i><span>Hesabım</span></a>
-</nav>
-
-<script src="/assets/image-manifest.js" defer></script>
-<script src="/assets/responsive-images.js?v=20261010-product-images1" defer></script>
-<script src="/assets/home.js?v=20261012-featured-four1" defer></script>
-</body></html>
-
+<header class="pink-header"><div class="pink-header-row">
+<button class="boutique-menu" type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog" aria-label="Kategoriler"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+<a class="pink-brand" href="/tr/"><span class="pink-brand-mark"><i class="fa-solid fa-gift"></i></span><span class="pink-brand-copy"><strong>ONLINE GIFTS</strong><small>Hediyeler · Çiçekler · Özel baskı</small></span></a>
+<nav class="boutique-desktop-links"><a href="/tr/">Ana sayfa</a><a href="/products/?lang=tr&category=love">Çiçekler</a><a href="/products/?lang=tr&category=gifts">Hediyeler</a><a href="/products/?lang=tr&category=drinkware">Kişiye özel baskı</a><a href="#occasions">Özel günler</a><a href="#about">Hakkımızda</a></nav>
+<div class="pink-header-actions"><a class="pink-icon-button" href="/products/?lang=tr&account=1" aria-label="Hesabım"><i class="fa-regular fa-user"></i></a><a class="pink-icon-button" href="/products/?lang=tr&favorites=1" aria-label="Favoriler"><i class="fa-regular fa-heart"></i><span class="pink-count" id="homeFavoriteCount" hidden>0</span></a><a class="pink-icon-button" href="/products/?lang=tr&cart=1" aria-label="Sepet"><i class="fa-solid fa-bag-shopping"></i><span class="pink-count" id="homeCartCount" hidden>0</span></a></div>
+<form class="pink-search home-search" action="/products/" method="get" role="search"><input type="hidden" name="lang" value="tr"><label class="sr-only" for="homeSearch">Hediye ara</label><input id="homeSearch" name="q" type="search" placeholder="Özel bir hediye ara ..." maxlength="150"><button class="pink-search-submit" type="submit" aria-label="Ara"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+</div></header>
+<main id="main" class="pink-main"><section class="pink-hero boutique-hero"><a class="pink-hero-link" href="/products/?lang=tr&"><picture><source media="(max-width:760px)" srcset="/assets/boutique-hero-mobile.webp"><img src="/assets/boutique-hero-desktop.webp" alt="Kırmızı güller ve özenle paketlenmiş hediyeler" width="2048" height="683" fetchpriority="high"></picture><div class="boutique-hero-copy"><small>GIFTS · FLOWERS · CUSTOM PRINTING</small><h1><span class="desktop-heading">Hediyeler ve çiçekler<br>Zarif bir dokunuş</span><span class="mobile-heading">Her özel ana…<br>Hikâyeni anlatan bir hediye</span></h1><p>Özel hediyeler · Çiçekler · Kişiye özel baskı<br><span class="desktop-tagline">Her özel an, kalıcı bir hatırayı hak eder.</span></p><span class="boutique-cta">Şimdi alışveriş yap <i class="fa-solid fa-arrow-left"></i></span><div class="hero-benefits"><span><i class="fa-solid fa-medal"></i>Özenle seçilmiş ürünler</span><span><i class="fa-solid fa-gift"></i>Özel hediye paketleri</span><span><i class="fa-solid fa-truck-fast"></i>Türkiye içi teslimat</span></div></div></a></section>
+<section class="boutique-category-grid" aria-label="Kategoriler"><a class="boutique-category boutique-rose" href="/products/?lang=tr&category=love"><span class="category-photo"></span><div><strong>Çiçekler</strong><p>Her ana özel bir dokunuş</p><b>Şimdi keşfet <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-gift" href="/products/?lang=tr&category=gifts"><span class="category-photo"></span><div><strong>Hediyeler</strong><p>Her ana özel bir dokunuş</p><b>Şimdi keşfet <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-print" href="/products/?lang=tr&category=drinkware"><span class="category-photo"></span><div><strong>Kişiye özel baskı</strong><p>Her ana özel bir dokunuş</p><b>Şimdi keşfet <i class="fa-solid fa-arrow-left"></i></b></div></a></section>
+<section class="pink-trust boutique-mobile-trust"><article><i class="fa-solid fa-truck-fast"></i><strong>Hızlı teslimat</strong></article><article><i class="fa-solid fa-shield-heart"></i><strong>Güvenli sipariş</strong></article><article><i class="fa-solid fa-gift"></i><strong>Özenli paket</strong></article><article><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#8c552a" stroke-width="1.5" aria-hidden="true"><path d="M4 13V11a8 8 0 0 1 16 0v6q0 4-7 4"/><rect x="3" y="11" width="4" height="7" rx="2"/><rect x="17" y="11" width="4" height="7" rx="2"/></svg><strong>Müşteri desteği</strong></article></section>
+<dialog id="homeCategoryDrawer" class="pink-category-drawer" aria-labelledby="homeCategoryTitle"><div class="pink-category-drawer-head"><h2 id="homeCategoryTitle">Kategoriler</h2><button type="button" data-close-categories aria-label="Kapat"><i class="fa-solid fa-xmark"></i></button></div><nav class="pink-categories"><a href="/products/?lang=tr&category=love"><span class="pink-cat-icon"><i class="fa-solid fa-gift"></i></span><strong>Çiçekler</strong></a><a href="/products/?lang=tr&category=gifts"><span class="pink-cat-icon"><i class="fa-solid fa-gift"></i></span><strong>Hediyeler</strong></a><a href="/products/?lang=tr&category=drinkware"><span class="pink-cat-icon"><i class="fa-solid fa-gift"></i></span><strong>Kişiye özel baskı</strong></a></nav></dialog>
+<section class="pink-section" id="personalized"><div class="pink-section-head"><h2>Öne çıkan ürünler</h2><a href="/products/?lang=tr&">Tüm ürünleri gör <i class="fa-solid fa-arrow-left"></i></a></div><div class="pink-product-grid" id="homeFeaturedProducts"><div class="pink-product-skeleton"></div><div class="pink-product-skeleton"></div></div></section>
+<section class="boutique-reviews" id="reviews"><h2>Müşterilerimiz ne diyor?</h2><p>Müşteri deneyimlerini keşfet ve hediye deneyimini paylaş.</p><a class="boutique-review-link" href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener"><i class="fa-regular fa-star"></i> Google müşteri yorumları</a></section>
+<details class="boutique-more"><summary>Özel günler ve üyelik fırsatlarını keşfet</summary><section class="pink-section pink-occasion-section" id="occasions"><div class="pink-section-head"><h2>Her özel güne bir hediye</h2></div><div class="pink-occasion-grid"><a class="boutique-category boutique-rose" href="/products/?lang=tr&category=love"><span class="category-photo"></span><div><strong>Çiçekler</strong><p>Her ana özel bir dokunuş</p><b>Şimdi keşfet <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-gift" href="/products/?lang=tr&category=gifts"><span class="category-photo"></span><div><strong>Hediyeler</strong><p>Her ana özel bir dokunuş</p><b>Şimdi keşfet <i class="fa-solid fa-arrow-left"></i></b></div></a><a class="boutique-category boutique-print" href="/products/?lang=tr&category=drinkware"><span class="category-photo"></span><div><strong>Kişiye özel baskı</strong><p>Her ana özel bir dokunuş</p><b>Şimdi keşfet <i class="fa-solid fa-arrow-left"></i></b></div></a></div></section>
+<section class="pink-offers" id="offers"><div class="pink-offer-icon"><i class="fa-solid fa-gift"></i></div><div><h2>İlk siparişe 200₺ indirim</h2><p>Üye ol, ilk sipariş indiriminden ve haftalık hediyelerden yararlan.</p></div><a href="/products/?lang=tr&account=1">Şimdi üye ol</a></section>
+<section class="pink-how" id="how-it-works"><h2>Üç adımda sana özel hediye</h2><div class="pink-how-grid"><article><span>1</span><strong>Ürününü seç</strong></article><article><span>2</span><strong>Kişiselleştir</strong></article><article><span>3</span><strong>Sipariş ver ve takip et</strong></article></div></section>
+</details></main>
+<footer class="pink-footer" id="about"><div class="boutique-footer-brand"><strong>Online Gifts</strong><span>Her özel ana daha fazla güzellik</span><small>2016’dan beri Türkiye’de kişiye özel hediyeler</small></div><nav><strong>Hızlı bağlantılar</strong><a href="/products/?lang=tr&">Ürünler</a><a href="/track/?lang=tr">Sipariş takibi</a><a href="/products/?lang=tr&account=1">Hesabım</a></nav><nav><strong>Müşteri hizmetleri</strong><a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">WhatsApp</a><a href="https://bayi.onlinegiftis.com/">Bizimle çalış</a><a href="/" lang="ar">العربية</a></nav><div class="boutique-footer-note"><strong>Güzel bir anı için</strong><p>Hediyeler · Çiçekler · Özel baskı</p><small>© <span id="year">2026</span> Online Gifts</small></div></footer>
+<nav class="pink-bottom-nav" aria-label="Hızlı gezinme"><a href="/tr/" class="active"><i class="fa-solid fa-house"></i><span>Ana sayfa</span></a><button type="button" data-open-categories aria-controls="homeCategoryDrawer" aria-expanded="false" aria-haspopup="dialog"><i class="fa-solid fa-table-cells-large"></i><span>Kategoriler</span></button><a href="/products/?lang=tr&favorites=1"><i class="fa-regular fa-heart"></i><span>Favoriler</span></a><a href="/products/?lang=tr&cart=1"><i class="fa-solid fa-cart-shopping"></i><span>Sepet</span></a><a href="/products/?lang=tr&account=1"><i class="fa-regular fa-user"></i><span>Hesabım</span></a></nav>
+<script src="/assets/image-manifest.js" defer></script><script src="/assets/responsive-images.js?v=20261010-product-images1" defer></script><script src="/assets/home.js?v=20261012-boutique2" defer></script></body></html>

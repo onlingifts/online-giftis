@@ -13,7 +13,7 @@
  const colorKeys=['bg','surface','primary','secondary','text','muted','accent','onPrimary'];
  const colorStyle=colors=>colorKeys.filter(k=>/^#[0-9a-fA-F]{6}$/.test(colors?.[k]||'')).map(k=>'--home-'+k+':'+colors[k]).join(';');
  function applyHomeColors(meta){const el=document.documentElement;for(const key of colorKeys)el.style.removeProperty('--home-'+key);el.toggleAttribute('data-home-colors',Boolean(meta?.customColors));if(meta?.customColors)for(const key of colorKeys)if(/^#[0-9a-fA-F]{6}$/.test(meta.colors?.[key]||''))el.style.setProperty('--home-'+key,meta.colors[key]);}
- const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(Number(v||0))+' TL';
+ const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(Number(v||0))+' ₺';
  const categories=p=>{const raw=p?.categories??p?.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).map(x=>String(x).trim()).filter(Boolean)};
  let favorites=new Set();
  try{favorites=new Set((JSON.parse(localStorage.getItem(FAVORITES_KEY)||'[]')||[]).map(String))}catch{}
@@ -56,8 +56,10 @@
    const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);
    const preferred=products.filter(p=>p.isFeatured&&p.price!==null);
    const customized=products.filter(p=>p.price!==null&&(p.requiresCustomizationText||p.requiresCustomizationImage||p.requiresDesignInput||categories(p).some(c=>['nfc','drinkware','gifts','love'].includes(c))));
+   const bouquets=products.filter(p=>/ورد|بوكيه|çiçek|gül/i.test(name(p)));
+   const photoGifts=products.filter(p=>p.requiresCustomizationImage||categories(p).includes('photo'));
    const seen=new Set(),list=[];
-   [...preferred,...customized,...products].forEach(p=>{if(list.length>=4)return;const k=String(p.id);if(!seen.has(k)){seen.add(k);list.push(p)}});
+   [...bouquets.slice(0,2),...customized.slice(0,2),...photoGifts,...preferred,...products].forEach(p=>{if(list.length>=6)return;const k=String(p.id);if(!seen.has(k)){seen.add(k);list.push(p)}});
    if(host)host.innerHTML=list.length?list.map(productCard).join(''):'<div class="pink-empty">'+txt('ما في منتجات متاحة حالياً.','Henüz ürün bulunmuyor.')+'</div>';
    host?.querySelectorAll('[data-favorite-id]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggleFavorite(btn.dataset.favoriteId,btn)}));
 
@@ -72,7 +74,10 @@
    const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
    const banner=main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
    const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');
-   if(hero){hero.style.display=banner?'':'none';if(img&&banner){img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');hero.classList.add('has-custom-banner')}}
+   const referenceCampaign=Boolean(hero?.classList.contains?.('boutique-hero'))&&!new URLSearchParams(location.search).has('savedBanners');
+   if(hero){hero.style.display=banner||!main?.configured?'':'none';if(img&&banner&&!referenceCampaign){img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');hero.querySelectorAll('picture source').forEach(source=>source.remove());hero.classList.add('has-custom-banner')}}
+   const shortcutCategory={love:data.categories.find(c=>/ورود|بوكيه|çiçek/i.test(c.nameAr+' '+(c.nameTr||''))),gifts:data.categories.find(c=>c.key==='personalized')||data.categories.find(c=>c.key==='gifts'),drinkware:data.categories.find(c=>c.key==='assorted')||data.categories.find(c=>c.key==='drinkware')};
+   document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;});
    const nav=document.querySelector('.pink-categories');if(nav){const icons={drinkware:'fa-mug-hot',nfc:'fa-wifi',family:'fa-people-roof',kids:'fa-child-reaching',love:'fa-heart',all:'fa-gift'};nav.innerHTML=data.categories.map(c=>'<a href="/products/?'+(language==='tr'?'lang=tr&':'')+(c.key==='all'?'':'category='+encodeURIComponent(c.key))+'"><span class="pink-cat-icon cat-gift"><i class="fa-solid '+(icons[c.key]||'fa-gift')+'"></i></span><strong>'+esc(language==='tr'?(c.nameTr||c.nameAr):c.nameAr)+'</strong></a>').join('')}
    const bannerGrid=document.querySelector('.pink-occasion-grid');
    if(bannerGrid&&Array.isArray(data.banners)){
@@ -104,6 +109,8 @@
   drawer.addEventListener('close',syncDrawer);
   drawer.addEventListener('click',event=>{if(event.target!==drawer)return;const rect=drawer.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)drawer.close()});
  }
+ function revealSection(){const target=document.getElementById(location.hash.slice(1)||'main');const more=target?.closest('.boutique-more');if(more)more.open=true;}
+ window.addEventListener('hashchange',revealSection);revealSection();
  const y=$('year');if(y)y.textContent=new Date().getFullYear();
  try{localStorage.setItem('og_lang',language)}catch{}
  syncBadges();loadProducts();loadCategories();
