@@ -36,7 +36,7 @@
   return '<article class="pink-product-card">'+
    '<button class="pink-favorite'+(active?' is-favorite':'')+'" type="button" data-favorite-id="'+id+'" aria-label="'+txt('إضافة للمفضلة','Favorilere ekle')+'" aria-pressed="'+active+'"><i class="'+(active?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
    '<a class="pink-product-link" href="'+href(id)+'">'+
-    '<span class="pink-product-media">'+(image?'<img '+OGImages.product(p,'(max-width: 900px) calc((100vw - 34px) / 3), (max-width: 1208px) calc((100vw - 67px) / 4), 282px')+' alt="'+esc(name(p))+'" loading="lazy" decoding="async">':'<span class="pink-empty">'+txt('بدون صورة','Görsel yok')+'</span>')+'</span>'+
+    '<span class="pink-product-media">'+(image?'<img '+OGImages.product(p,'(max-width: 900px) calc((100vw - 34px) / 2), (max-width: 1208px) calc((100vw - 67px) / 4), 282px')+' alt="'+esc(name(p))+'" loading="lazy" decoding="async">':'<span class="pink-empty">'+txt('بدون صورة','Görsel yok')+'</span>')+'</span>'+
     '<span class="pink-product-body"><strong class="pink-product-name">'+esc(name(p))+'</strong><span class="pink-product-bottom"><b class="pink-product-price">'+esc(price)+'</b><span class="pink-product-open" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span></span></span>'+
    '</a></article>'
  }
@@ -57,7 +57,7 @@
    const preferred=products.filter(p=>p.isFeatured&&p.price!==null);
    const customized=products.filter(p=>p.price!==null&&(p.requiresCustomizationText||p.requiresCustomizationImage||p.requiresDesignInput||categories(p).some(c=>['nfc','drinkware','gifts','love'].includes(c))));
    const seen=new Set(),list=[];
-   [...preferred,...customized,...products].forEach(p=>{if(list.length>=3)return;const k=String(p.id);if(!seen.has(k)){seen.add(k);list.push(p)}});
+   [...preferred,...customized,...products].forEach(p=>{if(list.length>=4)return;const k=String(p.id);if(!seen.has(k)){seen.add(k);list.push(p)}});
    if(host)host.innerHTML=list.length?list.map(productCard).join(''):'<div class="pink-empty">'+txt('ما في منتجات متاحة حالياً.','Henüz ürün bulunmuyor.')+'</div>';
    host?.querySelectorAll('[data-favorite-id]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggleFavorite(btn.dataset.favoriteId,btn)}));
 

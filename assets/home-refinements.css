@@ -25,3 +25,7 @@ html:has(.pink-category-drawer[open]){overflow:hidden}
 /* The side category shortcut is half its previous visible width and height. */
 .pink-category-trigger{transform:scale(.5);transform-origin:left center}
 html[dir="rtl"] .pink-category-trigger{transform-origin:right center}
+
+/* Four featured products: two columns on mobile, four on desktop. */
+#homeFeaturedProducts{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:900px){#homeFeaturedProducts{grid-template-columns:repeat(2,minmax(0,1fr))}}
