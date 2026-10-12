@@ -4,6 +4,7 @@
  const params=new URLSearchParams(location.search);
  const id=Number(document.body.dataset.productId||params.get('id')||0);
  let product=null;
+ let selectedQuantity=1;
  let categoryMeta={};
  const $=x=>document.getElementById(x);
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
@@ -91,6 +92,27 @@
   host.innerHTML=gallery.map((im,i)=>'<button type="button" data-image-index="'+i+'" aria-label="'+txt('عرض الصورة ','Görseli göster ')+(i+1)+'" aria-pressed="'+Boolean(im.isPrimary||i===0)+'"><img src="'+API+escapeHtml(im.imageUrl)+'" alt="'+escapeHtml(currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p))+'" loading="lazy"></button>').join('');
   host.querySelectorAll('button').forEach(button=>button.onclick=()=>{const im=gallery[Number(button.dataset.imageIndex)],img=media.querySelector('img');if(img){img.src=API+im.imageUrl;img.removeAttribute('srcset');img.alt=currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p)}host.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)))})
  }
+ function enhanceBoutiqueProduct(p){
+  const actions=document.querySelector('.actions');
+  if(actions&&!$('productQuantity')){
+   const quantity=document.createElement('div');quantity.className='boutique-quantity';
+   quantity.innerHTML='<button type="button" data-quantity-minus aria-label="'+txt('تقليل الكمية','Adedi azalt')+'">−</button><output id="productQuantity" aria-live="polite">1</output><button type="button" data-quantity-plus aria-label="'+txt('زيادة الكمية','Adedi artır')+'">+</button>';
+   actions.prepend(quantity);quantity.querySelector('[data-quantity-minus]').onclick=()=>{selectedQuantity=Math.max(1,selectedQuantity-1);$('productQuantity').textContent=selectedQuantity};quantity.querySelector('[data-quantity-plus]').onclick=()=>{selectedQuantity=Math.min(Math.max(1,product.stockQuantity),selectedQuantity+1);$('productQuantity').textContent=selectedQuantity};
+  }
+  const media=document.querySelector('.media');
+  if(media&&!media.querySelector('.boutique-detail-favorite')){
+   const favorite=document.createElement('button');favorite.type='button';favorite.className='boutique-detail-favorite';favorite.setAttribute('aria-label',txt('المفضلة','Favoriler'));
+   let ids=new Set();try{ids=new Set(JSON.parse(localStorage.getItem('og_favorites_v1')||'[]').map(String))}catch{}
+   const render=()=>{const active=ids.has(String(id));favorite.innerHTML='<i class="fa-'+(active?'solid':'regular')+' fa-heart"></i>';favorite.setAttribute('aria-pressed',String(active))};render();
+   favorite.onclick=()=>{ids.has(String(id))?ids.delete(String(id)):ids.add(String(id));localStorage.setItem('og_favorites_v1',JSON.stringify([...ids]));render()};media.append(favorite);
+  }
+  const info=document.querySelector('.info');
+  if(info&&!info.querySelector('.boutique-accordion')){
+   const host=document.createElement('div');
+   host.innerHTML='<details class="boutique-accordion"><summary>'+txt('معلومات التوصيل','Teslimat bilgileri')+'</summary><p>'+txt('اختر الولاية والمنطقة في السلة لتظهر أجرة التوصيل والإجمالي قبل تثبيت الطلب.','Siparişi onaylamadan önce sepetten il ve ilçeyi seçerek teslimat ücretini ve toplamı görebilirsin.')+'</p></details><details class="boutique-accordion"><summary>'+txt('الاستبدال والاسترجاع','Değişim ve iade')+'</summary><p>'+txt('تواصل مع خدمة العملاء لمعرفة شروط الاستبدال والاسترجاع للمنتج قبل الطلب.','Sipariş öncesinde bu ürünün değişim ve iade koşulları için müşteri hizmetlerine ulaşabilirsin.')+' <a href="'+WA+'">WhatsApp</a></p></details><details class="boutique-accordion"><summary>'+txt('تقييمات العملاء','Müşteri yorumları')+'</summary><p><a href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener">'+txt('اطّلع على تقييمات المتجر على Google','Google mağaza yorumlarını gör')+'</a></p></details>';
+   info.append(host);
+  }
+ }
  function setProduct(p){
   product=p;
   if(window.OGThemes){const key=OGThemes.productCategory(p,params.get('category')),meta=categoryMeta[key];OGThemes.apply(key,meta?.customColors?meta.colors:null);}
@@ -108,9 +130,10 @@
    }
   }
   renderGallery(p);
+  enhanceBoutiqueProduct(p);
   if(p.requiresDesignInput||p.requiresCustomizationText||p.requiresCustomizationImage){
    let button=$('designBtn');if(!button){button=document.createElement('button');button.id='designBtn';button.type='button';button.className='og-design-trigger';document.querySelector('.actions')?.before(button)}
-   button.textContent=txt('🎨 صمّم هديتك هنا','🎨 Hediyeni burada tasarla');button.disabled=!p.orderable;
+   button.textContent=txt('صمّم هديتك هنا','Hediyeni burada tasarla');button.disabled=!p.orderable;
    button.onclick=()=>{if(!window.OGProductDesign)return;OGProductDesign.open({...p,name:localizedName(p)},async(file,label)=>{await OGProductDesign.saveAttachment(id,file);add(label,true)})}
   }
   if($('livePrice'))$('livePrice').textContent=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
@@ -154,8 +177,8 @@
   let cart=[];
   try{cart=JSON.parse(localStorage.getItem('og_cart_v1')||'[]');if(!Array.isArray(cart))cart=[]}catch{}
   const existing=cart.find(x=>Number(x.productId)===id);
-  if(existing){if(skipPrompt){existing.customizationText=custom}else{if(existing.quantity<product.stockQuantity)existing.quantity+=1;else return;if(custom)existing.customizationText=custom}}
-  else cart.push({productId:id,name:localizedName(product),price:product.price,quantity:1,stock:product.stockQuantity,customizationText:custom});
+  if(existing){if(skipPrompt){existing.customizationText=custom}else{if(existing.quantity+selectedQuantity<=product.stockQuantity)existing.quantity+=selectedQuantity;else return;if(custom)existing.customizationText=custom}}
+  else cart.push({productId:id,name:localizedName(product),price:product.price,quantity:selectedQuantity,stock:product.stockQuantity,customizationText:custom});
   localStorage.setItem('og_cart_v1',JSON.stringify(cart));
   location.href=currentLang==='tr'?'/products/?lang=tr&cart=1':'/products/?cart=1'
  }

@@ -759,7 +759,7 @@ function uploadBlock(x){
  if(!needsFile)return '';
  const selected=state.uploads.get(x.productId);
  const label=x.requiresCustomizationImage?txt('ارفع صورة/ملف التخصيص *','Kişiselleştirme dosyası *'):txt('ارفع صورة/ملف (أو اكتب التفاصيل)','Görsel/dosya yükle (veya detay yaz)');
- return '<div class="cart-upload"><label>'+label+'</label><button type="button" class="og-design-trigger" data-open-design="'+x.productId+'">'+txt('🎨 صمّم هديتك هنا','🎨 Hediyeni burada tasarla')+'</button><input type="file" data-upload="'+x.productId+'" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf"><small data-upload-name="'+x.productId+'">'+(selected?txt('تم اختيار: ','Seçildi: ')+esc(selected.name):txt('الحد الأقصى 10 MB','En fazla 10 MB'))+'</small></div>'
+ return '<div class="cart-upload"><label>'+label+'</label><button type="button" class="og-design-trigger" data-open-design="'+x.productId+'">'+txt('صمّم هديتك هنا','Hediyeni burada tasarla')+'</button><input type="file" data-upload="'+x.productId+'" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf"><small data-upload-name="'+x.productId+'">'+(selected?txt('تم اختيار: ','Seçildi: ')+esc(selected.name):txt('الحد الأقصى 10 MB','En fazla 10 MB'))+'</small></div>'
 }
 function textBlock(x){
  if(!x.requiresCustomizationText&&!x.requiresDesignInput)return '';
@@ -904,13 +904,18 @@ async function initCustomerAccount(){
  await loadCustomerAccount();
  if(new URLSearchParams(location.search).get('account')==='1')openModal(accountModal)
 }
+function cartImage(x){
+ const p=state.products.find(p=>Number(p.id)===Number(x.productId));
+ const url=lang()==='tr'?(p?.imageUrlTr??p?.imageUrl):(p?.imageUrlAr??p?.imageUrl);
+ return p?.hasImage&&url?'<img class="cart-item-image" src="'+esc(new URL(url,API).href)+'" alt="'+esc(x.name)+'" loading="lazy">':'<span class="cart-item-image" aria-hidden="true"></span>';
+}
 function renderCart(){
  $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded;
  state.cart=state.cart.filter(x=>!state.catalogLoaded||state.products.some(p=>p.id===x.productId));
  const count=state.cart.reduce((n,x)=>n+x.quantity,0);
  $('cartCount').textContent=count;$('navCartCount').textContent=count;$('cartFab').classList.toggle('show',count>0);
  if(!count){$('cartItems').innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-bag-shopping"></i></div>'+txt('السلة فارغة','Sepet boş')+'</div>';$('cartTotal').textContent=money(0);saveCart();renderPayment();return}
- $('cartItems').innerHTML=state.cart.map((x,i)=>'<div class="cart-item"><div class="cart-item-main"><b>'+esc(x.name)+'</b><small>'+money(x.price)+' × '+x.quantity+'</small>'+textBlock(x)+uploadBlock(x)+'</div><div class="cart-item-actions"><button type="button" data-minus="'+i+'"><i class="fa-solid fa-minus"></i></button><strong>'+x.quantity+'</strong><button type="button" data-plus="'+i+'"><i class="fa-solid fa-plus"></i></button><button type="button" data-remove="'+i+'"><i class="fa-solid fa-trash"></i></button></div></div>').join('');
+ $('cartItems').innerHTML=state.cart.map((x,i)=>'<div class="cart-item">'+cartImage(x)+'<div class="cart-item-main"><b>'+esc(x.name)+'</b><small>'+money(x.price)+' × '+x.quantity+'</small>'+textBlock(x)+uploadBlock(x)+'</div><div class="cart-item-actions"><button type="button" data-minus="'+i+'"><i class="fa-solid fa-minus"></i></button><strong>'+x.quantity+'</strong><button type="button" data-plus="'+i+'"><i class="fa-solid fa-plus"></i></button><button type="button" data-remove="'+i+'"><i class="fa-solid fa-trash"></i></button></div></div>').join('');
  $('cartTotal').textContent=money(state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0));
  $('cartItems').querySelectorAll('[data-custom-text]').forEach(input=>input.addEventListener('input',()=>{const x=state.cart.find(v=>v.productId===Number(input.dataset.customText));if(x){x.customizationText=input.value.slice(0,500);saveCart()}}));
  $('cartItems').querySelectorAll('[data-upload]').forEach(input=>input.addEventListener('change',()=>{
@@ -1007,7 +1012,7 @@ async function loadProducts(){
   }
   state.cart=deduped;saveCart();
   if(window.OGProductDesign)await Promise.all(state.cart.map(async item=>{try{const file=await OGProductDesign.getAttachment(item.productId);if(file&&!state.uploads.has(item.productId))state.uploads.set(item.productId,file)}catch{}}));
-  renderCategories();renderProducts();renderCart()
+  renderCategories();renderProducts();renderCart();window.dispatchEvent(new CustomEvent('og-catalog-ready',{detail:{products:state.products,categories:Object.values(state.categoryMeta)}}))
  }catch{
   grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>'+txt('تعذر تحميل المنتجات حالياً. تقدر تطلب مباشرة عبر واتساب.','Ürünler şu anda yüklenemedi. WhatsApp üzerinden sipariş verebilirsiniz.')+'</div>'
  }
@@ -1088,7 +1093,7 @@ function applyLanguage(l){
  try{localStorage.setItem('og_lang',l)}catch{}
  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:productName(p)}:x});saveCart();
  refreshLocationLabels();
- renderCategories();renderProducts();renderCart();renderPayment();renderAccount()
+ renderCategories();renderProducts();renderCart();window.dispatchEvent(new CustomEvent('og-catalog-ready',{detail:{products:state.products,categories:Object.values(state.categoryMeta)}}));renderPayment();renderAccount()
  document.title=l==='tr'?'Ürünler | Online Gifts Türkiye':'منتجات Online Gifts | هدايا مخصصة في تركيا';
  $('navCart').setAttribute('aria-label',txt('سلة التسوق','Alışveriş sepeti'));
  document.querySelectorAll('.footer-links a').forEach(a=>{const href=a.getAttribute('href');if(href.startsWith('/track/'))a.href=l==='tr'?'/track/?lang=tr':'/track/';if(href.includes('#how-it-works'))a.href=l==='tr'?'/tr/#how-it-works':'/#how-it-works'});
@@ -1122,9 +1127,10 @@ restoreCart();
 const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=(()=>{try{return localStorage.getItem('og_lang')}catch{return null}})();if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
 setAccountMode('login');
 renderCart();
-Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const q=new URLSearchParams(location.search);if(q.get('cart')==='1'&&state.cart.length)openModal(cartModal);if(q.get('account')==='1')openModal(accountModal)});
+Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const q=new URLSearchParams(location.search);if(q.get('cart')==='1')openModal(cartModal);if(q.get('account')==='1')openModal(accountModal)});
 })();
 </script>
+<script src="/assets/boutique-commerce.js?v=20261012-boutique2" defer></script>
 </body>
 </html>
 
