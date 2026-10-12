@@ -26,7 +26,7 @@ assert.match(presentation.card({...snapshot.banners[0],key:'personalized'},'/pro
   let updated=false;
   await page.route('https://**/*',async route=>{
    assert.equal(route.request().method(),'GET','Read-only test');const url=new URL(route.request().url());
-   if(url.pathname==='/api/store/categories'){const data=structuredClone(snapshot);if(updated){data.categories.find(c=>c.key==='nfc')[lang==='ar'?'bannerUrlAr':'bannerUrlTr']='/api/store/categories/banner?key=nfc&v=admin-new-upload';data.homeBanner[lang==='ar'?'bannerUrlAr':'bannerUrlTr']='/api/store/home-banner?v=admin-new-upload';data.banners[0][lang==='ar'?'bannerUrlAr':'bannerUrlTr']='/api/store/banners/image?id=birthday&v=admin-new-upload';}return route.fulfill({json:data});}
+   if(url.pathname==='/api/store/categories'){const data=structuredClone(snapshot);if(updated){data.categories.find(c=>c.key==='nfc')[lang==='ar'?'bannerUrlAr':'bannerUrlTr']='/api/store/categories/banner?key=nfc&v=admin-new-upload';data.homeBanner[lang==='ar'?'bannerUrlAr':'bannerUrlTr']='/api/store/home-banner?v=admin-new-upload';data.banners[0][lang==='ar'?'bannerUrlAr':'bannerUrlTr']='/api/store/banners/image?id=birthday&v=admin-new-upload';}data.storefront={homeBanners:{limit:4,selected:['banner:birthday','category:nfc']}};return route.fulfill({json:data});}
    if(url.pathname==='/api/store/products')return route.fulfill({json:products});
    if(url.pathname.includes('/image')||url.pathname.includes('banner'))return route.fulfill({contentType:'image/webp',body:fs.readFileSync('assets/boutique-gifts.webp')});
    return route.abort();
@@ -41,10 +41,11 @@ assert.match(presentation.card({...snapshot.banners[0],key:'personalized'},'/pro
   updated=true;await page.goto('http://localhost:8765/products/?lang='+lang+'&category=nfc');await page.waitForFunction(()=>document.getElementById('categoryCampaignImg').src.includes('admin-new-upload'));
   assert.equal(await page.locator('.boutique-category-campaign-copy').isVisible(),false);
   await page.screenshot({path:path.join(output,'admin-upload-category-'+lang+'-'+width+'.png')});
-  await page.goto('http://localhost:8765/'+(lang==='tr'?'tr/':''));await page.waitForFunction(()=>document.querySelector('.has-custom-banner img')?.src.includes('admin-new-upload'));
-  await page.locator('.pink-occasion-grid .boutique-saved-banner').first().waitFor();
-  assert.equal(await page.locator('.pink-occasion-grid .boutique-section-card strong').first().textContent(),lang==='tr'?'Doğum günü':'أعياد الميلاد');
+  await page.goto('http://localhost:8765/'+(lang==='tr'?'tr/':''));await page.waitForFunction(()=>document.querySelector('.hero-image-only img')?.src.includes('admin-new-upload'));
+  await page.locator('#homeAllCategories .boutique-saved-banner').first().waitFor();
+  assert.equal(await page.locator('#homeAllCategories .boutique-section-card strong').first().textContent(),lang==='tr'?'Doğum günü':'أعياد الميلاد');
   await page.screenshot({path:path.join(output,'admin-upload-home-'+lang+'-'+width+'.png'),fullPage:true});await page.close();
  }
  assert.deepEqual(errors,[]);await browser.close();console.log('PASS specialty coverage, AR/TR uploads, own promo names and 56 browser screenshots');
 })().catch(e=>{console.error(e);process.exit(1)});
+

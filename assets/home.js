@@ -83,33 +83,14 @@
  async function loadCategories(){
   try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))throw Error('categories');categoryRows=data.categories;homeLayout=data.storefront||null;renderCollections();
    const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
-   const suffix=language==='tr'?'Tr':'Ar',managed=main&&Object.prototype.hasOwnProperty.call(main,'effectiveBannerUrl'+suffix);
-   const banner=managed?main['effectiveBannerUrl'+suffix]:main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
-   const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');
-   const isDefault=managed?main['bannerSource'+suffix]==='default':Boolean(hero?.classList.contains('boutique-hero'))&&window.OGBoutique&&!OGBoutique.savedAsset({...main,key:'home'});
-   if(hero){hero.hidden=managed?!banner:!banner&&Boolean(main?.configured);hero.style.display=hero.hidden?'none':'';
-    if(img&&banner){hero.classList.toggle('has-custom-banner',!isDefault);if(isDefault){img.src=managed?banner:'/assets/boutique-hero-desktop.webp';const picture=hero.querySelector('picture');if(picture&&!picture.querySelector('source')){const source=document.createElement('source');source.media='(max-width:760px)';source.srcset='/assets/boutique-hero-mobile.webp';picture.prepend(source);}img.removeAttribute('style');}
-     else{img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;hero.querySelectorAll('picture source').forEach(source=>source.remove());}
-     img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');
-    }
-   }
+   window.OGHomeBanners?.mountHero(data,document.querySelector('.pink-hero'));
    const shortcutCategory={love:data.categories.find(c=>/ورود|بوكيه|çiçek/i.test(c.nameAr+' '+(c.nameTr||''))),gifts:data.categories.find(c=>c.key==='personalized')||data.categories.find(c=>c.key==='gifts'),drinkware:data.categories.find(c=>c.key==='assorted')||data.categories.find(c=>c.key==='drinkware')};
    document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;const art=window.OGBoutique?.campaign(category),photo=link.querySelector('.category-photo');if(photo&&art){photo.hidden=!art.asset;if(art.asset)photo.style.backgroundImage='url('+JSON.stringify(art.asset)+')';}const title=link.querySelector('strong');if(title)title.textContent=language==='tr'?(category.nameTr||category.nameAr):category.nameAr;const description=link.querySelector('p');if(description&&art)description.textContent=art.description;});
    const nav=document.querySelector('.pink-categories');if(nav){const icons={drinkware:'fa-mug-hot',nfc:'fa-wifi',family:'fa-people-roof',kids:'fa-child-reaching',love:'fa-heart',all:'fa-gift'};nav.innerHTML=data.categories.map(c=>'<a href="/products/?'+(language==='tr'?'lang=tr&':'')+(c.key==='all'?'':'category='+encodeURIComponent(c.key))+'"><span class="pink-cat-icon cat-gift"><i class="fa-solid '+(icons[c.key]||'fa-gift')+'"></i></span><strong>'+esc(language==='tr'?(c.nameTr||c.nameAr):c.nameAr)+'</strong></a>').join('')}
    renderCategoryDrawer();
-   const allCategories=$('homeAllCategories');if(allCategories&&window.OGBoutique)allCategories.innerHTML=OGBoutique.orderedCategories(categoryRows).map(c=>OGBoutique.card(c,'/products/?'+(language==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(c.key))).join('');
-   const bannerGrid=document.querySelector('.pink-occasion-grid');
-   if(bannerGrid&&Array.isArray(data.banners)){
-    bannerGrid.innerHTML=data.banners.slice().sort((a,b)=>a.sortOrder-b.sortOrder).map(b=>{
-     const category=data.categories.find(c=>c.key===b.categoryKey);
-     const title=category?(language==='tr'?(category.nameTr||category.nameAr):category.nameAr):(language==='tr'?(b.nameTr||b.nameAr):b.nameAr);
-     const image=language==='tr'?b.bannerUrlTr:b.bannerUrlAr;
-     const query=language==='tr'?b.queryTr:b.queryAr;
-     const target='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category.key):query?'q='+encodeURIComponent(query):'');
-     return window.OGBoutique?OGBoutique.card({...b,key:b.categoryKey||b.id,nameAr:b.nameAr||category?.nameAr,nameTr:b.nameTr||category?.nameTr},target,catalogue.find(p=>categories(p).includes(b.categoryKey)&&p.hasImage)):'<a class="pink-occasion-card" href="'+esc(target)+'"><strong>'+esc(title)+'</strong></a>';
-    }).join('');
-    const section=bannerGrid.closest('section');if(section)section.hidden=!data.banners.length||homeLayout?.sections?.find(s=>s.key==='promotions')?.enabled===false;
-   }
+   const allCategories=$('homeAllCategories');if(allCategories&&window.OGBoutique){const chosen=window.OGHomeBanners?.picks(data)||[];allCategories.innerHTML=chosen.map(item=>OGBoutique.card(item.meta,item.href)).join('');allCategories.closest('section').hidden=!chosen.length;}
+   // All selected campaign cards now share one capped homepage collection.
+   const bannerGrid=document.querySelector('.pink-occasion-grid');if(bannerGrid){bannerGrid.replaceChildren();bannerGrid.closest('section').hidden=true;}
    window.OGHomeLayout?.apply(homeLayout,document,language);
    // Other category shortcuts use the same saved names and visibility.
    document.querySelectorAll('[data-occasion],.collection-card').forEach(link=>{

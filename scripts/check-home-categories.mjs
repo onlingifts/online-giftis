@@ -14,10 +14,11 @@ test('all saved categories, including renamed and ninth-plus entries, appear in 
  const categories=Array.from({length:12},(_,i)=>({key:'cat'+i,nameAr:'اسم جديد '+i,nameTr:'Yeni ad '+i}));
  for(const lang of ['ar','tr']){const {nav}=await render({categories,homeBanner:{}},lang);assert.equal((nav.innerHTML.match(/<a /g)||[]).length,12);assert.match(nav.innerHTML,/category=cat11/);assert.ok(nav.innerHTML.includes(lang==='ar'?'اسم جديد 11':'Yeni ad 11'));}
 });
-test('independent main image wins over the all-category banner and deletion keeps it hidden',async()=>{
+test('independent main image wins over the all-category banner, languages stay separate, deletion keeps it hidden',()=>{
+ const window={};vm.runInNewContext(readFileSync(new URL('../assets/home-banners.js',import.meta.url),'utf8'),{window,document:{documentElement:{lang:'ar'}},URL});
  const categories=[{key:'all',bannerUrlAr:'/old-category.webp'}];
- const current=await render({categories,homeBanner:{bannerUrlAr:'/main.webp'}});assert.equal(current.image.src,'https://api.onlinegiftis.com/main.webp');
- const deleted=await render({categories,homeBanner:{configured:true,bannerUrlAr:null}});assert.equal(deleted.hero.style.display,'none');assert.equal(deleted.image.src,undefined);
- const turkish=await render({categories,homeBanner:{bannerUrlAr:'/ar.webp',bannerUrlTr:'/tr.webp'}},'tr');assert.equal(turkish.image.src,'https://api.onlinegiftis.com/tr.webp');
+ assert.equal(window.OGHomeBanners.heroRows({categories,homeBanner:{bannerUrlAr:'/main.webp'}})[0].asset,'https://api.onlinegiftis.com/main.webp');
+ assert.equal(window.OGHomeBanners.heroRows({categories,homeBanner:{configured:true,bannerUrlAr:null}}).length,0);
+ const trWindow={};vm.runInNewContext(readFileSync(new URL('../assets/home-banners.js',import.meta.url),'utf8'),{window:trWindow,document:{documentElement:{lang:'tr'}},URL});
+ assert.equal(trWindow.OGHomeBanners.heroRows({categories,homeBanner:{bannerUrlAr:'/ar.webp',bannerUrlTr:'/tr.webp'}})[0].asset,'https://api.onlinegiftis.com/tr.webp');
 });
-
