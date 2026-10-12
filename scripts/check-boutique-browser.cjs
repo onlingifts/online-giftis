@@ -46,7 +46,8 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   await page.evaluate(()=>document.querySelectorAll('img').forEach(img=>img.loading='eager'));
   await page.waitForFunction(()=>[...document.images].filter(img=>img.getAttribute('src')).every(img=>img.complete));await page.evaluate(()=>document.fonts.ready);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Overflow '+name);
-  assert.equal(await page.evaluate(()=>[...document.images].filter(img=>img.getAttribute('src')).every(img=>img.naturalWidth>0)),true,'Broken artwork '+name);
+  const broken=await page.evaluate(()=>[...document.images].filter(img=>img.getAttribute('src')&&!img.naturalWidth).map(img=>({src:img.src,currentSrc:img.currentSrc,outer:img.outerHTML,display:getComputedStyle(img).display})));if(broken.length){console.log('Broken images '+name,JSON.stringify(broken));await page.screenshot({path:path.join(output,name+'-broken.png'),fullPage:true});}
+  assert.deepEqual(broken,[],'Broken artwork '+name);
   await page.screenshot({path:path.join(output,name+'.png'),fullPage:true});
   await page.screenshot({path:path.join(output,name+'-viewport.png'),fullPage:false});
  }
