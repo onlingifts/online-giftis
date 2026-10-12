@@ -5,6 +5,8 @@ on:
       - 'assets/**'
       - 'index.html'
       - 'tr/index.html'
+      - 'gift/**'
+      - 'tr/gift/**'
       - 'products/**'
       - 'scripts/**'
       - '.github/workflows/check-themes.yml'
@@ -19,6 +21,7 @@ jobs:
         with:
           node-version: '24'
       - run: node scripts/check-themes.mjs
+      - run: node scripts/check-wheel-static.mjs
       - run: node --test scripts/check-auth.mjs scripts/check-home-categories.mjs scripts/check-home-layout.mjs scripts/check-home-banners.mjs
       - name: Prepare read-only catalogue fixture
         run: curl --fail --max-time 60 https://api.onlinegiftis.com/api/store/products -o /tmp/og-products.json

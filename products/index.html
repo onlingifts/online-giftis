@@ -405,7 +405,7 @@ img{max-width:100%}
 <link rel="stylesheet" href="/assets/themes.css?v=20261010-single-banner1">
 <script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js?v=20261010-product-images1"></script><script src="/assets/boutique-presentation.js?v=20261012-desktop2"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
 <link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261013-banner-fit1">
-</head>
+<link rel="stylesheet" href="/assets/wheel-checkout.css?v=20261013-wheel1"><script src="/assets/wheel-checkout.js?v=20261013-wheel1" defer></script></head>
 <body>
 <div class="topbar">
  <div class="container">
@@ -870,7 +870,7 @@ async function loadCustomerAccount(){
    if(r.status===401)await OGCustomerAuth.signOut();
    throw new Error(d.error||'account')
   }
-  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount();
+  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount();window.OGWheelCheckout?.awards();if(state.customer)window.OGWheelCheckout?.maybeReturnToWheel();
   if(state.customer)await loadMemberNotifications()
  }catch{
   state.customer=null;state.benefits=null;renderAccount()
@@ -913,7 +913,7 @@ function cartImage(x){
  return p?.hasImage&&url?'<img class="cart-item-image" src="'+esc(new URL(url,API).href)+'" alt="'+esc(x.name)+'" loading="lazy">':'<span class="cart-item-image" aria-hidden="true"></span>';
 }
 function renderCart(){
- $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded;
+ $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded||Boolean(window.OGWheelCheckout?.blocked());
  state.cart=state.cart.filter(x=>!state.catalogLoaded||state.products.some(p=>p.id===x.productId));
  const count=state.cart.reduce((n,x)=>n+x.quantity,0);
  $('cartCount').textContent=count;$('navCartCount').textContent=count;$('cartFab').classList.toggle('show',count>0);
@@ -967,13 +967,14 @@ function renderPayment(){
     (c.bankNote?'<div class="bank-row"><span>'+txt('ملاحظة','Not')+'</span><span>'+esc(lang()==='tr'?(c.bankNoteTr||(String(c.bankNote||'').trim()==='يرجى ارفاق اشعار الحوالة بلطلب'?'Lütfen havale dekontunu siparişe ekleyin.':c.bankNote)):c.bankNote)+'</span></div>':'')
  }
  const subtotal=state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0);
- const memberDiscount=state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
+ const wheelQuote=window.OGWheelCheckout?.getQuote();
+ const memberDiscount=wheelQuote?Number(wheelQuote.discountAmount||0):state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
  const hasItems=state.cart.some(item=>Number(item.quantity)>0);
- const deliveryFee=hasItems&&!state.config?.freeDelivery?Math.max(0,Number(state.config?.deliveryFee||0)):0;
+ const deliveryFee=hasItems&&!wheelQuote?.freeDelivery&&!state.config?.freeDelivery?Math.max(0,Number(state.config?.deliveryFee||0)):0;
  const codFee=hasItems&&state.paymentMethod==='cod'?Number(state.config?.codFee??75):0;
  const grandTotal=Math.round((Math.max(0,subtotal-memberDiscount)+deliveryFee+codFee)*100)/100;
  const discountRow=$('memberDiscountRow'),discountAmount=$('memberDiscountAmount');
- if(discountRow)discountRow.hidden=memberDiscount<=0;
+ if(discountRow){discountRow.hidden=memberDiscount<=0;const label=discountRow.querySelector('.trn');if(label){label.dataset.ar=wheelQuote?'خصم جائزة العجلة':'خصم العضوية لأول طلب';label.dataset.tr=wheelQuote?'Çark ödülü indirimi':'Üyelik ilk sipariş indirimi';label.textContent=lang()==='tr'?label.dataset.tr:label.dataset.ar;}}
  if(discountAmount)discountAmount.textContent='-'+money(memberDiscount);
  const deliveryFeeAmount=$('deliveryFeeAmount');
  if(deliveryFeeAmount)deliveryFeeAmount.textContent=!state.configLoaded?'—':deliveryFee>0?money(deliveryFee):txt('مجاني','Ücretsiz');
@@ -981,7 +982,7 @@ function renderPayment(){
  if(codFeeRow)codFeeRow.style.display=hasItems&&state.paymentMethod==='cod'?'flex':'none';
  if(codFeeAmount)codFeeAmount.textContent=money(codFee);
  if(grandTotalEl)grandTotalEl.textContent=money(grandTotal);
- $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded;
+ $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded||Boolean(window.OGWheelCheckout?.blocked());
  const label=$('checkoutSubmitLabel');
  if(label)label.textContent=state.paymentMethod==='bank_transfer'?txt('تثبيت الطلب بعد التحويل','Havale sonrası siparişi tamamla'):txt('تثبيت الطلب - الدفع عند الاستلام','Siparişi tamamla - Kapıda ödeme')
 }
@@ -1052,6 +1053,7 @@ async function checkout(){
   address:$('checkoutAddress').value.trim(),notes:$('checkoutNotes').value.trim(),
   paymentMethod:state.paymentMethod
  };
+ try{Object.assign(payload,window.OGWheelCheckout?.orderFields(payload)||{});}catch(error){checkoutError(error.message);return;}
  const form=new FormData();form.append('payload',JSON.stringify(payload));
  for(const x of state.cart){const file=state.uploads.get(x.productId);if(file)form.append('customization_'+x.productId,file)}
  if(state.paymentMethod==='bank_transfer'&&state.receipt)form.append('transferReceipt',state.receipt);
@@ -1060,19 +1062,21 @@ async function checkout(){
   const token=window.OGCustomerAuth?await OGCustomerAuth.getAccessToken():null;
   const headers=token?{Authorization:'Bearer '+token}:undefined;
   const r=await fetch(API+'/api/store/orders',{method:'POST',body:form,headers}),d=await r.json();
-  if(!r.ok)throw new Error(d.error||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'));
+  if(!r.ok)throw new Error(d.error||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'));if(d.order?.status==='cancelled')throw new Error(txt('هذا الطلب ملغى؛ أزل الجائزة وأعد اختيارها لبدء طلب جديد.','Bu sipariş iptal edildi; yeni sipariş için ödülü kaldırıp yeniden seç.'));
   result.className='checkout-result show ok';
   let success=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+esc(d.order.orderNumber);
-  if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: ')+esc(money(d.order.discountAmount))+'</strong>';
+  if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+(String(d.order.discountCode||'').startsWith('WHEEL:')?txt('تم تطبيق خصم العجلة: ','Çark indirimi uygulandı: '):txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: '))+esc(money(d.order.discountAmount))+'</strong>';
   if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
   result.innerHTML=success+'<br><a href="'+(lang()==='tr'?'/track/?lang=tr':'/track/')+'" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
   $('orderSuccessTitle').textContent=txt('تم تثبيت الطلب بنجاح','Siparişiniz başarıyla alındı');
   $('orderSuccessDetails').textContent=txt('تم تسجيل طلبك في Online Gifts. احتفظ برقم الطلب لتتبعه.','Siparişin kaydedildi. Takip için sipariş numaranı sakla.');
   $('orderSuccessNumber').textContent=d.order.orderNumber;
-  $('orderSuccessExtras').textContent=Number(d.order.discountAmount||0)>0?txt('خصم العضوية: ','Üyelik indirimi: ')+money(d.order.discountAmount):'';
+  $('orderSuccessExtras').textContent=Number(d.order.discountAmount||0)>0?(String(d.order.discountCode||'').startsWith('WHEEL:')?txt('خصم العجلة: ','Çark indirimi: '):txt('خصم العضوية: ','Üyelik indirimi: '))+money(d.order.discountAmount):'';
+  if(d.order.wheelReward&&Number(d.order.discountAmount||0)===0)$('orderSuccessExtras').textContent=lang()==='tr'?d.order.wheelReward.labelTr:d.order.wheelReward.labelAr;
   $('orderSuccessTrack').href=lang()==='tr'?'/track/?lang=tr':'/track/';
   $('orderSuccessTrack').textContent=txt('تتبع طلبي','Siparişimi takip et');
   $('orderSuccessClose').textContent=txt('العودة للتسوق','Alışverişe devam et');
+  if(payload.wheelCode)window.OGWheelCheckout?.consumed();
   closeModal(cartModal);
   openModal($('orderSuccessModal'));
   $('orderSuccessClose').focus();
@@ -1081,7 +1085,7 @@ async function checkout(){
   if(state.customer)await loadCustomerAccount();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
  }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}
- finally{state.submitting=false;btn.disabled=!state.cart.length}
+ finally{state.submitting=false;btn.disabled=!state.cart.length||Boolean(window.OGWheelCheckout?.blocked())}
 }
 function openModal(el){el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.classList.add('modal-open')}
 function closeModal(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');if(!document.querySelector('.modal-backdrop.open'))document.body.classList.remove('modal-open')}
@@ -1116,7 +1120,7 @@ $('memberNoticeRefresh').addEventListener('click',loadMemberNotifications);
 document.querySelectorAll('[data-account-mode]').forEach(b=>b.addEventListener('click',()=>setAccountMode(b.dataset.accountMode)));
 $('accountSubmit').addEventListener('click',submitAccount);
 $('googleLoginBtn').addEventListener('click',()=>OGCustomerAuth?.googleSignIn());
-$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;state.notifications=[];state.notificationUnread=0;renderAccount();setAccountMode('login')});
+$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();window.OGWheelCheckout?.clearSelection();state.customer=null;state.benefits=null;state.notifications=[];state.notificationUnread=0;renderAccount();setAccountMode('login')});
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
 accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
@@ -1130,6 +1134,7 @@ restoreCart();
 const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=(()=>{try{return localStorage.getItem('og_lang')}catch{return null}})();if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
 setAccountMode('login');
 renderCart();
+document.addEventListener('DOMContentLoaded',()=>window.OGWheelCheckout?.mount({cart:()=>state.cart,customer:()=>state.customer,update:renderPayment}));
 Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const q=new URLSearchParams(location.search);if(q.get('cart')==='1')openModal(cartModal);if(q.get('account')==='1')openModal(accountModal)});
 })();
 </script>

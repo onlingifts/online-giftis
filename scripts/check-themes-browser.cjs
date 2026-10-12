@@ -10,6 +10,7 @@ const assert=require('node:assert/strict');
  await page.route('https://api.onlinegiftis.com/**',async r=>{
   const req=r.request(),url=new URL(req.url());
   if(req.method()==='OPTIONS')throw Error('Unexpected preflight for public catalogue');
+  if(url.pathname==='/api/store/wheel')return r.fulfill({json:{active:false,campaign:null,awards:[]}});
   if(url.pathname==='/api/store/reviews')return r.fulfill({json:{summary:{count:0,average:null},reviews:[]}});
   if(url.pathname==='/api/store/products')return r.fulfill({json:{products}});
   if(url.pathname==='/api/store/categories')return categoryFailure?r.abort():r.fulfill({json:{categories:[{key:'laser',nameAr:'الحفر بالليزر',nameTr:'Lazer kazıma'},{key:'gifts',nameAr:'هدايا',nameTr:'Hediyeler'}]}});
