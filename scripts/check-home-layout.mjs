@@ -22,7 +22,7 @@ test('section ordering and bilingual titles are applied as text without reviving
 test('effective artwork from backend overrides legacy frontend fallback, including explicit hidden images',()=>{
  const p=context.window.OGBoutique;
  for(const lang of ['ar','tr']){context.document.documentElement.lang=lang;const suffix=lang==='ar'?'Ar':'Tr';const meta={key:'nfc',nameAr:'ميداليات',nameTr:'Anahtarlık',['effectiveBannerUrl'+suffix]:null,['bannerSource'+suffix]:'hidden'};assert.equal(p.campaign(meta).asset,null);assert.ok(!p.card(meta,'/products/').includes('<img'));
-  const uploaded={...meta,['effectiveBannerUrl'+suffix]:'https://onlinegiftis.com/new.webp',['bannerSource'+suffix]:'uploaded'};assert.equal(p.campaign(uploaded).asset,'https://onlinegiftis.com/new.webp');assert.equal(p.campaign(uploaded).custom,true);
+  const uploaded={...meta,['effectiveBannerUrl'+suffix]:'https://onlinegiftis.com/new.webp',['bannerSource'+suffix]:'uploaded'};assert.equal(p.campaign(uploaded).asset,'https://onlinegiftis.com/new.webp');assert.equal(p.campaign(uploaded).custom,true);const relative={...uploaded,['effectiveBannerUrl'+suffix]:'/api/store/categories/banner?lang='+lang+'&key=nfc&v=new'};assert.match(p.campaign(relative).asset,/^https:\/\/api\.onlinegiftis\.com\/api\/store\/categories\/banner/);assert.equal(p.savedAsset(relative),p.campaign(relative).asset);
   const def={...meta,['effectiveBannerUrl'+suffix]:'https://onlinegiftis.com/default.webp',['bannerSource'+suffix]:'default',['campaignDescription'+suffix]:'وصف محفوظ'};assert.equal(p.campaign(def).asset,'https://onlinegiftis.com/default.webp');assert.equal(p.campaign(def).description,'وصف محفوظ');assert.equal(p.campaign(def).custom,false);
  }
 });
