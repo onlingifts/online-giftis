@@ -17,6 +17,7 @@ test('section ordering and bilingual titles are applied as text without reviving
  const main={querySelector(){return {};},insertBefore(el){order.push(el.id);}};for(const el of elements.values())el.parentElement=main;
  const doc={getElementById(id){return id==='main'?main:elements.get(id);},querySelector(){return null;}};
  const layout={sections:[{key:'flowers',enabled:true,sortOrder:0,titleAr:'ورد',titleTr:'Çiçek'},{key:'personalized',enabled:false,sortOrder:1,titleAr:'نص',titleTr:'Özel'}]};apply(layout,doc,'tr');assert.deepEqual(titles,['Çiçek','Özel']);assert.deepEqual(order,['homeFlowersSection','homePersonalizedSection']);assert.equal(elements.get('homePersonalizedSection').hidden,true);
+ apply({sections:[{key:'reviews',enabled:false,sortOrder:0}]},doc,'ar');assert.equal(elements.get('reviews').hidden,true);apply({sections:[{key:'reviews',enabled:true,sortOrder:0}]},doc,'ar');assert.equal(elements.get('reviews').hidden,false);
 });
 test('effective artwork from backend overrides legacy frontend fallback, including explicit hidden images',()=>{
  const p=context.window.OGBoutique;

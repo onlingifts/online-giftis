@@ -28,7 +28,7 @@
   const main=doc.getElementById('main'),anchor=main?.querySelector('.boutique-more');
   sections(layout).slice().sort((a,b)=>a.sortOrder-b.sortOrder).forEach(section=>{
    const el=doc.getElementById(ids[section.key]);if(!el)return;
-   if(section.enabled===false)el.hidden=true;
+   if(section.key==='reviews')el.hidden=section.enabled===false;else if(section.enabled===false)el.hidden=true;
    const title=section[language==='tr'?'titleTr':'titleAr'];if(title&&el.querySelector('h2'))el.querySelector('h2').textContent=title;
    if(main&&anchor&&el.parentElement===main)main.insertBefore(el,anchor);
   });
