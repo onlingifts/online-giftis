@@ -87,7 +87,7 @@
    const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
    const banner=main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
    const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');
-   const referenceCampaign=Boolean(hero?.classList.contains?.('boutique-hero'))&&!new URLSearchParams(location.search).has('savedBanners');
+   const referenceCampaign=Boolean(hero?.classList.contains?.('boutique-hero'))&&window.OGBoutique&&!OGBoutique.savedAsset({...main,key:'home'});
    if(hero){hero.style.display=banner||!main?.configured?'':'none';if(img&&banner&&!referenceCampaign){img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');hero.querySelectorAll('picture source').forEach(source=>source.remove());hero.classList.add('has-custom-banner')}}
    const shortcutCategory={love:data.categories.find(c=>/ورود|بوكيه|çiçek/i.test(c.nameAr+' '+(c.nameTr||''))),gifts:data.categories.find(c=>c.key==='personalized')||data.categories.find(c=>c.key==='gifts'),drinkware:data.categories.find(c=>c.key==='assorted')||data.categories.find(c=>c.key==='drinkware')};
    document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;});
@@ -101,7 +101,7 @@
      const image=language==='tr'?b.bannerUrlTr:b.bannerUrlAr;
      const query=language==='tr'?b.queryTr:b.queryAr;
      const target='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category.key):query?'q='+encodeURIComponent(query):'');
-     return window.OGBoutique?OGBoutique.card({key:b.categoryKey||b.id,nameAr:category?.nameAr||b.nameAr,nameTr:category?.nameTr||b.nameTr},target,catalogue.find(p=>categories(p).includes(b.categoryKey)&&p.hasImage)):'<a class="pink-occasion-card" href="'+esc(target)+'"><strong>'+esc(title)+'</strong></a>';
+     return window.OGBoutique?OGBoutique.card({...b,key:b.categoryKey||b.id,nameAr:b.nameAr||category?.nameAr,nameTr:b.nameTr||category?.nameTr},target,catalogue.find(p=>categories(p).includes(b.categoryKey)&&p.hasImage)):'<a class="pink-occasion-card" href="'+esc(target)+'"><strong>'+esc(title)+'</strong></a>';
     }).join('');
     const section=bannerGrid.closest('section');if(section)section.hidden=!data.banners.length;
    }
