@@ -38,7 +38,7 @@
    copy.querySelector('h1').textContent=hero.heading;
    copy.querySelector('p').textContent=hero.description;
    const button=copy.querySelector('.boutique-cta');button.textContent=hero.button;
-   const link=doc.querySelector('.pink-hero-link');if(link&&/^\/(?!\/)/.test(hero.link)&&!/[\\\u0000-\u001f]/.test(hero.link))link.setAttribute('href',hero.link);
+   const link=copy.closest?.('.pink-hero-link')||doc.querySelector('.pink-hero-link');if(link&&/^\/(?!\/)/.test(hero.link)&&!/[\\\u0000-\u001f]/.test(hero.link))link.setAttribute('href',hero.link);
   }
  }
  window.OGHomeLayout={sections,select,apply};
