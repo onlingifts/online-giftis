@@ -6,7 +6,8 @@ const vm=require('node:vm');
 const snapshot=JSON.parse(fs.readFileSync('scripts/fixtures/banner-management.json'));
 const products=JSON.parse(fs.readFileSync('/tmp/og-products.json'));
 const expected={personalized:'occasions',assorted:'printing',kids:'kids',family:'family',nfc:'keychains',photo:'photo',laser:'silver',perfumes_accessories:'perfume',thermal:'hookah','cat_bb6c6aa1-4628-457f-a482-639e011bc174':'jewelry','cat_3cd33c02-2fb9-4609-82c0-2898be0264a6':'flowers','cat_cd93d32f-d427-4542-aad7-f1958012c278':'gifts'};
-const sandbox={window:{},document:{documentElement:{lang:'ar'}},location:{search:''},URL,URLSearchParams};
+const tokens=new Map();
+const sandbox={window:{},document:{documentElement:{lang:'ar',style:{setProperty:(k,v)=>tokens.set(k,v),removeProperty:k=>tokens.delete(k)}}},location:{search:''},URL,URLSearchParams};
 vm.runInNewContext(fs.readFileSync('assets/boutique-presentation.js','utf8'),sandbox);
 const presentation=sandbox.window.OGBoutique;
 for(const category of snapshot.categories.filter(c=>c.key!=='all')){
@@ -14,6 +15,7 @@ for(const category of snapshot.categories.filter(c=>c.key!=='all')){
  assert.ok(fs.existsSync('.'+presentation.campaign(category).asset),category.nameAr);
  for(const lang of ['ar','tr']){sandbox.document.documentElement.lang=lang;const changed={...category,[lang==='ar'?'bannerUrlAr':'bannerUrlTr']:'/api/store/categories/banner?key='+category.key+'&v=admin-new-upload'};assert.match(presentation.campaign(changed).asset,/admin-new-upload/);assert.equal(presentation.campaign(changed).custom,true);assert.equal(presentation.campaign(category).custom,false);}
 }
+presentation.applyPalette({customColors:true,colors:{primary:'#123456',bg:'#ABCDEF',text:'#010203'}});assert.equal(tokens.get('--lux-wine'),'#123456');assert.equal(tokens.get('--lux-ivory'),'#ABCDEF');presentation.applyPalette({customColors:false});assert.equal(tokens.size,0);
 assert.match(presentation.card({...snapshot.banners[0],key:'personalized'},'/products/'),/Doğum günü/);
 (async()=>{
  const output=process.env.OG_SCREENSHOT_DIR||'/tmp/og-specialty-banners';fs.mkdirSync(output,{recursive:true});

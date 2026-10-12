@@ -12,7 +12,7 @@
  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
  const colorKeys=['bg','surface','primary','secondary','text','muted','accent','onPrimary'];
  const colorStyle=colors=>colorKeys.filter(k=>/^#[0-9a-fA-F]{6}$/.test(colors?.[k]||'')).map(k=>'--home-'+k+':'+colors[k]).join(';');
- function applyHomeColors(meta){const el=document.documentElement;for(const key of colorKeys)el.style.removeProperty('--home-'+key);el.toggleAttribute('data-home-colors',Boolean(meta?.customColors));if(meta?.customColors)for(const key of colorKeys)if(/^#[0-9a-fA-F]{6}$/.test(meta.colors?.[key]||''))el.style.setProperty('--home-'+key,meta.colors[key]);}
+ function applyHomeColors(meta){window.OGBoutique?.applyPalette(meta);const el=document.documentElement;for(const key of colorKeys)el.style.removeProperty('--home-'+key);el.toggleAttribute('data-home-colors',Boolean(meta?.customColors));if(meta?.customColors)for(const key of colorKeys)if(/^#[0-9a-fA-F]{6}$/.test(meta.colors?.[key]||''))el.style.setProperty('--home-'+key,meta.colors[key]);}
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(Number(v||0))+' ₺';
  const categories=p=>{const raw=p?.categories??p?.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).map(x=>String(x).trim()).filter(Boolean)};
  let catalogue=[],categoryRows=[];

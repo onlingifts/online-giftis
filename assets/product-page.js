@@ -126,7 +126,7 @@
  }
  function setProduct(p){
   product=p;
-  if(window.OGThemes){const key=OGThemes.productCategory(p,params.get('category')),meta=categoryMeta[key];OGThemes.apply(key,meta?.customColors?meta.colors:null);}
+  if(window.OGThemes){const key=OGThemes.productCategory(p,params.get('category')),meta=categoryMeta[key];window.OGBoutique?.applyPalette(meta);OGThemes.apply(key,meta?.customColors?meta.colors:null);}
   applyLanguageShell(p);
   renderProductContent(p);
   const media=document.querySelector('.media');
