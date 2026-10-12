@@ -154,3 +154,14 @@ html body .product-card-wrap .product-actions{display:none!important}.product-ca
 .boutique-home-collection .pink-section-head>a{position:static}.boutique-home #homeFlowersProducts{grid-template-columns:repeat(2,minmax(0,1fr));max-width:650px;margin-inline:auto}.boutique-section-card[data-art-role=catalogue]>img,.boutique-section-card[data-art-role=perfume]>img{width:48%;object-fit:contain;background:#ecd8c3}.boutique-section-card[data-art-role=catalogue]>div,.boutique-section-card[data-art-role=perfume]>div{background:#f1e4d6}.boutique-category-campaign[data-art-role=catalogue]>img,.boutique-category-campaign[data-art-role=perfume]>img{width:48%;object-fit:contain!important;background:#eddbc8}.boutique-category-campaign[data-art-role=catalogue],.boutique-category-campaign[data-art-role=perfume]{background:#f1e4d6!important}
 html body #products>.container>.section-head.premium-shop-hero{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;min-height:35px!important}html body .premium-shop-hero:before,html body .premium-shop-hero:after{display:none!important}
 @media(max-width:760px){html body #products>.container>.section-head.premium-shop-hero{display:none!important}.boutique-home #homeFlowersProducts{max-width:none}.boutique-home-collection .pink-section-head>a{position:static}.boutique-home .pink-occasion-grid .boutique-section-card[data-art-role=catalogue]>img,.boutique-home .pink-occasion-grid .boutique-section-card[data-art-role=perfume]>img{width:100%}}
+/* Administrator uploads are displayed intact; the saved name stays readable below the image. */
+.boutique-section-card.boutique-saved-banner{display:flex!important;flex-direction:column!important;min-height:0!important;background:var(--lux-ivory)}
+.boutique-section-card.boutique-saved-banner>img{position:static;width:100%;height:auto;object-fit:contain;z-index:auto;aspect-ratio:auto}
+.boutique-section-card.boutique-saved-banner>div{width:100%;min-height:0!important;margin:0;padding:12px!important;background:none}
+.boutique-section-card.boutique-saved-banner p{display:none}
+.boutique-section-card.boutique-saved-banner strong{font-size:16px!important}
+.boutique-section-card.boutique-saved-banner span{margin-top:8px}
+/* Preserve explicitly configured administration colors in the boutique theme. */
+.boutique-section-card strong,.boutique-category-campaign-copy{color:var(--lux-ink)}
+.boutique-section-card p,.boutique-category-campaign-copy p{color:var(--lux-muted,#826049)}
+.boutique-section-card span,.boutique-category-campaign-copy span,.boutique-add,.pink-product-quick{color:var(--lux-on-primary,#fff)}

@@ -690,7 +690,7 @@ function renderCategoryCampaign(){
  const meta=state.categoryMeta[state.category]||{key:state.category,nameAr:categoryLabel(state.category),nameTr:categoryLabel(state.category)};
  if(state.favoritesOnly||state.category==='all'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return;}
  const saved=lang()==='tr'?meta.bannerUrlTr:(meta.bannerUrlAr||meta.bannerUrl);
- const useSaved=new URLSearchParams(location.search).has('savedBanners')&&Boolean(saved);
+ const useSaved=Boolean(OGBoutique.savedAsset(meta));
  const art=OGBoutique.campaign(meta,visibleProducts().find(p=>p.hasImage));link.dataset.artRole=art.role;link.classList.toggle('boutique-category-campaign',!useSaved);
  link.href='#productGrid';img.removeAttribute('srcset');img.removeAttribute('sizes');img.removeAttribute('style');img.src=useSaved&&saved?new URL(saved,API).href:art.asset;img.alt=categoryLabel(state.category);
  let copy=link.querySelector('.boutique-category-campaign-copy');if(!copy){copy=document.createElement('div');copy.className='boutique-category-campaign-copy';link.append(copy);}
@@ -711,6 +711,7 @@ function renderCategoryVisual(){
 function renderCategories(){
  if(state.category!=='all'&&state.categoryOrder.length&&!state.categoryMeta[state.category]){state.category='all';const url=new URL(location.href);url.searchParams.delete('category');history.replaceState({},'',url)}
  const meta=state.categoryMeta[state.category];
+ OGBoutique.applyPalette(meta);
  const theme=OGThemes.apply(state.category,meta?.customColors?meta.colors:null);
  const hero=document.querySelector('#products .section-head');
  const mobileTitle=$('catalogMobileTitle');if(mobileTitle)mobileTitle.textContent=state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
