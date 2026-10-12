@@ -5,6 +5,7 @@
  const id=Number(document.body.dataset.productId||params.get('id')||0);
  let product=null;
  let selectedQuantity=1;
+ let intentHandled=false;
  let categoryMeta={};
  const $=x=>document.getElementById(x);
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
@@ -84,15 +85,25 @@
  }
  function renderGallery(p){
   const media=document.querySelector('.media');if(!media)return;
-  const localized=p.localizedImages?.[currentLang];
-  const shared=p.storefront?.gallery||[];
-  const gallery=localized?[{imageUrl:localized,altAr:localizedName(p),altTr:localizedName(p),isPrimary:true},...shared.map(im=>({...im,isPrimary:false}))]:shared;
-  if(gallery.length<2)return;
-  let host=document.querySelector('.product-gallery');if(!host){host=document.createElement('div');host.className='product-gallery';media.after(host)}
-  host.innerHTML=gallery.map((im,i)=>'<button type="button" data-image-index="'+i+'" aria-label="'+txt('عرض الصورة ','Görseli göster ')+(i+1)+'" aria-pressed="'+Boolean(im.isPrimary||i===0)+'"><img src="'+API+escapeHtml(im.imageUrl)+'" alt="'+escapeHtml(currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p))+'" loading="lazy"></button>').join('');
-  host.querySelectorAll('button').forEach(button=>button.onclick=()=>{const im=gallery[Number(button.dataset.imageIndex)],img=media.querySelector('img');if(img){img.src=API+im.imageUrl;img.removeAttribute('srcset');img.alt=currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p)}host.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)))})
+  const primary=currentLang==='tr'?(p.imageUrlTr??p.imageUrl):(p.imageUrlAr??p.imageUrl);
+  const raw=[{imageUrl:primary,altAr:localizedName(p),altTr:localizedName(p)},...(p.storefront?.gallery||[])];
+  const seen=new Set();const gallery=raw.filter(im=>im?.imageUrl&&!seen.has(im.imageUrl)&&seen.add(im.imageUrl));
+  if(!gallery.length)return;
+  let host=document.querySelector('.product-gallery');if(!host){host=document.createElement('div');host.className='product-gallery';host.setAttribute('aria-label',txt('صور المنتج','Ürün görselleri'));media.after(host)}
+  host.innerHTML=gallery.map((im,i)=>'<button type="button" data-image-index="'+i+'" aria-label="'+txt('عرض الصورة ','Görseli göster ')+(i+1)+'" aria-pressed="'+(i===0)+'"><img src="'+new URL(im.imageUrl,API).href+'" alt="'+escapeHtml(currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p))+'" loading="lazy"></button>').join('');
+  host.querySelectorAll('button').forEach(button=>button.onclick=()=>{const im=gallery[Number(button.dataset.imageIndex)],img=media.querySelector('img');if(img){img.src=new URL(im.imageUrl,API).href;img.removeAttribute('srcset');img.alt=currentLang==='tr'?im.altTr||localizedName(p):im.altAr||localizedName(p)}host.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)))})
+  const image=media.querySelector('img');if(image){image.tabIndex=0;image.setAttribute('role','button');image.setAttribute('aria-label',txt('تكبير صورة المنتج','Ürün görselini büyüt'));const show=()=>{
+   let viewer=$('productImageViewer');if(!viewer){viewer=document.createElement('dialog');viewer.id='productImageViewer';viewer.className='boutique-image-viewer';viewer.setAttribute('aria-label',txt('صورة المنتج','Ürün görseli'));viewer.innerHTML='<button type="button" aria-label="'+txt('إغلاق','Kapat')+'">×</button><img alt="">';document.body.append(viewer);viewer.querySelector('button').onclick=()=>viewer.close();viewer.onclick=e=>{if(e.target===viewer)viewer.close()};}
+   const full=viewer.querySelector('img');full.src=image.src;full.alt=image.alt;viewer.showModal();
+  };image.onclick=show;image.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show()}};}
  }
  function enhanceBoutiqueProduct(p){
+  const productInfo=document.querySelector('.info');
+  if(productInfo){
+   if(!productInfo.querySelector('.boutique-product-title')){const title=document.createElement('div');title.className='boutique-product-title';const heading=productInfo.querySelector('h1'),price=$('livePrice');if(heading){heading.before(title);title.append(heading);if(price)title.append(price);}}
+   const description=productInfo.querySelector('.desc');if(description&&!productInfo.querySelector('.boutique-product-description')){const section=document.createElement('section');section.className='boutique-product-description';const heading=document.createElement('h2');heading.textContent=txt('تفاصيل المنتج','Ürün detayları');description.before(section);section.append(heading,description);const controls=productInfo.querySelector('.actions');if(controls)controls.after(section);}
+   if(!productInfo.querySelector('.boutique-rating')&&OGBoutique.rating(p)){const rating=document.createElement('div');rating.innerHTML=OGBoutique.rating(p);productInfo.querySelector('.boutique-product-title')?.after(rating);}
+  }
   const actions=document.querySelector('.actions');
   if(actions&&!$('productQuantity')){
    const quantity=document.createElement('div');quantity.className='boutique-quantity';
@@ -154,6 +165,7 @@
     return
    }
    setProduct(p);
+   if(params.get('intent')==='add'&&!intentHandled&&p.orderable){intentHandled=true;add('',true,true);return;}
    if(document.body.dataset.dynamicProduct==='1'){
     const q=new URLSearchParams(location.search);
     q.delete('id');
@@ -166,7 +178,7 @@
    const info=document.querySelector('.info');if(info&&!info.querySelector('.retry-product')){const button=document.createElement('button');button.className='buy retry-product';button.textContent=txt('إعادة المحاولة','Tekrar dene');button.onclick=()=>{button.remove();refresh()};info.append(button)}
   }
  }
- function add(customOverride,skipPrompt=false){
+ function add(customOverride,skipPrompt=false,forceIncrement=false){
   if(!product||!product.orderable)return;
   let custom=typeof customOverride==='string'?customOverride:'';
   const needsText=Boolean(product.requiresCustomizationText??(product.customizationType==='text'||product.customizationType==='text_and_image'));
@@ -177,7 +189,7 @@
   let cart=[];
   try{cart=JSON.parse(localStorage.getItem('og_cart_v1')||'[]');if(!Array.isArray(cart))cart=[]}catch{}
   const existing=cart.find(x=>Number(x.productId)===id);
-  if(existing){if(skipPrompt){existing.customizationText=custom}else{if(existing.quantity+selectedQuantity<=product.stockQuantity)existing.quantity+=selectedQuantity;else return;if(custom)existing.customizationText=custom}}
+  if(existing){if(skipPrompt&&!forceIncrement){existing.customizationText=custom}else{if(existing.quantity+selectedQuantity<=product.stockQuantity)existing.quantity+=selectedQuantity;else return;if(custom)existing.customizationText=custom}}
   else cart.push({productId:id,name:localizedName(product),price:product.price,quantity:selectedQuantity,stock:product.stockQuantity,customizationText:custom});
   localStorage.setItem('og_cart_v1',JSON.stringify(cart));
   location.href=currentLang==='tr'?'/products/?lang=tr&cart=1':'/products/?cart=1'

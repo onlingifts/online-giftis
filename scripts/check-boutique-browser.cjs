@@ -56,15 +56,21 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
    if(width===390){await page.locator('.boutique-menu').click();await page.locator('#homeCategoryDrawer[open]').waitFor();await screenshot(page,'home-categories'+suffix);await page.keyboard.press('Escape');}
    await page.goto(base+'/products/?lang='+language);await page.locator('.product-card-link').first().waitFor();await screenshot(page,'catalogue'+suffix);
    if(width===390){await page.locator('body > .boutique-bottom-nav a').nth(1).click();await page.locator('#boutiqueCategories[open]').waitFor();await screenshot(page,'categories'+suffix);await page.keyboard.press('Escape');}
+   if(width===390){const category=savedCategories.categories.find(c=>['assorted','drinkware','gifts'].includes(c.key))||savedCategories.categories.find(c=>c.key!=='all');if(category){await page.goto(base+'/products/?lang='+language+'&category='+encodeURIComponent(category.key));await page.locator('#categoryCampaign.boutique-category-campaign').waitFor();assert.match(await page.locator('#categoryCampaignImg').getAttribute('src'),/^\/assets\/boutique-/);await screenshot(page,'category-campaign'+suffix);}}
    const first=catalogue.find(p=>p.id===104)||catalogue[0];await page.goto(base+'/products/detail/?id='+first.id+'&lang='+language);await page.waitForFunction(()=>document.getElementById('buyBtn')&&!document.getElementById('buyBtn').disabled);await screenshot(page,'product'+suffix);
    if(width===390){await page.locator('.boutique-accordion').last().locator('summary').click();assert.ok(await page.locator('.boutique-accordion').last().getAttribute('open')!==null);}
    await context.close();
   }
  }
  mode='flow';
+ // Image and cart controls are separate from navigation and never exceed current stock.
+ {const {page,context}=await newPage('ar');await page.goto(base+'/products/?lang=ar');await page.locator('[data-add-product="9001"]').waitFor();await page.locator('[data-add-product="9001"]').click();await page.locator('#cartModal.open').waitFor();for(let i=0;i<4;i++)await page.locator('[data-plus]').click();assert.equal(await page.locator('.cart-item-actions strong').innerText(),'3');await context.close();}
+ {const {page,context}=await newPage('tr');await page.goto(base+'/tr/');await page.locator('.pink-product-quick').first().click();await page.locator('#cartModal.open').waitFor();assert.equal(await page.locator('.cart-item-actions strong').innerText(),'1');assert.match(page.url(),/lang=tr/);await context.close();}
+
  for(const language of ['ar','tr']){
   const {page,context}=await newPage(language);
   await page.goto(base+'/products/detail/?id=9001&lang='+language);await page.waitForFunction(()=>!document.getElementById('buyBtn').disabled);
+  await page.locator('.media img').click();await page.locator('#productImageViewer[open]').waitFor();assert.ok(await page.locator('#productImageViewer img').getAttribute('src'));await page.keyboard.press('Escape');
   await page.locator('[data-quantity-plus]').click();assert.equal(await page.locator('#productQuantity').innerText(),'2');
   await page.locator('.boutique-detail-favorite').click();assert.equal(await page.locator('.boutique-detail-favorite').getAttribute('aria-pressed'),'true');
   await page.locator('.product-gallery button').last().click();assert.match(await page.locator('.media img').getAttribute('src'),/9002/);
@@ -80,5 +86,5 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   await page.locator('#accountEmail').fill('preview@example.test');await page.locator('#accountPassword').fill('PreviewPasswordOnly');await page.locator('#accountSubmit').click();await page.locator('#accountMemberView:not([hidden])').waitFor();await screenshot(page,'account-390-'+language);await page.locator('#accountLogout').click();await page.locator('#accountGuestView:not([hidden])').waitFor();
   await context.close();
  }
- assert.equal(authCalls,2);assert.deepEqual(errors,[]);await browser.close();console.log('Boutique passed: bilingual visual views, categories, gallery, quantity, favorites, 3 checkout stages, required fields, bank receipt, single order submission and mocked member login/logout. Screenshots: '+output);
+ assert.equal(authCalls,2);assert.deepEqual(errors,[]);await browser.close();console.log('Boutique passed: bilingual visual views, categories, gallery/zoom, stock-limited card quick-add, home quick-add, quantity, favorites, 3 checkout stages, required fields, bank receipt, single order submission and mocked member login/logout. Screenshots: '+output);
 })().catch(e=>{console.error(e);process.exit(1)});
