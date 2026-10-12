@@ -18,6 +18,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   // Every remote request is intercepted: screenshots and purchase/auth tests cannot touch production data.
   await page.route('https://**/*',async route=>{
    const req=route.request(),url=new URL(req.url());
+   if(url.hostname==='onlinegiftis.com'&&url.pathname.startsWith('/assets/')){assert.equal(req.method(),'GET');const file=path.join(process.cwd(),url.pathname.slice(1));if(!file.startsWith(path.join(process.cwd(),'assets')+path.sep)||!fs.existsSync(file))throw Error('Missing design artwork '+url.pathname);return route.fulfill({contentType:'image/webp',body:fs.readFileSync(file)});}
    if(url.hostname==='api.onlinegiftis.com'){
     if(url.pathname==='/api/store/products')return route.fulfill({json:{products:mode==='visual'?catalogue:[sample]}});
     if(url.pathname==='/api/store/categories')return route.fulfill({json:mode==='visual'?savedCategories:{categories}});
@@ -45,6 +46,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   await page.evaluate(()=>document.querySelectorAll('img').forEach(img=>img.loading='eager'));
   await page.waitForFunction(()=>[...document.images].filter(img=>img.getAttribute('src')).every(img=>img.complete));await page.evaluate(()=>document.fonts.ready);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Overflow '+name);
+  assert.equal(await page.evaluate(()=>[...document.images].filter(img=>img.getAttribute('src')).every(img=>img.naturalWidth>0)),true,'Broken artwork '+name);
   await page.screenshot({path:path.join(output,name+'.png'),fullPage:true});
   await page.screenshot({path:path.join(output,name+'-viewport.png'),fullPage:false});
  }
