@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '24'
       - run: node scripts/check-themes.mjs
-      - run: node --test scripts/check-auth.mjs scripts/check-home-categories.mjs
+      - run: node --test scripts/check-auth.mjs scripts/check-home-categories.mjs scripts/check-home-layout.mjs
       - name: Prepare read-only catalogue fixture
         run: curl --fail --max-time 60 https://api.onlinegiftis.com/api/store/products -o /tmp/og-products.json
       - name: Prepare read-only category fixture
@@ -34,6 +34,7 @@ jobs:
           node scripts/check-themes-browser.cjs
           node scripts/check-boutique-browser.cjs
           node scripts/check-banner-management.cjs
+          node scripts/check-home-layout-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -42,3 +43,5 @@ jobs:
             /tmp/og-*.png
             /tmp/og-boutique/
             /tmp/og-specialty-banners/
+            /tmp/og-home-admin/
+

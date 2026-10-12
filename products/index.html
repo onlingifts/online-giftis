@@ -403,8 +403,8 @@ img{max-width:100%}
 
 </style>
 <link rel="stylesheet" href="/assets/themes.css?v=20261010-single-banner1">
-<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js?v=20261010-product-images1"></script><script src="/assets/boutique-presentation.js?v=20261012-catalog3"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
-<link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261012-catalog3">
+<script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js?v=20261010-product-images1"></script><script src="/assets/boutique-presentation.js?v=20261012-admin1"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
+<link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261012-admin1">
 </head>
 <body>
 <div class="topbar">
@@ -692,7 +692,8 @@ function renderCategoryCampaign(){
  const saved=lang()==='tr'?meta.bannerUrlTr:(meta.bannerUrlAr||meta.bannerUrl);
  const useSaved=Boolean(OGBoutique.savedAsset(meta));
  const art=OGBoutique.campaign(meta,visibleProducts().find(p=>p.hasImage));link.dataset.artRole=art.role;link.classList.toggle('boutique-category-campaign',!useSaved);
- link.href='#productGrid';img.removeAttribute('srcset');img.removeAttribute('sizes');img.removeAttribute('style');img.src=useSaved&&saved?new URL(saved,API).href:art.asset;img.alt=categoryLabel(state.category);
+ if(!art.asset){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return;}
+ link.href='#productGrid';img.removeAttribute('srcset');img.removeAttribute('sizes');img.removeAttribute('style');img.src=art.asset;img.alt=categoryLabel(state.category);
  let copy=link.querySelector('.boutique-category-campaign-copy');if(!copy){copy=document.createElement('div');copy.className='boutique-category-campaign-copy';link.append(copy);}
  copy.hidden=useSaved;copy.innerHTML='<strong>'+esc(categoryLabel(state.category))+'</strong><p>'+esc(art.description)+'</p><span>'+txt('تسوّق المنتجات','Ürünleri keşfet')+'</span>';
  link.hidden=false;document.documentElement.setAttribute('data-has-campaign','true');
@@ -1135,4 +1136,5 @@ Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const
 <script src="/assets/boutique-commerce.js?v=20261012-catalog3" defer></script>
 </body>
 </html>
+
 

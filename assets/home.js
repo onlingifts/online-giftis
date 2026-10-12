@@ -15,7 +15,7 @@
  function applyHomeColors(meta){window.OGBoutique?.applyPalette(meta);const el=document.documentElement;for(const key of colorKeys)el.style.removeProperty('--home-'+key);el.toggleAttribute('data-home-colors',Boolean(meta?.customColors));if(meta?.customColors)for(const key of colorKeys)if(/^#[0-9a-fA-F]{6}$/.test(meta.colors?.[key]||''))el.style.setProperty('--home-'+key,meta.colors[key]);}
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(Number(v||0))+' ₺';
  const categories=p=>{const raw=p?.categories??p?.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).map(x=>String(x).trim()).filter(Boolean)};
- let catalogue=[],categoryRows=[];
+ let catalogue=[],categoryRows=[],homeLayout=null;
  let favorites=new Set();
  try{favorites=new Set((JSON.parse(localStorage.getItem(FAVORITES_KEY)||'[]')||[]).map(String))}catch{}
  function cartCount(){
@@ -51,11 +51,16 @@
  }
  function bindFavoriteButtons(host){host?.querySelectorAll('[data-favorite-id]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggleFavorite(btn.dataset.favoriteId,btn)}));}
  function renderCollections(){
-  const photos=catalogue.filter(p=>p.requiresCustomizationText||p.requiresCustomizationImage||p.requiresDesignInput).slice(0,4);
-  const flowerKeys=categoryRows.filter(c=>window.OGBoutique?.role(c)==='flowers').map(c=>c.key);
-  const flowers=catalogue.filter(p=>categories(p).some(key=>flowerKeys.includes(key))||/ورد|بوكيه|çiçek|gül/i.test(name(p))).slice(0,4);
-  for(const [key,products] of [['Personalized',photos],['Flowers',flowers]]){const host=$('home'+key+'Products'),section=$('home'+key+'Section');if(!host||!section)continue;section.hidden=!products.length;host.innerHTML=products.map(productCard).join('');bindFavoriteButtons(host);}
-  const category=categoryRows.find(c=>window.OGBoutique?.role(c)==='flowers');const link=$('homeFlowersSection')?.querySelector('.pink-section-head a');if(link&&category)link.href='/products/?'+(language==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(category.key);
+  if(!window.OGHomeLayout)return;
+  const hosts={featured:['homeFeaturedProducts','personalized'],personalized:['homePersonalizedProducts','homePersonalizedSection'],flowers:['homeFlowersProducts','homeFlowersSection']};
+  for(const section of OGHomeLayout.sections(homeLayout)){
+   const ids=hosts[section.key];if(!ids)continue;
+   const host=$(ids[0]),el=$(ids[1]);if(!host||!el)continue;
+   const products=OGHomeLayout.select(section,catalogue,categoryRows,c=>window.OGBoutique?.role(c));
+   el.hidden=section.enabled===false||!products.length;host.innerHTML=products.map(productCard).join('');bindFavoriteButtons(host);
+   const link=el.querySelector('.pink-section-head a');if(link){const category=section.selection==='category'?section.categoryKey:section.selection==='flowers'?categoryRows.find(c=>window.OGBoutique?.role(c)==='flowers')?.key:null;link.href='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category):'');}
+  }
+  OGHomeLayout.apply(homeLayout,document,language);
  }
  function renderCategoryDrawer(){
   const nav=document.querySelector('.pink-categories');if(!nav||!categoryRows.length||!window.OGBoutique)return;
@@ -67,14 +72,7 @@
    const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
    if(!r.ok||!Array.isArray(d.products))throw new Error('products');
    const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);catalogue=products;renderCollections();renderCategoryDrawer();
-   const preferred=products.filter(p=>p.isFeatured&&p.price!==null);
-   const customized=products.filter(p=>p.price!==null&&(p.requiresCustomizationText||p.requiresCustomizationImage||p.requiresDesignInput||categories(p).some(c=>['nfc','drinkware','gifts','love'].includes(c))));
-   const bouquets=products.filter(p=>/ورد|بوكيه|çiçek|gül/i.test(name(p)));
-   const photoGifts=products.filter(p=>p.requiresCustomizationImage||categories(p).includes('photo'));
-   const seen=new Set(),list=[];
-   [...bouquets.slice(0,2),...customized.slice(0,2),...photoGifts,...preferred,...products].forEach(p=>{if(list.length>=6)return;const k=String(p.id);if(!seen.has(k)){seen.add(k);list.push(p)}});
-   if(host)host.innerHTML=list.length?list.map(productCard).join(''):'<div class="pink-empty">'+txt('ما في منتجات متاحة حالياً.','Henüz ürün bulunmuyor.')+'</div>';
-   host?.querySelectorAll('[data-favorite-id]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggleFavorite(btn.dataset.favoriteId,btn)}));
+
 
 
    document.querySelectorAll('.stage-main-card,.stage-mini-card').forEach((card,i)=>{const p=products[i];if(!p)return;card.href=href(p.id);const img=card.querySelector('img');if(img)OGImages.setProduct(img,p,'460px');const title=card.querySelector('strong');if(title)title.textContent=name(p)});
@@ -83,14 +81,20 @@
   }
  }
  async function loadCategories(){
-  try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;categoryRows=data.categories;renderCollections();
+  try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;categoryRows=data.categories;homeLayout=data.storefront||null;renderCollections();
    const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
-   const banner=main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
+   const suffix=language==='tr'?'Tr':'Ar',managed=main&&Object.prototype.hasOwnProperty.call(main,'effectiveBannerUrl'+suffix);
+   const banner=managed?main['effectiveBannerUrl'+suffix]:main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
    const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');
-   const referenceCampaign=Boolean(hero?.classList.contains?.('boutique-hero'))&&window.OGBoutique&&!OGBoutique.savedAsset({...main,key:'home'});
-   if(hero){hero.style.display=banner||!main?.configured?'':'none';if(img&&banner&&!referenceCampaign){img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');hero.querySelectorAll('picture source').forEach(source=>source.remove());hero.classList.add('has-custom-banner')}}
+   const isDefault=managed?main['bannerSource'+suffix]==='default':Boolean(hero?.classList.contains('boutique-hero'))&&window.OGBoutique&&!OGBoutique.savedAsset({...main,key:'home'});
+   if(hero){hero.hidden=managed?!banner:!banner&&Boolean(main?.configured);hero.style.display=hero.hidden?'none':'';
+    if(img&&banner){hero.classList.toggle('has-custom-banner',!isDefault);if(isDefault){img.src=managed?banner:'/assets/boutique-hero-desktop.webp';const picture=hero.querySelector('picture');if(picture&&!picture.querySelector('source')){const source=document.createElement('source');source.media='(max-width:760px)';source.srcset='/assets/boutique-hero-mobile.webp';picture.prepend(source);}img.removeAttribute('style');}
+     else{img.hidden=false;img.removeAttribute('srcset');img.removeAttribute('sizes');img.style.height='auto';img.style.aspectRatio='auto';img.style.objectFit='contain';img.src=new URL(banner,API).href;hero.querySelectorAll('picture source').forEach(source=>source.remove());}
+     img.alt=txt('البانر الرئيسي — Online Gifts','Online Gifts ana banner');
+    }
+   }
    const shortcutCategory={love:data.categories.find(c=>/ورود|بوكيه|çiçek/i.test(c.nameAr+' '+(c.nameTr||''))),gifts:data.categories.find(c=>c.key==='personalized')||data.categories.find(c=>c.key==='gifts'),drinkware:data.categories.find(c=>c.key==='assorted')||data.categories.find(c=>c.key==='drinkware')};
-   document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;});
+   document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;const art=window.OGBoutique?.campaign(category),photo=link.querySelector('.category-photo');if(photo&&art){photo.hidden=!art.asset;if(art.asset)photo.style.backgroundImage='url('+JSON.stringify(art.asset)+')';}const title=link.querySelector('strong');if(title)title.textContent=language==='tr'?(category.nameTr||category.nameAr):category.nameAr;const description=link.querySelector('p');if(description&&art)description.textContent=art.description;});
    const nav=document.querySelector('.pink-categories');if(nav){const icons={drinkware:'fa-mug-hot',nfc:'fa-wifi',family:'fa-people-roof',kids:'fa-child-reaching',love:'fa-heart',all:'fa-gift'};nav.innerHTML=data.categories.map(c=>'<a href="/products/?'+(language==='tr'?'lang=tr&':'')+(c.key==='all'?'':'category='+encodeURIComponent(c.key))+'"><span class="pink-cat-icon cat-gift"><i class="fa-solid '+(icons[c.key]||'fa-gift')+'"></i></span><strong>'+esc(language==='tr'?(c.nameTr||c.nameAr):c.nameAr)+'</strong></a>').join('')}
    renderCategoryDrawer();
    const bannerGrid=document.querySelector('.pink-occasion-grid');
@@ -103,8 +107,9 @@
      const target='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category.key):query?'q='+encodeURIComponent(query):'');
      return window.OGBoutique?OGBoutique.card({...b,key:b.categoryKey||b.id,nameAr:b.nameAr||category?.nameAr,nameTr:b.nameTr||category?.nameTr},target,catalogue.find(p=>categories(p).includes(b.categoryKey)&&p.hasImage)):'<a class="pink-occasion-card" href="'+esc(target)+'"><strong>'+esc(title)+'</strong></a>';
     }).join('');
-    const section=bannerGrid.closest('section');if(section)section.hidden=!data.banners.length;
+    const section=bannerGrid.closest('section');if(section)section.hidden=!data.banners.length||homeLayout?.sections?.find(s=>s.key==='promotions')?.enabled===false;
    }
+   window.OGHomeLayout?.apply(homeLayout,document,language);
    // Other category shortcuts use the same saved names and visibility.
    document.querySelectorAll('[data-occasion],.collection-card').forEach(link=>{
     const key=new URL(link.href).searchParams.get('category');if(!key)return;
@@ -132,5 +137,6 @@
  window.addEventListener('pageshow',event=>{if(event.persisted)loadCategories()});
  window.addEventListener('storage',e=>{if(e.key===FAVORITES_KEY){try{favorites=new Set((JSON.parse(e.newValue||'[]')||[]).map(String))}catch{}syncBadges()}if(e.key===CART_KEY)syncBadges()});
 })();
+
 
 

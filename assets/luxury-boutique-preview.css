@@ -165,3 +165,7 @@ html body #products>.container>.section-head.premium-shop-hero{background:transp
 .boutique-section-card strong,.boutique-category-campaign-copy{color:var(--lux-ink)}
 .boutique-section-card p,.boutique-category-campaign-copy p{color:var(--lux-muted,#826049)}
 .boutique-section-card span,.boutique-category-campaign-copy span,.boutique-add,.pink-product-quick{color:var(--lux-on-primary,#fff)}
+
+
+/* Admin visibility must win over display rules at every breakpoint. */
+.pink-main [hidden],#categoryCampaign[hidden]{display:none!important}

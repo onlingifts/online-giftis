@@ -18,6 +18,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   // Every remote request is intercepted: screenshots and purchase/auth tests cannot touch production data.
   await page.route('https://**/*',async route=>{
    const req=route.request(),url=new URL(req.url());
+   if(url.hostname==='onlinegiftis.com'&&url.pathname.startsWith('/assets/')){assert.equal(req.method(),'GET');const file=path.join(process.cwd(),url.pathname.slice(1));if(!file.startsWith(path.join(process.cwd(),'assets')+path.sep)||!fs.existsSync(file))throw Error('Missing design artwork '+url.pathname);return route.fulfill({contentType:'image/webp',body:fs.readFileSync(file)});}
    if(url.hostname==='api.onlinegiftis.com'){
     if(url.pathname==='/api/store/products')return route.fulfill({json:{products:mode==='visual'?catalogue:[sample]}});
     if(url.pathname==='/api/store/categories')return route.fulfill({json:mode==='visual'?savedCategories:{categories}});
@@ -45,6 +46,8 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   await page.evaluate(()=>document.querySelectorAll('img').forEach(img=>img.loading='eager'));
   await page.waitForFunction(()=>[...document.images].filter(img=>img.getAttribute('src')).every(img=>img.complete));await page.evaluate(()=>document.fonts.ready);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Overflow '+name);
+  const broken=await page.evaluate(()=>[...document.images].filter(img=>img.getAttribute('src')&&!img.naturalWidth).map(img=>({src:img.src,currentSrc:img.currentSrc,outer:img.outerHTML,display:getComputedStyle(img).display})));if(broken.length){console.log('Broken images '+name,JSON.stringify(broken));await page.screenshot({path:path.join(output,name+'-broken.png'),fullPage:true});}
+  assert.deepEqual(broken,[],'Broken artwork '+name);
   await page.screenshot({path:path.join(output,name+'.png'),fullPage:true});
   await page.screenshot({path:path.join(output,name+'-viewport.png'),fullPage:false});
  }
@@ -56,7 +59,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
    if(width===390){await page.locator('.boutique-menu').click();await page.locator('#homeCategoryDrawer[open]').waitFor();await screenshot(page,'home-categories'+suffix);await page.keyboard.press('Escape');}
    await page.goto(base+'/products/?lang='+language);await page.locator('.product-card-link').first().waitFor();await screenshot(page,'catalogue'+suffix);
    if(width===390){await page.locator('body > .boutique-bottom-nav a').nth(1).click();await page.locator('#boutiqueCategories[open]').waitFor();await screenshot(page,'categories'+suffix);await page.keyboard.press('Escape');}
-   if(width===390){const category=savedCategories.categories.find(c=>['assorted','drinkware','gifts'].includes(c.key))||savedCategories.categories.find(c=>c.key!=='all');if(category){await page.goto(base+'/products/?lang='+language+'&category='+encodeURIComponent(category.key));await page.locator('#categoryCampaign.boutique-category-campaign').waitFor();assert.match(await page.locator('#categoryCampaignImg').getAttribute('src'),/^\/assets\/boutique-/);await screenshot(page,'category-campaign'+suffix);}}
+   if(width===390){const category=savedCategories.categories.find(c=>['assorted','drinkware','gifts'].includes(c.key))||savedCategories.categories.find(c=>c.key!=='all');if(category){await page.goto(base+'/products/?lang='+language+'&category='+encodeURIComponent(category.key));await page.locator('#categoryCampaign.boutique-category-campaign').waitFor();assert.match(await page.locator('#categoryCampaignImg').getAttribute('src'),/^(?:https:\/\/onlinegiftis\.com)?\/assets\/boutique-/);await screenshot(page,'category-campaign'+suffix);}}
    const first=catalogue.find(p=>p.id===104)||catalogue[0];await page.goto(base+'/products/detail/?id='+first.id+'&lang='+language);await page.waitForFunction(()=>document.getElementById('buyBtn')&&!document.getElementById('buyBtn').disabled);await screenshot(page,'product'+suffix);
    if(width===390){await page.locator('.boutique-accordion').last().locator('summary').click();assert.ok(await page.locator('.boutique-accordion').last().getAttribute('open')!==null);}
    await context.close();
@@ -88,3 +91,4 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
  }
  assert.equal(authCalls,2);assert.deepEqual(errors,[]);await browser.close();console.log('Boutique passed: bilingual visual views, categories, gallery/zoom, stock-limited card quick-add, home quick-add, quantity, favorites, 3 checkout stages, required fields, bank receipt, single order submission and mocked member login/logout. Screenshots: '+output);
 })().catch(e=>{console.error(e);process.exit(1)});
+
