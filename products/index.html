@@ -1134,7 +1134,7 @@ restoreCart();
 const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=(()=>{try{return localStorage.getItem('og_lang')}catch{return null}})();if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
 setAccountMode('login');
 renderCart();
-document.addEventListener('DOMContentLoaded',()=>window.OGWheelCheckout?.mount({cart:()=>state.cart,customer:()=>state.customer,update:syncPaymentUI}));
+document.addEventListener('DOMContentLoaded',()=>window.OGWheelCheckout?.mount({cart:()=>state.cart,customer:()=>state.customer,update:renderPayment}));
 Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const q=new URLSearchParams(location.search);if(q.get('cart')==='1')openModal(cartModal);if(q.get('account')==='1')openModal(accountModal)});
 })();
 </script>
