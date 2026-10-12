@@ -1,0 +1,122 @@
+window.OGGoogleReviews = [
+  {
+    "id": "google-190735",
+    "locale": "ar",
+    "author": "Ahmad Ayoubi",
+    "rating": 5,
+    "original": "شركة محترمة وصادقة وهدايا مميزة بأسعار جيدة",
+    "text": "شركة محترمة وصادقة وهدايا مميزة بأسعار جيدة",
+    "translated": false,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190735).png"
+  },
+  {
+    "id": "google-190744",
+    "locale": "ar",
+    "author": "محمد فرواني",
+    "rating": 5,
+    "original": "تجربتي مع هذه الشركة كانت ممتازة، وأحب أن أشكركم على حسن التعامل والمصداقية والاهتمام بالعملاء. كان التعامل بكل احترام واحترافية، وكانت تجربتي معهم إيجابية ومميزة. أنصح بالتعامل معهم، وأتمنى دوام النجاح والتوفيق والتقدم 🌷",
+    "text": "تجربتي مع هذه الشركة كانت ممتازة، وأحب أن أشكركم على حسن التعامل والمصداقية والاهتمام بالعملاء. كان التعامل بكل احترام واحترافية، وكانت تجربتي معهم إيجابية ومميزة. أنصح بالتعامل معهم، وأتمنى دوام النجاح والتوفيق والتقدم 🌷",
+    "translated": false,
+    "excerpt": true,
+    "source": "Google",
+    "sourceImage": "image(20261012-190744).png"
+  },
+  {
+    "id": "google-190805",
+    "locale": "ar",
+    "author": "عدنان محمد",
+    "rating": 5,
+    "original": "ماشاء الله تبارك الرحمن شغل والاروع والهدايا بتجنن والمعامله احلا شي شفتها الله يرزقك .......",
+    "text": "ماشاء الله تبارك الرحمن شغل والاروع والهدايا بتجنن والمعامله احلا شي شفتها الله يرزقك .......",
+    "translated": false,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190805).png"
+  },
+  {
+    "id": "google-190811",
+    "locale": "ar",
+    "author": "Ansam Alkouzam",
+    "rating": 5,
+    "original": "اكتر شي بحبه مصداقية وشغل لا يعلى عليه بالتوفيق الدائم ونشوف فروع هدايا اونلاين بكل العالم",
+    "text": "اكتر شي بحبه مصداقية وشغل لا يعلى عليه بالتوفيق الدائم ونشوف فروع هدايا اونلاين بكل العالم",
+    "translated": false,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190811).png"
+  },
+  {
+    "id": "google-190831",
+    "locale": "ar",
+    "author": "Almas Soltan",
+    "rating": 5,
+    "original": "ماشاءالله شغل نظيف ومرتب وتعامل رائع شكرا لكم على هي تحفة ❤️",
+    "text": "ماشاءالله شغل نظيف ومرتب وتعامل رائع شكرا لكم على هي تحفة ❤️",
+    "translated": false,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190831).png"
+  },
+  {
+    "id": "google-190845",
+    "locale": "tr",
+    "author": "JOMANAH ABDO",
+    "rating": 5,
+    "original": "من أفضل المحلات في التعامل الطيب والمهذب ومقدرين جدا لظروف ومسهليين التعامل بشكل يشكر الحمد لله يبارك فيهم وفي عملهم واشيائهم جميييييله جدا وبيعطوا الطلب زي ما تطلبه وافضل كمان",
+    "text": "Nazik ve saygılı yaklaşımlarıyla en iyi mağazalardan biri. Koşulları çok iyi anlıyor ve alışverişi kolaylaştırıyorlar; bunun için teşekkür ederim. Allah kendilerine ve işlerine bereket versin. Ürünleri çok güzel; siparişi tam istediğiniz gibi, hatta daha da güzel hazırlıyorlar.",
+    "translated": true,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190845).png"
+  },
+  {
+    "id": "google-190901",
+    "locale": "tr",
+    "author": "حمودي نجوم",
+    "rating": 5,
+    "original": "شركة اونلاين افضل شركة بتعامل الطيب والمنتج الاصلي والممتاز وتوصيل دقيق وامان 🖤",
+    "text": "Online, nazik yaklaşımı, orijinal ve mükemmel ürünleri, zamanında ve güvenli teslimatıyla en iyi firma. 🖤",
+    "translated": true,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190901).png"
+  },
+  {
+    "id": "google-190944",
+    "locale": "tr",
+    "author": "BİLAL ALAR",
+    "rating": 5,
+    "original": "يتعاملون مع الزبائن بشكل جيد والشحن سريع وامن منذ ثلاث سنوات لم اواجه اي مشكله",
+    "text": "Müşterilere iyi davranıyorlar; kargo hızlı ve güvenli. Üç yıldır hiçbir sorun yaşamadım.",
+    "translated": true,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-190944).png"
+  },
+  {
+    "id": "google-191004",
+    "locale": "tr",
+    "author": "Fadi Iliwi",
+    "rating": 5,
+    "original": "تعامل ممتاز، كنت محتار شو أجيب هدية في إسطنبول، وساعدوني باختيار هدية مناسبة ووصلت بسرعة. أنصح فيهم لأي شخص بدو هدية مميزة في إسطنبول.",
+    "text": "İletişimleri mükemmel. İstanbul’da ne hediye alacağıma karar verememiştim; uygun bir hediye seçmeme yardımcı oldular ve hızlıca teslim edildi. İstanbul’da özel bir hediye arayan herkese tavsiye ederim.",
+    "translated": true,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-191004).png"
+  },
+  {
+    "id": "google-191019",
+    "locale": "tr",
+    "author": "ابو الجود الجميلي",
+    "rating": 5,
+    "original": "انتم شركة او اي ما كنتم اكثر من رائعين اشكركم واشكر جهدكم على هذا العمل الجيد لا ازكي احدا لكن الحق يقال انتم شركة ممتازة 👌🙂 لكن ارجو وارجو كثيرا ان يكون ميزة الدفع عند الباب فقط للزبائن المقربين وهكذا اظن رأي ولا اتدخل بعملكم فأنتم اعلم وادرا شكرا جزيلا لكم من القلب اتمنى لكم النجاح 🥰🥰",
+    "text": "Bir şirket ya da her neyseniz, harikasınız. Size ve bu güzel iş için gösterdiğiniz çabaya teşekkür ederim. Kimseyi gereksiz yere övmem ama hakkınızı vermek gerekir: mükemmel bir firmasınız. 👌🙂 Yalnız, kapıda ödeme seçeneğinin sadece yakın müşterilere sunulmasını çok rica ediyorum. Bu yalnızca benim görüşüm; işinize karışmak istemem, siz daha iyi bilirsiniz. Kalpten teşekkür eder, başarılar dilerim. 🥰🥰",
+    "translated": true,
+    "excerpt": false,
+    "source": "Google",
+    "sourceImage": "image(20261012-191019).png"
+  }
+];

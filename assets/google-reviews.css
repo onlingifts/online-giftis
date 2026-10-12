@@ -1,0 +1,21 @@
+/* Curated customer voices: matching the store's ivory, wine and gold palette. */
+#reviews .google-review-intro{max-width:760px;margin:0 0 28px;color:var(--lux-ink,#34252a)}
+#reviews .google-review-intro>p:last-child{font-size:17px;line-height:1.9;margin:8px 0 0}
+#reviews .google-review-eyebrow{color:var(--lux-wine,#6d2335);font-size:12px;font-weight:800;letter-spacing:.08em;margin:0}
+.google-review-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+.google-review-card{position:relative;display:flex;flex-direction:column;min-width:0;padding:28px;background:var(--lux-card,#fffdfa);border:1px solid var(--lux-line,rgba(109,35,53,.14));border-radius:22px;box-shadow:0 10px 32px rgba(72,24,36,.045);overflow:hidden}
+.google-review-card:first-child{grid-column:span 2;background:linear-gradient(125deg,#f3e7de,#fffaf5);border-color:rgba(185,148,92,.4)}
+.google-review-card::after{content:'”';position:absolute;inset-inline-end:20px;top:14px;font:86px/1 Georgia,serif;color:rgba(185,148,92,.16);pointer-events:none}
+.google-review-header{display:flex;gap:13px;align-items:center;padding-inline-end:25px;position:relative;z-index:1}
+.google-review-monogram{display:grid;place-items:center;flex:0 0 44px;height:44px;background:var(--lux-wine,#6d2335);color:#fff8ee;border-radius:50%;font-size:16px;font-weight:700;box-shadow:0 0 0 5px rgba(185,148,92,.09)}
+#reviews .google-review-header h3{font-family:inherit;margin:0 0 4px;font-size:16px;line-height:1.5;color:var(--lux-wine-dark,#481824);overflow-wrap:anywhere}
+.google-review-source{font-size:12px;color:#6e6059}
+.google-review-stars{color:#a47b37;font-size:18px;letter-spacing:3px;direction:ltr;text-align:start;width:fit-content;margin:22px 0 13px}
+.google-review-card blockquote{font-family:inherit;font-size:16px;line-height:1.95;color:var(--lux-ink,#34252a);margin:0 0 22px;border:0;padding:0;overflow-wrap:anywhere}
+.google-review-card:first-child blockquote{font-size:21px;line-height:1.85;max-width:580px}
+.google-review-translation,.google-review-excerpt{margin-top:auto;font-size:11px;color:#71625b;border-top:1px solid var(--lux-line,rgba(109,35,53,.14));padding-top:13px}
+#reviews .google-review-note{font-size:12px;line-height:1.8;color:#76665e;margin:18px 0 34px}
+.native-review-heading{border-top:1px solid var(--lux-line,rgba(109,35,53,.14));padding-top:26px}
+#reviews .native-review-heading h3{font-family:inherit;font-size:19px;color:var(--lux-wine,#6d2335);margin:0 0 8px}
+@media(max-width:1050px){.google-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.google-review-card:first-child{grid-column:span 2}}
+@media(max-width:600px){.google-review-grid{grid-template-columns:minmax(0,1fr);gap:14px}.google-review-card:first-child{grid-column:auto}.google-review-card{padding:23px;border-radius:19px}.google-review-card:first-child blockquote{font-size:19px}#reviews .google-review-intro>p:last-child{font-size:15px}}
