@@ -35,6 +35,7 @@ jobs:
           node scripts/check-boutique-browser.cjs
           node scripts/check-banner-management.cjs
           node scripts/check-home-layout-browser.cjs
+          node scripts/check-desktop-followup.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -44,4 +45,5 @@ jobs:
             /tmp/og-boutique/
             /tmp/og-specialty-banners/
             /tmp/og-home-admin/
+            /tmp/og-desktop-followup/
 

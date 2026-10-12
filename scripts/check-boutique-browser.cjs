@@ -20,6 +20,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
    const req=route.request(),url=new URL(req.url());
    if(url.hostname==='onlinegiftis.com'&&url.pathname.startsWith('/assets/')){assert.equal(req.method(),'GET');const file=path.join(process.cwd(),url.pathname.slice(1));if(!file.startsWith(path.join(process.cwd(),'assets')+path.sep)||!fs.existsSync(file))throw Error('Missing design artwork '+url.pathname);return route.fulfill({contentType:'image/webp',body:fs.readFileSync(file)});}
    if(url.hostname==='api.onlinegiftis.com'){
+    if(url.pathname==='/api/store/reviews')return route.fulfill({json:{summary:{count:0,average:null},reviews:[]}});
     if(url.pathname==='/api/store/products')return route.fulfill({json:{products:mode==='visual'?catalogue:[sample]}});
     if(url.pathname==='/api/store/categories')return route.fulfill({json:mode==='visual'?savedCategories:{categories}});
     if(url.pathname==='/api/store/config')return route.fulfill({json:{config:{bankConfigured:true,bankName:'Preview Bank',bankAccountName:'Preview account',iban:'TR00 PREVIEW ONLY',deliveryFee:150,freeDelivery:false,codFee:75}}});

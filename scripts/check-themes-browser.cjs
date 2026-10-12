@@ -10,6 +10,7 @@ const assert=require('node:assert/strict');
  await page.route('https://api.onlinegiftis.com/**',async r=>{
   const req=r.request(),url=new URL(req.url());
   if(req.method()==='OPTIONS')throw Error('Unexpected preflight for public catalogue');
+  if(url.pathname==='/api/store/reviews')return r.fulfill({json:{summary:{count:0,average:null},reviews:[]}});
   if(url.pathname==='/api/store/products')return r.fulfill({json:{products}});
   if(url.pathname==='/api/store/categories')return categoryFailure?r.abort():r.fulfill({json:{categories:[{key:'laser',nameAr:'الحفر بالليزر',nameTr:'Lazer kazıma'},{key:'gifts',nameAr:'هدايا',nameTr:'Hediyeler'}]}});
   if(url.pathname==='/api/store/config')return r.fulfill({json:{config:{bankConfigured:false,freeDelivery:true,codFee:75}}});
@@ -49,3 +50,4 @@ const assert=require('node:assert/strict');
  for(const path of ['/','/tr/']){await page.goto(base+path);await page.evaluate(()=>document.querySelectorAll('img').forEach(img=>img.loading='eager'));await page.waitForFunction(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0));for(const img of await page.locator('img').all())assert.ok(await img.evaluate(el=>el.complete&&el.naturalWidth>0),'Broken home image '+path)}
  assert.deepEqual(errors,[]);await browser.close();console.log('Passed: 30 responsive views, Turkish search, new product routes/images, design details, checkout totals, stale cart removal, deleted product, registration tabs and category outage.');
 })().catch(e=>{console.error(e);process.exit(1)});
+
