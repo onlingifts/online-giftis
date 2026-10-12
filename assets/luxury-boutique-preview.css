@@ -172,13 +172,13 @@ html body #products>.container>.section-head.premium-shop-hero{background:transp
 
 /* Banner artwork is complete; copy occupies its own area in both languages. */
 html body .boutique-section-card,html body .pink-categories>a.boutique-section-card{display:flex!important;flex-direction:column!important;min-height:0!important;background:var(--lux-card);isolation:auto}
-html body .boutique-section-card>img,html body .boutique-categories-screen .boutique-section-card>img,html body .pink-occasion-grid .boutique-section-card>img{position:static!important;inset:auto!important;width:100%!important;height:auto!important;aspect-ratio:3/1!important;object-fit:contain!important;object-position:center!important;z-index:auto;background:var(--lux-ivory)}
+html body .boutique-section-card>img,html body .boutique-categories-screen .boutique-section-card>img,html body .pink-occasion-grid .boutique-section-card>img{position:static!important;inset:auto!important;width:100%!important;height:auto!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important;z-index:auto;background:var(--lux-ivory)}
 html body .boutique-section-card>div,html body .pink-categories>a.boutique-section-card>div,html body .pink-occasion-grid .boutique-section-card>div{position:static!important;width:100%!important;min-height:0!important;margin:0!important;padding:16px!important;background:var(--lux-card)!important;text-align:start!important}
 html body .boutique-section-card strong{font-size:18px!important;line-height:1.5;overflow-wrap:anywhere}
 html body .boutique-section-card p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:8px 0;line-height:1.7}
 html body .boutique-section-card span{display:inline-block;margin-top:8px;align-self:flex-start}
 html body #categoryCampaign.boutique-category-campaign{display:flex!important;flex-direction:column;min-height:0!important;isolation:auto}
-html body #categoryCampaign.boutique-category-campaign>img{display:block;position:static!important;width:100%!important;height:auto!important;aspect-ratio:3/1!important;object-fit:contain!important;object-position:center!important;background:var(--lux-ivory)}
+html body #categoryCampaign.boutique-category-campaign>img{display:block;position:static!important;width:100%!important;height:auto!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important;background:var(--lux-ivory)}
 html body #categoryCampaign .boutique-category-campaign-copy{position:static!important;inset:auto!important;width:100%!important;padding:20px 26px!important;min-height:0!important;direction:inherit;text-align:start}
 html body #categoryCampaign .boutique-category-campaign-copy strong{font-size:clamp(22px,2.2vw,32px)}
 html body #categoryCampaign .boutique-category-campaign-copy p{max-width:900px;margin:10px 0;overflow-wrap:anywhere}
