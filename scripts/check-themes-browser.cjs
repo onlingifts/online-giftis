@@ -35,7 +35,7 @@ const assert=require('node:assert/strict');
  await page.locator('.product-card-link').first().click();await page.waitForFunction(()=>!document.getElementById('buyBtn').disabled);
  assert.equal(await page.locator('h1').innerText(),'Yeni hediye');assert.match(await page.locator('.media img').getAttribute('src'),/api\.onlinegiftis\.com/);
  await page.locator('#buyBtn').click();await page.locator('#cartModal.open').waitFor();await page.locator('[data-custom-text]').fill('Ömer');
- await page.locator('#checkoutName').fill('Test Buyer');await page.locator('#checkoutPhone').fill('05340000000');await page.locator('#checkoutCity').fill('İstanbul');await page.locator('#checkoutAddress').fill('Test Address');
+ await page.locator('#checkoutName').fill('Test Buyer');await page.locator('#checkoutPhone').fill('05340000000');await page.locator('#checkoutCity').selectOption({label:'İstanbul'});await page.locator('#checkoutAddress').fill('Test Address');
  assert.equal(await page.locator('#checkoutGrandTotal').innerText(),'575 ₺');
  await page.locator('#checkoutSubmit').click();await page.locator('#checkoutResult.ok').waitFor();assert.equal(orderCalls,1);assert.match(await page.locator('#checkoutResult').innerText(),/webTEST/);
  assert.ok(await page.locator('#checkoutSubmit').isDisabled());assert.equal(await page.locator('#checkoutResult').evaluate(el=>parseFloat(getComputedStyle(el).fontSize)),16);
