@@ -15,6 +15,7 @@
  function applyHomeColors(meta){const el=document.documentElement;for(const key of colorKeys)el.style.removeProperty('--home-'+key);el.toggleAttribute('data-home-colors',Boolean(meta?.customColors));if(meta?.customColors)for(const key of colorKeys)if(/^#[0-9a-fA-F]{6}$/.test(meta.colors?.[key]||''))el.style.setProperty('--home-'+key,meta.colors[key]);}
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:0}).format(Number(v||0))+' ₺';
  const categories=p=>{const raw=p?.categories??p?.category??[];return (Array.isArray(raw)?raw:typeof raw==='string'?raw.split(','):[]).map(x=>String(x).trim()).filter(Boolean)};
+ let catalogue=[],categoryRows=[];
  let favorites=new Set();
  try{favorites=new Set((JSON.parse(localStorage.getItem(FAVORITES_KEY)||'[]')||[]).map(String))}catch{}
  function cartCount(){
@@ -36,9 +37,9 @@
   return '<article class="pink-product-card">'+
    '<button class="pink-favorite'+(active?' is-favorite':'')+'" type="button" data-favorite-id="'+id+'" aria-label="'+txt('إضافة للمفضلة','Favorilere ekle')+'" aria-pressed="'+active+'"><i class="'+(active?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
    '<a class="pink-product-link" href="'+href(id)+'">'+
-    '<span class="pink-product-media">'+(image?'<img '+OGImages.product(p,'(max-width: 900px) calc((100vw - 34px) / 2), (max-width: 1208px) calc((100vw - 67px) / 4), 282px')+' alt="'+esc(name(p))+'" loading="lazy" decoding="async">':'<span class="pink-empty">'+txt('بدون صورة','Görsel yok')+'</span>')+'</span>'+
-    '<span class="pink-product-body"><strong class="pink-product-name">'+esc(name(p))+'</strong><span class="pink-product-bottom"><b class="pink-product-price">'+esc(price)+'</b><span class="pink-product-open" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span></span></span>'+
-   '</a></article>'
+    '<span class="pink-product-media">'+(image?'<img '+OGImages.product(p,'(max-width: 900px) calc((100vw - 34px) / 2), (max-width: 1208px) calc((100vw - 67px) / 4), 282px')+' alt="'+esc(window.OGBoutique?.shortName(p)||name(p))+'" loading="lazy" decoding="async">':'<span class="pink-empty">'+txt('بدون صورة','Görsel yok')+'</span>')+'</span>'+
+    '<span class="pink-product-body"><strong class="pink-product-name">'+esc(window.OGBoutique?.shortName(p)||name(p))+'</strong>'+(window.OGBoutique?.rating(p)||'')+'<span class="pink-product-bottom"><b class="pink-product-price">'+esc(price)+'</b><span class="pink-product-open" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span></span></span>'+
+   '</a><a class="pink-product-quick" href="'+href(id)+'&intent=add" aria-label="'+txt('إضافة للسلة: ','Sepete ekle: ')+esc(name(p))+'"><i class="fa-solid fa-cart-shopping"></i></a></article>'
  }
  function pickByCategory(products,key){return products.find(p=>p.orderable!==false&&p.hasImage&&categories(p).includes(key))}
  function applyOccasionImages(products){
@@ -48,12 +49,24 @@
    const img=card.querySelector('img');if(img)OGImages.setProduct(img,p,'(max-width: 900px) calc((100vw - 36px) / 4), 280px')
   })
  }
+ function bindFavoriteButtons(host){host?.querySelectorAll('[data-favorite-id]').forEach(btn=>btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();toggleFavorite(btn.dataset.favoriteId,btn)}));}
+ function renderCollections(){
+  const photos=catalogue.filter(p=>p.requiresCustomizationText||p.requiresCustomizationImage||p.requiresDesignInput).slice(0,4);
+  const flowerKeys=categoryRows.filter(c=>window.OGBoutique?.role(c)==='flowers').map(c=>c.key);
+  const flowers=catalogue.filter(p=>categories(p).some(key=>flowerKeys.includes(key))||/ورد|بوكيه|çiçek|gül/i.test(name(p))).slice(0,4);
+  for(const [key,products] of [['Personalized',photos],['Flowers',flowers]]){const host=$('home'+key+'Products'),section=$('home'+key+'Section');if(!host||!section)continue;section.hidden=!products.length;host.innerHTML=products.map(productCard).join('');bindFavoriteButtons(host);}
+  const category=categoryRows.find(c=>window.OGBoutique?.role(c)==='flowers');const link=$('homeFlowersSection')?.querySelector('.pink-section-head a');if(link&&category)link.href='/products/?'+(language==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(category.key);
+ }
+ function renderCategoryDrawer(){
+  const nav=document.querySelector('.pink-categories');if(!nav||!categoryRows.length||!window.OGBoutique)return;
+  nav.innerHTML=OGBoutique.orderedCategories(categoryRows).map(c=>OGBoutique.card(c,'/products/?'+(language==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(c.key),catalogue.find(p=>categories(p).includes(c.key)&&p.hasImage))).join('');
+ }
  async function loadProducts(){
   const host=$('homeFeaturedProducts');if(!host&&!document.querySelector('.stage-main-card'))return;
   try{
    const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
    if(!r.ok||!Array.isArray(d.products))throw new Error('products');
-   const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);
+   const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);catalogue=products;renderCollections();renderCategoryDrawer();
    const preferred=products.filter(p=>p.isFeatured&&p.price!==null);
    const customized=products.filter(p=>p.price!==null&&(p.requiresCustomizationText||p.requiresCustomizationImage||p.requiresDesignInput||categories(p).some(c=>['nfc','drinkware','gifts','love'].includes(c))));
    const bouquets=products.filter(p=>/ورد|بوكيه|çiçek|gül/i.test(name(p)));
@@ -70,7 +83,7 @@
   }
  }
  async function loadCategories(){
-  try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;
+  try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))return;categoryRows=data.categories;renderCollections();
    const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
    const banner=main?(language==='tr'?main.bannerUrlTr:main.bannerUrlAr):(language==='tr'?all?.bannerUrlTr:(all?.bannerUrlAr||all?.bannerUrl));
    const hero=document.querySelector('.pink-hero'),img=hero?.querySelector('img');
@@ -79,6 +92,7 @@
    const shortcutCategory={love:data.categories.find(c=>/ورود|بوكيه|çiçek/i.test(c.nameAr+' '+(c.nameTr||''))),gifts:data.categories.find(c=>c.key==='personalized')||data.categories.find(c=>c.key==='gifts'),drinkware:data.categories.find(c=>c.key==='assorted')||data.categories.find(c=>c.key==='drinkware')};
    document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;});
    const nav=document.querySelector('.pink-categories');if(nav){const icons={drinkware:'fa-mug-hot',nfc:'fa-wifi',family:'fa-people-roof',kids:'fa-child-reaching',love:'fa-heart',all:'fa-gift'};nav.innerHTML=data.categories.map(c=>'<a href="/products/?'+(language==='tr'?'lang=tr&':'')+(c.key==='all'?'':'category='+encodeURIComponent(c.key))+'"><span class="pink-cat-icon cat-gift"><i class="fa-solid '+(icons[c.key]||'fa-gift')+'"></i></span><strong>'+esc(language==='tr'?(c.nameTr||c.nameAr):c.nameAr)+'</strong></a>').join('')}
+   renderCategoryDrawer();
    const bannerGrid=document.querySelector('.pink-occasion-grid');
    if(bannerGrid&&Array.isArray(data.banners)){
     bannerGrid.innerHTML=data.banners.slice().sort((a,b)=>a.sortOrder-b.sortOrder).map(b=>{
@@ -87,7 +101,7 @@
      const image=language==='tr'?b.bannerUrlTr:b.bannerUrlAr;
      const query=language==='tr'?b.queryTr:b.queryAr;
      const target='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category.key):query?'q='+encodeURIComponent(query):'');
-     return '<a class="pink-occasion-card" href="'+esc(target)+'" data-site-banner="'+esc(b.id)+'"'+(b.customColors?' data-banner-colors style="'+esc(colorStyle(b.colors))+'"':'')+'>'+(image?'<img src="'+esc(new URL(image,API).href)+'" alt="'+esc(title)+'" loading="lazy" decoding="async">':'<span class="occasion-art"><i class="fa-solid fa-gift"></i></span>')+'<strong>'+esc(title)+'</strong></a>';
+     return window.OGBoutique?OGBoutique.card({key:b.categoryKey||b.id,nameAr:category?.nameAr||b.nameAr,nameTr:category?.nameTr||b.nameTr},target,catalogue.find(p=>categories(p).includes(b.categoryKey)&&p.hasImage)):'<a class="pink-occasion-card" href="'+esc(target)+'"><strong>'+esc(title)+'</strong></a>';
     }).join('');
     const section=bannerGrid.closest('section');if(section)section.hidden=!data.banners.length;
    }

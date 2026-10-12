@@ -13,7 +13,7 @@
   tr=document.documentElement.lang==='tr';shop='/products/?'+(tr?'lang=tr&':'');home=tr?'/tr/':'/';
   const labels=[t('الرئيسية','Ana sayfa'),t('الأقسام','Kategoriler'),t('المفضلة','Favoriler'),t('السلة','Sepet'),t('حسابي','Hesabım')];
   const hrefs=[home,shop+'categories=1',shop+'favorites=1',shop+'cart=1',shop+'account=1'];
-  nav.querySelectorAll('a').forEach((a,i)=>{a.href=hrefs[i];a.querySelector('span').textContent=labels[i]});
+  document.querySelectorAll('.boutique-bottom-nav').forEach(menu=>menu.querySelectorAll('a').forEach((a,i)=>{a.href=hrefs[i];a.querySelector('span').textContent=labels[i]}));
   const stage=Number(document.getElementById('cartModal')?.dataset.checkoutStage||0);
   const next=document.getElementById('checkoutNext');if(next)next.textContent=stage===0?t('إتمام الطلب','Siparişi tamamla'):t('متابعة للدفع','Ödemeye devam et');
   const stages=[t('السلة','Sepet'),t('العنوان','Adres'),t('الدفع','Ödeme')];document.querySelectorAll('button[data-checkout-stage]').forEach((button,i)=>{if(button.tagName==='BUTTON')button.lastChild.textContent=stages[i]});
@@ -71,14 +71,9 @@
   const open=()=>{if(!categoryScreen.open)categoryScreen.showModal()};
   nav.children[1].addEventListener('click',e=>{e.preventDefault();open()});
   window.addEventListener('og-catalog-ready',event=>{
-   const {products,categories}=event.detail;cards.replaceChildren();
-   categories.filter(c=>c.key!=='all').forEach(category=>{
-    const a=document.createElement('a');a.href=shop+'category='+encodeURIComponent(category.key);a.className='boutique-category-screen-card';
-    const p=products.find(p=>(Array.isArray(p.categories)?p.categories:[]).includes(category.key)&&p.hasImage);
-    const imageUrl=tr?(p?.imageUrlTr??p?.imageUrl):(p?.imageUrlAr??p?.imageUrl);
-    const img=document.createElement('img');img.src=imageUrl?new URL(imageUrl,'https://api.onlinegiftis.com').href:'/assets/boutique-hero-desktop.webp';img.alt='';img.loading='lazy';
-    const copy=document.createElement('div');const label=document.createElement('strong');label.textContent=tr?(category.nameTr||category.nameAr):category.nameAr;
-    const button=document.createElement('span');button.textContent=t('تسوّق الآن','Şimdi keşfet');copy.append(label,button);a.append(img,copy);cards.append(a);
+   tr=document.documentElement.lang==='tr';shop='/products/?'+(tr?'lang=tr&':'');const {products,categories}=event.detail;cards.replaceChildren();
+   OGBoutique.orderedCategories(categories).forEach(category=>{
+    const template=document.createElement('template');template.innerHTML=OGBoutique.card(category,shop+'category='+encodeURIComponent(category.key),products.find(p=>Array.isArray(p.categories)&&p.categories.includes(category.key)&&p.hasImage));cards.append(template.content);
    });
    if(query.get('categories')==='1')open();
   });
