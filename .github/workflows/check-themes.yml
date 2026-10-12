@@ -31,12 +31,12 @@ jobs:
       - name: Verify mobile, tablet, desktop and category navigation
         run: |
           python3 -m http.server 8765 >/tmp/storefront-server.log 2>&1 &
+          node scripts/check-home-banners-browser.cjs
           node scripts/check-themes-browser.cjs
           node scripts/check-boutique-browser.cjs
           node scripts/check-banner-management.cjs
           node scripts/check-home-layout-browser.cjs
           node scripts/check-desktop-followup.cjs
-          node scripts/check-home-banners-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
