@@ -19,3 +19,7 @@
 #reviews .native-review-heading h3{font-family:inherit;font-size:19px;color:var(--lux-wine,#6d2335);margin:0 0 8px}
 @media(max-width:1050px){.google-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.google-review-card:first-child{grid-column:span 2}}
 @media(max-width:600px){.google-review-grid{grid-template-columns:minmax(0,1fr);gap:14px}.google-review-card:first-child{grid-column:auto}.google-review-card{padding:23px;border-radius:19px}.google-review-card:first-child blockquote{font-size:19px}#reviews .google-review-intro>p:last-child{font-size:15px}}
+#reviews{padding-block:32px;border-radius:24px}
+.google-review-card{text-align:start}
+#reviews .google-review-intro{text-align:start}
+@media(max-width:600px){#reviews{padding:24px 14px;border-radius:20px}}
