@@ -24,7 +24,12 @@ const assert=require('node:assert/strict');
   assert.equal(await cards.count(),4);assert.equal(await page.locator('#homeCategories h2').textContent(),lang==='tr'?'Kategoriler':'الأقسام');
   for(const card of await cards.all()){
    assert.equal(await card.isVisible(),true);const fit=await card.locator('img').evaluate(img=>getComputedStyle(img).objectFit);assert.equal(fit,'contain');
-   const image=await card.locator('img').boundingBox(),copy=await card.locator('div').boundingBox();assert.ok(image.y+image.height<=copy.y+1,'category text overlaps image');
+   const image=await card.locator('img').boundingBox(),copy=await card.locator('div').boundingBox(),frame=await card.boundingBox();
+   if(lang==='ar'){
+    assert.ok(copy.y<image.y+image.height&&copy.y+copy.height>image.y,'Arabic homepage text must overlay the artwork');
+    assert.ok(copy.x>=frame.x-1&&copy.x+copy.width<=frame.x+frame.width+1&&copy.y>=frame.y-1&&copy.y+copy.height<=frame.y+frame.height+1,'Arabic text stays inside its banner');
+    assert.equal(await card.locator('p').isVisible(),true);assert.equal(await card.locator('span').isVisible(),true);
+   }else{assert.ok(image.y+image.height<=copy.y+1,'Turkish category text stays below image');}
   }
   assert.equal(await page.locator('.pink-hero picture img').evaluate(img=>getComputedStyle(img).objectFit),'contain','hero art must not crop');
   await page.locator(width>760?'.boutique-desktop-links [data-open-categories]':'.boutique-menu').click();assert.equal(await page.locator('#homeCategoryDrawer .boutique-section-card').count(),snapshot.categories.filter(c=>c.key!=='all').length);if(lang==='tr')assert.match(await page.locator('#homeCategoryDrawer [data-art-role="printing"] img').first().getAttribute('src'),/boutique-print-tr\.webp/);const flower=page.locator('#homeCategoryDrawer [data-art-role="flowers"]').first();await flower.scrollIntoViewIfNeeded();await flower.locator('img').evaluate(image=>image.decode());const ratio=await flower.locator('img').evaluate(image=>{const rect=image.getBoundingClientRect();return {shown:rect.width/rect.height,natural:image.naturalWidth/image.naturalHeight};});assert.ok(Math.abs(ratio.shown-ratio.natural)<0.02,'flower image must use its own aspect ratio');await flower.screenshot({path:'/tmp/og-desktop-followup/flower-fit-'+lang+'-'+width+'.png'});await page.locator('[data-close-categories]').click();
@@ -33,14 +38,13 @@ const assert=require('node:assert/strict');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'home overflow '+lang+' '+width);
   await page.screenshot({path:'/tmp/og-desktop-followup/home-'+lang+'-'+width+'.png',fullPage:true});
   await page.goto('http://localhost:8765/products/?category=assorted&lang='+lang);await page.locator('#categoryCampaign.boutique-category-campaign').waitFor({state:'visible'});await page.locator('#categoryCampaignImg').evaluate(image=>image.decode());await page.evaluate(()=>document.fonts.ready);
-  // The catalogue renderer can update campaign layout after the first image decode.
-  // Wait for the same non-overlap invariant before measuring its final geometry.
-  await page.waitForFunction(()=>{
-   const img=document.getElementById('categoryCampaignImg'),copy=document.querySelector('.boutique-category-campaign-copy');
-   if(!img?.complete||!img.naturalWidth||!copy)return false;
-   const imageRect=img.getBoundingClientRect(),copyRect=copy.getBoundingClientRect();
-   return imageRect.height>0&&copyRect.height>0&&imageRect.bottom<=copyRect.top+1;
-  },null,{timeout:10000});
+  // A pointer retained from the previous page can activate the image zoom.
+  // Measure the neutral layout after that hover transition has finished.
+  await page.mouse.move(0,0);
+  await page.locator('#categoryCampaignImg').evaluate(async image=>{
+   await image.decode();
+   await Promise.all(image.getAnimations().map(animation=>animation.finished.catch(()=>{})));
+  });
   const {image,copy}=await page.evaluate(()=>({image:document.getElementById('categoryCampaignImg').getBoundingClientRect().toJSON(),copy:document.querySelector('.boutique-category-campaign-copy').getBoundingClientRect().toJSON()}));assert.ok(image.y+image.height<=copy.y+1,'campaign text overlaps artwork');assert.equal(await page.locator('#categoryCampaignImg').evaluate(img=>getComputedStyle(img).objectFit),'contain');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'category overflow');await page.screenshot({path:'/tmp/og-desktop-followup/category-'+lang+'-'+width+'.png',fullPage:true});await page.close();
  }assert.equal(submissions,2);assert.deepEqual(errors,[]);console.log('All homepage categories, complete banner images, separate long AR/TR copy, Turkish print artwork and native review login/pending flow passed at 390/1024/1440/1920.');}
