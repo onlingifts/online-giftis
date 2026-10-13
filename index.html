@@ -341,6 +341,20 @@ html[lang="ar"] body.boutique-home #homeCategoryDrawer .boutique-section-card sp
  html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy{bottom:18px!important}
  html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy h1{font-size:20px}
 }
+
+/* Arabic homepage category cards use the same artwork overlay as the drawer. */
+html[lang="ar"] body.boutique-home #homeAllCategories>a.boutique-section-card:has(>img){display:grid!important;grid-template-columns:minmax(0,1fr);position:relative;isolation:isolate;min-height:170px!important}
+html[lang="ar"] body.boutique-home #homeAllCategories>a.boutique-section-card:has(>img)>img{grid-area:1/1;align-self:center;position:static!important;width:100%!important;height:auto!important;object-fit:contain!important}
+html[lang="ar"] body.boutique-home #homeAllCategories>a.boutique-section-card:has(>img)>div{grid-area:1/1;z-index:1;align-self:stretch;justify-self:start;display:flex;flex-direction:column;justify-content:center;width:52%!important;min-height:170px!important;padding:16px!important;background:linear-gradient(to left,var(--lux-card) 10%,transparent)!important;text-align:start!important}
+html[lang="ar"] body.boutique-home #homeAllCategories .boutique-section-card strong{font-size:clamp(16px,1.5vw,22px)!important;line-height:1.5}
+html[lang="ar"] body.boutique-home #homeAllCategories .boutique-section-card p{display:-webkit-box!important;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:12px;line-height:1.7;margin:6px 0}
+html[lang="ar"] body.boutique-home #homeAllCategories .boutique-section-card span{display:inline-block!important;align-self:start;margin-top:6px;font-size:12px;padding:7px 14px}
+@media(max-width:760px){
+ html[lang="ar"] body.boutique-home #homeAllCategories>a.boutique-section-card:has(>img)>div{padding:12px!important;width:54%!important}
+ html[lang="ar"] body.boutique-home #homeAllCategories .boutique-section-card strong{font-size:16px!important}
+ html[lang="ar"] body.boutique-home #homeAllCategories .boutique-section-card p{font-size:10px}
+ html[lang="ar"] body.boutique-home #homeAllCategories .boutique-section-card span{font-size:11px;padding:7px 12px}
+}
 </style>
 </head><body class="pink-home boutique-home">
 <a class="skip-link" href="#main">انتقل للمحتوى</a>
