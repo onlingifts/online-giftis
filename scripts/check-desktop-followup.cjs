@@ -40,6 +40,7 @@ const assert=require('node:assert/strict');
   await page.goto('http://localhost:8765/products/?category=assorted&lang='+lang);await page.locator('#categoryCampaign.boutique-category-campaign').waitFor({state:'visible'});await page.locator('#categoryCampaignImg').evaluate(image=>image.decode());await page.evaluate(()=>document.fonts.ready);
   // The catalogue renderer can update campaign layout after the first image decode.
   // Wait for the same non-overlap invariant before measuring its final geometry.
+  console.log('Campaign pre-measure',lang,width,await page.evaluate(()=>{const img=document.getElementById('categoryCampaignImg'),copy=document.querySelector('.boutique-category-campaign-copy');return{src:img.src,classes:img.parentElement.className,hidden:copy.hidden,display:getComputedStyle(copy).display,img:img.getBoundingClientRect().toJSON(),copy:copy.getBoundingClientRect().toJSON()}}));
   const measured=await page.waitForFunction(()=>{
    const img=document.getElementById('categoryCampaignImg'),copy=document.querySelector('.boutique-category-campaign-copy');
    if(!img?.complete||!img.naturalWidth||!copy)return false;
