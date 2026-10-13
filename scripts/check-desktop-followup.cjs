@@ -33,6 +33,14 @@ const assert=require('node:assert/strict');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'home overflow '+lang+' '+width);
   await page.screenshot({path:'/tmp/og-desktop-followup/home-'+lang+'-'+width+'.png',fullPage:true});
   await page.goto('http://localhost:8765/products/?category=assorted&lang='+lang);await page.locator('#categoryCampaign.boutique-category-campaign').waitFor({state:'visible'});await page.locator('#categoryCampaignImg').evaluate(image=>image.decode());await page.evaluate(()=>document.fonts.ready);
+  // The catalogue renderer can update campaign layout after the first image decode.
+  // Wait for the same non-overlap invariant before measuring its final geometry.
+  await page.waitForFunction(()=>{
+   const img=document.getElementById('categoryCampaignImg'),copy=document.querySelector('.boutique-category-campaign-copy');
+   if(!img?.complete||!img.naturalWidth||!copy)return false;
+   const imageRect=img.getBoundingClientRect(),copyRect=copy.getBoundingClientRect();
+   return imageRect.height>0&&copyRect.height>0&&imageRect.bottom<=copyRect.top+1;
+  },null,{timeout:10000});
   const {image,copy}=await page.evaluate(()=>({image:document.getElementById('categoryCampaignImg').getBoundingClientRect().toJSON(),copy:document.querySelector('.boutique-category-campaign-copy').getBoundingClientRect().toJSON()}));assert.ok(image.y+image.height<=copy.y+1,'campaign text overlaps artwork');assert.equal(await page.locator('#categoryCampaignImg').evaluate(img=>getComputedStyle(img).objectFit),'contain');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'category overflow');await page.screenshot({path:'/tmp/og-desktop-followup/category-'+lang+'-'+width+'.png',fullPage:true});await page.close();
  }assert.equal(submissions,2);assert.deepEqual(errors,[]);console.log('All homepage categories, complete banner images, separate long AR/TR copy, Turkish print artwork and native review login/pending flow passed at 390/1024/1440/1920.');}

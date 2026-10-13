@@ -320,6 +320,28 @@ body.pink-home :focus-visible{outline:3px solid var(--pink-deep);outline-offset:
 <link rel="stylesheet" href="/assets/home-refinements.css?v=20261012-featured-four1"><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261013-banner-fit1">
 <link rel="stylesheet" href="/assets/home-banners.css?v=20261012-slider1">
 <link rel="stylesheet" href="/assets/google-reviews.css?v=20261012-reviews1">
+<style id="arabic-banner-overlay">
+/* Restore Arabic banner copy inside the artwork; Turkish keeps its existing layout. */
+html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only){display:block!important;position:relative;direction:rtl;height:auto!important}
+html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) picture{display:block!important;position:static!important;width:100%;height:auto!important}
+html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) picture img{display:block;width:100%;height:auto!important;object-fit:contain!important}
+html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy{position:absolute!important;inset:auto 5% auto auto!important;top:50%!important;transform:translateY(-50%);width:40%!important;padding:0!important;direction:rtl;text-align:start}
+html[lang="ar"] body.boutique-home #homeCategoryDrawer .pink-categories>a.boutique-section-card:has(>img){display:grid!important;grid-template-columns:minmax(0,1fr);position:relative;isolation:isolate;min-height:150px!important}
+html[lang="ar"] body.boutique-home #homeCategoryDrawer .pink-categories>a.boutique-section-card:has(>img)>img{grid-area:1/1;align-self:center;position:static!important;width:100%!important;height:auto!important;object-fit:contain!important}
+html[lang="ar"] body.boutique-home #homeCategoryDrawer .pink-categories>a.boutique-section-card:has(>img)>div{grid-area:1/1;z-index:1;align-self:stretch;justify-self:start;display:flex;flex-direction:column;justify-content:center;width:54%!important;min-height:150px!important;padding:12px!important;background:linear-gradient(to left,var(--lux-card) 15%,transparent)!important;text-align:start!important}
+html[lang="ar"] body.boutique-home #homeCategoryDrawer .boutique-section-card strong{font-size:17px!important;line-height:1.5}
+html[lang="ar"] body.boutique-home #homeCategoryDrawer .boutique-section-card p{font-size:11px;line-height:1.6;margin:5px 0}
+html[lang="ar"] body.boutique-home #homeCategoryDrawer .boutique-section-card span{font-size:11px;padding:7px 12px}
+@media(max-width:760px){
+ html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy{inset:auto 4% 24px auto!important;top:auto!important;transform:none;width:54%!important}
+ html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) picture img{aspect-ratio:auto!important}
+ html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy h1{font-size:22px;line-height:1.45}
+}
+@media(max-width:350px){
+ html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy{bottom:18px!important}
+ html[lang="ar"] body.boutique-home .boutique-hero .pink-hero-link:not(.hero-image-only) .boutique-hero-copy h1{font-size:20px}
+}
+</style>
 </head><body class="pink-home boutique-home">
 <a class="skip-link" href="#main">انتقل للمحتوى</a>
 <header class="pink-header"><div class="pink-header-row">
