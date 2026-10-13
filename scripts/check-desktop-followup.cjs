@@ -24,7 +24,12 @@ const assert=require('node:assert/strict');
   assert.equal(await cards.count(),4);assert.equal(await page.locator('#homeCategories h2').textContent(),lang==='tr'?'Kategoriler':'الأقسام');
   for(const card of await cards.all()){
    assert.equal(await card.isVisible(),true);const fit=await card.locator('img').evaluate(img=>getComputedStyle(img).objectFit);assert.equal(fit,'contain');
-   const image=await card.locator('img').boundingBox(),copy=await card.locator('div').boundingBox();assert.ok(image.y+image.height<=copy.y+1,'category text overlaps image');
+   const image=await card.locator('img').boundingBox(),copy=await card.locator('div').boundingBox(),frame=await card.boundingBox();
+   if(lang==='ar'){
+    assert.ok(copy.y<image.y+image.height&&copy.y+copy.height>image.y,'Arabic homepage text must overlay the artwork');
+    assert.ok(copy.x>=frame.x-1&&copy.x+copy.width<=frame.x+frame.width+1&&copy.y>=frame.y-1&&copy.y+copy.height<=frame.y+frame.height+1,'Arabic text stays inside its banner');
+    assert.equal(await card.locator('p').isVisible(),true);assert.equal(await card.locator('span').isVisible(),true);
+   }else{assert.ok(image.y+image.height<=copy.y+1,'Turkish category text stays below image');}
   }
   assert.equal(await page.locator('.pink-hero picture img').evaluate(img=>getComputedStyle(img).objectFit),'contain','hero art must not crop');
   await page.locator(width>760?'.boutique-desktop-links [data-open-categories]':'.boutique-menu').click();assert.equal(await page.locator('#homeCategoryDrawer .boutique-section-card').count(),snapshot.categories.filter(c=>c.key!=='all').length);if(lang==='tr')assert.match(await page.locator('#homeCategoryDrawer [data-art-role="printing"] img').first().getAttribute('src'),/boutique-print-tr\.webp/);const flower=page.locator('#homeCategoryDrawer [data-art-role="flowers"]').first();await flower.scrollIntoViewIfNeeded();await flower.locator('img').evaluate(image=>image.decode());const ratio=await flower.locator('img').evaluate(image=>{const rect=image.getBoundingClientRect();return {shown:rect.width/rect.height,natural:image.naturalWidth/image.naturalHeight};});assert.ok(Math.abs(ratio.shown-ratio.natural)<0.02,'flower image must use its own aspect ratio');await flower.screenshot({path:'/tmp/og-desktop-followup/flower-fit-'+lang+'-'+width+'.png'});await page.locator('[data-close-categories]').click();
