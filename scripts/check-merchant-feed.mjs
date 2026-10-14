@@ -18,3 +18,12 @@ test('availability reflects stock and localized name and image are used',()=>{
  const result=merchantFeed([{...product,stockQuantity:0,imageUrlAr:'/ar.webp',storefront:{nameAr:'كوب عربي',descriptionAr:'وصف عربي'}}]);
  assert.match(result.xml,/<g:availability>out_of_stock/);assert.match(result.xml,/<g:title>كوب عربي/);assert.match(result.xml,/https:\/\/api.onlinegiftis.com\/ar.webp/);
 });
+test('Turkish feed uses Turkish content, image and explicit language links',()=>{
+ const localized={...product,imageUrlTr:'/tr.webp',seoImage:{url:'https://onlinegiftis.com/ar-only.webp'},storefront:{nameAr:'كوب عربي',nameTr:'İsimli kupa',descriptionTr:'Kişiye özel kupa'}};
+ const tr=merchantFeed([localized],'tr');
+ assert.equal(tr.count,1);assert.match(tr.xml,/<g:title>İsimli kupa/);assert.match(tr.xml,/<g:description>Kişiye özel kupa/);assert.match(tr.xml,/https:\/\/api.onlinegiftis.com\/tr.webp/);assert.match(tr.xml,/\/products\/72\/\?lang=tr/);assert.doesNotMatch(tr.xml,/ar-only.webp/);
+ assert.match(merchantFeed([localized],'ar').xml,/\/products\/72\/\?lang=ar/);
+ assert.equal(merchantFeed([{...localized,storefront:{nameAr:'كوب'}}],'tr').count,0);
+ assert.equal(merchantFeed([{...localized,imageUrlTr:null}],'tr').count,0);
+ assert.equal(merchantFeed([{...localized,storefront:{nameAr:'أراكيل',nameTr:'Lüks ürün'}}],'tr').count,0);
+});

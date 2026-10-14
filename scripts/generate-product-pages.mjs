@@ -203,7 +203,9 @@ console.log('Generated '+products.length+' product SEO pages, '+imageRows.length
 
 
 // Use the same public retail snapshot as the SEO pages. No database writes.
-const merchant = merchantFeed(products);
 mkdirSync('feeds',{recursive:true});
-writeFileSync('feeds/google-products-ar.xml',merchant.xml);
-console.log('Merchant feed: '+merchant.count+' products; skipped '+JSON.stringify(merchant.skipped));
+for (const lang of ['ar','tr']) {
+  const merchant = merchantFeed(products,lang);
+  writeFileSync('feeds/google-products-'+lang+'.xml',merchant.xml);
+  console.log('Merchant feed '+lang+': '+merchant.count+' products; skipped '+JSON.stringify(merchant.skipped));
+}
