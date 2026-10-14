@@ -90,7 +90,7 @@
   if(trusts[1])trusts[1].textContent=txt('تغليف مرتب','Özenli paketleme');
   if(trusts[2])trusts[2].textContent=txt('توصيل داخل تركيا','Türkiye içi teslimat');
   const wa=document.querySelector('.actions .whatsapp');if(wa)wa.href=WA;
-  const actions=document.querySelector('.nav-actions');if(actions&&!actions.querySelector('.language-switch')){const link=document.createElement('a');link.className='language-switch';link.href='/products/detail/?id='+id+'&lang='+(currentLang==='tr'?'ar':'tr');link.textContent=currentLang==='tr'?'العربية':'Türkçe';actions.append(link)}
+  const actions=document.querySelector('.nav-actions');if(actions&&!actions.querySelector('.language-switch')){const link=document.createElement('a');link.className='language-switch';link.href='/products/'+encodeURIComponent(String(id))+'/?lang='+(currentLang==='tr'?'ar':'tr');link.textContent=currentLang==='tr'?'العربية':'Türkçe';actions.append(link)}
  }
  function renderGallery(p){
   const media=document.querySelector('.media');if(!media)return;
