@@ -1,5 +1,6 @@
 import { rmSync, mkdirSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { merchantFeed } from './merchant-feed.mjs';
 
 import '../assets/themes.js';
 const {info:themeInfo,list:categoryList,productCategory}=globalThis.OGThemes;
@@ -200,3 +201,9 @@ writeFileSync('image-sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urls
 console.log('Generated '+products.length+' product SEO pages, '+imageRows.length+' same-domain product images, sitemap.xml and image-sitemap.xml.');
 
 
+
+// Use the same public retail snapshot as the SEO pages. No database writes.
+const merchant = merchantFeed(products);
+mkdirSync('feeds',{recursive:true});
+writeFileSync('feeds/google-products-ar.xml',merchant.xml);
+console.log('Merchant feed: '+merchant.count+' products; skipped '+JSON.stringify(merchant.skipped));
