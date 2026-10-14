@@ -23,7 +23,7 @@
     const name=localizedName(p),description=localizedDescription(p);
     const image=p.hasImage?API+p.imageUrl:'';
     const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişim');
-    const href='/products/detail/?id='+p.id+(lang==='tr'?'&lang=tr':'');
+    const href='/products/'+encodeURIComponent(String(p.id))+'/'+(lang==='tr'?'?lang=tr':'');
     return '<article class="card"><div class="media">'+
      (image?'<img '+OGImages.product(p,'(max-width: 760px) 90vw, 300px')+' alt="'+esc(name)+'" loading="lazy" decoding="async">':'')+
      '</div><div class="body"><div class="name">'+esc(name)+'</div><div class="desc">'+esc(description)+'</div><div class="price">'+price+
