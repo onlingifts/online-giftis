@@ -7,6 +7,7 @@ const API = process.env.STOREFRONT_API || 'https://api.onlinegiftis.com/api/stor
 const SITE = 'https://onlinegiftis.com';
 const BACKEND = 'https://api.onlinegiftis.com';
 const IMAGE_DIR = 'product-images';
+const ARABIC_BRAND = 'اونلاين للهدايا';
 const today = new Date().toISOString().slice(0,10);
 // Product SEO pages always mirror the current independent retail catalog.
 
@@ -16,7 +17,7 @@ function money(v){return new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}
 function productUrl(p){return SITE+'/products/'+p.id+'/'}
 function dynamicImage(p){return p.hasImage && p.imageUrl ? BACKEND+p.imageUrl : SITE+'/assets/cover-new.webp'}
 function absImage(p){return p.seoImage?.url || SITE+'/assets/cover-new.webp'}
-function imageAlt(p){return clean(p.name)+' - Online Gifts'}
+function imageAlt(p){return clean(p.name)+' - '+ARABIC_BRAND}
 function safeToken(v=''){
   return String(v).normalize('NFKD').toLowerCase()
     .replace(/[\u0300-\u036f]/g,'')
@@ -76,22 +77,45 @@ async function syncProductImage(p){
     if(previous)rmSync(join(IMAGE_DIR,previous.file),{force:true});return null;
   }
 }
+
+function productImagesFor(p){
+  const urls=[];
+  if(p.seoImage?.url) urls.push(p.seoImage.url);
+  else if(p.hasImage&&p.imageUrl) urls.push(new URL(p.imageUrl,BACKEND).href);
+  for(const image of p.storefront?.gallery||[]){
+    if(image.imageUrl&&image.imageUrl!==p.imageUrl) urls.push(new URL(image.imageUrl,BACKEND).href);
+  }
+  return [...new Set(urls)];
+}
+function webPageSchemaFor(p){
+  const image=productImagesFor(p)[0];
+  return JSON.stringify({
+    '@context':'https://schema.org','@type':'WebPage',
+    '@id':productUrl(p)+'#webpage',url:productUrl(p),
+    name:p.name+' | '+ARABIC_BRAND,inLanguage:'ar',
+    isPartOf:{'@id':SITE+'/#website'},mainEntity:{'@id':productUrl(p)+'#product'},
+    ...(image?{primaryImageOfPage:{'@type':'ImageObject',contentUrl:image,url:image,caption:p.name}}:{})
+  }).replace(/</g,'\\u003c');
+}
+
 function descriptionFor(p){
   const d=clean(p.description);
   const core=d||('صفحة '+p.name+' من Online Gifts تعرض معلومات المنتج والسعر والمخزون وخيارات الطلب الحالية داخل تركيا.');
-  return core.slice(0,155);
+  return ARABIC_BRAND+': '+core.slice(0,155);
 }
 function schemaFor(p){
   const image=absImage(p);
   const s={
     '@context':'https://schema.org',
     '@type':'Product',
+    '@id':productUrl(p)+'#product',
+    mainEntityOfPage:{'@id':productUrl(p)+'#webpage'},
     name:p.name,
     description:clean(p.description)||p.name,
     sku:p.sku||String(p.id),
-    image:[image],
+    ...(productImagesFor(p).length?{image:productImagesFor(p)}:{}),
     url:productUrl(p),
-    brand:{'@type':'Brand',name:'Online Gifts'}
+    brand:{'@type':'Brand',name:'Online Gifts',alternateName:ARABIC_BRAND}
   };
   if(p.price!==null && Number(p.price)>0){
     s.offers={
@@ -101,13 +125,13 @@ function schemaFor(p){
       price:Number(p.price),
       availability:p.stockQuantity>0?'https://schema.org/InStock':'https://schema.org/OutOfStock',
       itemCondition:'https://schema.org/NewCondition',
-      seller:{'@type':'Organization',name:'Online Gifts'}
+      seller:{'@type':'Organization','@id':SITE+'/#store',name:'Online Gifts',alternateName:ARABIC_BRAND}
     };
   }
   return JSON.stringify(s).replace(/</g,'\\u003c');
 }
 function pageFor(p){
-  const title=('شراء '+p.name+' في تركيا | Online Gifts').slice(0,65);
+  const title='شراء '+p.name+' في تركيا | '+ARABIC_BRAND;
   const desc=descriptionFor(p);
   const image=absImage(p);
   const alt=imageAlt(p);
@@ -117,7 +141,7 @@ function pageFor(p){
   const imageHead=p.seoImage
     ? '<link rel="preload" as="image" href="'+image+'"><link rel="image_src" href="'+image+'">'
     : '';
-  return `<!doctype html><html lang="ar" dir="rtl" data-theme="${themeInfo(productCategory(p)).theme}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><meta name="robots" content="${p.storefront?.indexable===false?'noindex,follow':'index,follow,max-image-preview:large'}"><meta name="googlebot" content="${p.storefront?.indexable===false?'noindex,follow':'index,follow,max-image-preview:large'}"><link rel="canonical" href="${productUrl(p)}">${imageHead}<meta property="og:type" content="product"><meta property="og:title" content="${esc(p.name)} | Online Gifts"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${productUrl(p)}"><meta property="og:image" content="${image}"><meta property="og:image:secure_url" content="${image}"><meta property="og:image:alt" content="${esc(alt)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.name)} | Online Gifts"><meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${image}"><meta name="twitter:image:alt" content="${esc(alt)}"><meta property="product:price:currency" content="TRY">${p.price!==null?'<meta property="product:price:amount" content="'+Number(p.price)+'">':''}<link rel="preconnect" href="https://api.onlinegiftis.com"><link rel="stylesheet" href="/assets/store-fonts.css"><link rel="stylesheet" href="/assets/product-page.css?v=20261008-catalog1"><link rel="stylesheet" href="/assets/themes.css?v=20261010-colors1"><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261013-banner-fit1"><script type="application/ld+json">${schemaFor(p)}</script><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script></head><body data-product-id="${p.id}" data-product-categories="${esc(JSON.stringify(categoryList(p)))}"><script src="/assets/boutique-presentation.js?v=20261012-desktop2"></script><script src="/assets/themes.js?v=20261010-colors1"></script><header class="header"><div class="container nav"><a class="brand" href="/"><img src="/assets/brand-logo.webp" alt="Online Gifts"><div><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></div></a><div class="nav-actions"><a class="store" href="/products/"><i class="fa-solid fa-store"></i> كل المنتجات</a><a class="wa" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> واتساب</a></div></div></header><main><div class="container crumb"><a href="/">الرئيسية</a> / <a href="/products/">المنتجات</a> / ${esc(p.name)}</div><section class="product"><div class="container product-grid"><div class="media">${p.seoImage?'<img src="'+image+'" alt="'+esc(alt)+'" itemprop="image" decoding="async" fetchpriority="high">':'<div class="no-image"><i class="fa-solid fa-gift"></i></div>'}</div><article class="info">${p.isFeatured?'<span class="badge">الأكثر طلباً</span>':''}<h1>${esc(p.name)}</h1><div class="sku">SKU: ${esc(p.sku||String(p.id))}</div><p class="desc">${esc(clean(p.description)||'منتج من Online Gifts يمكن طلبه حسب حالة المخزون وخيارات التخصيص المتاحة.')}</p><div class="price" id="livePrice">${price}</div><div class="stock" id="liveStock">${stock}</div><div class="product-options"><a href="/products/?category=${encodeURIComponent(productCategory(p))}">${esc(themeInfo(productCategory(p)).ar)}</a><span data-ar="${esc((p.requiresCustomizationText?'نص مخصص · ':'')+(p.requiresCustomizationImage?'صورة مخصصة · ':'')+(p.requiresDesignInput?'تفاصيل تصميم · ':'')+(p.requiresPrepayment||p.paymentPolicy==='prepaid_only'?'دفع مسبق بالتحويل البنكي':'الدفع عند الاستلام أو التحويل البنكي'))}" data-tr="${esc((p.requiresCustomizationText?'Özel metin · ':'')+(p.requiresCustomizationImage?'Özel görsel · ':'')+(p.requiresDesignInput?'Tasarım detayları · ':'')+(p.requiresPrepayment||p.paymentPolicy==='prepaid_only'?'Banka havalesi ile ön ödeme':'Kapıda ödeme veya banka havalesi'))}">${esc((p.requiresCustomizationText?'نص مخصص · ':'')+(p.requiresCustomizationImage?'صورة مخصصة · ':'')+(p.requiresDesignInput?'تفاصيل تصميم · ':'')+(p.requiresPrepayment||p.paymentPolicy==='prepaid_only'?'دفع مسبق بالتحويل البنكي':'الدفع عند الاستلام أو التحويل البنكي'))}</span></div><div class="actions"><button class="buy" id="buyBtn" type="button" ${p.orderable?'':'disabled'}>${p.orderable?'<i class="fa-solid fa-bag-shopping"></i> اطلب المنتج':'غير متاح للطلب المباشر'}</button><a class="whatsapp" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a></div><div class="trust"><div><i class="fa-solid fa-palette"></i>تنفيذ حسب الطلب</div><div><i class="fa-solid fa-box"></i>تغليف مرتب</div><div><i class="fa-solid fa-truck-fast"></i>التوصيل برسوم داخل تركيا</div></div></article></div></section><section class="copy"><div class="container copy-grid"><article class="panel"><h2>عن هذا المنتج</h2><p>${esc(clean(p.description)||p.name)}</p><p>السعر والمخزون الظاهرين يتم تحديثهما من نظام Online Gifts. المنتجات المخصصة يمكن إدخال النص أو رفع الصورة والملف المطلوب من داخل سلة المتجر قبل تثبيت الطلب.</p></article><article class="panel"><h2>Online Gifts منذ 2016</h2><ul><li>تصميم وطباعة وتجهيز حسب نوع المنتج.</li><li>طباعة حرارية، حفر ليزر، طباعة 3D ومنتجات NFC.</li><li>تجهيز الطلبات والتوصيل برسوم داخل تركيا.</li><li>يمكن رفع ملفات التخصيص وإشعار التحويل مباشرة من المتجر، وللكميات الخاصة يمكن التواصل عبر واتساب.</li></ul></article></div></section></main><footer class="footer"><div class="container"><span>© Online Gifts — منذ 2016</span><span><a href="/gifts-istanbul/">هدايا في إسطنبول</a> · <a href="/custom-gifts-turkey/">هدايا مخصصة في تركيا</a></span></div></footer><script src="/assets/image-manifest.js" defer></script><script src="/assets/responsive-images.js?v=20261010-product-images1" defer></script><script src="/assets/product-design.js?v=20261008-designer1" defer></script><script src="/assets/product-page.js?v=20261012-desktop2" defer></script><script src="/assets/boutique-commerce.js?v=20261012-desktop2" defer></script></body></html>`;
+  return `<!doctype html><html lang="ar" dir="rtl" data-theme="${themeInfo(productCategory(p)).theme}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(desc)}"><meta name="robots" content="${p.storefront?.indexable===false?'noindex,follow':'index,follow,max-image-preview:large'}"><meta name="googlebot" content="${p.storefront?.indexable===false?'noindex,follow':'index,follow,max-image-preview:large'}"><link rel="canonical" href="${productUrl(p)}">${imageHead}<meta property="og:type" content="product"><meta property="og:site_name" content="${ARABIC_BRAND}"><meta property="og:title" content="${esc(p.name)} | ${ARABIC_BRAND}"><meta property="og:description" content="${esc(desc)}"><meta property="og:url" content="${productUrl(p)}"><meta property="og:image" content="${image}"><meta property="og:image:secure_url" content="${image}"><meta property="og:image:alt" content="${esc(alt)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(p.name)} | ${ARABIC_BRAND}"><meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${image}"><meta name="twitter:image:alt" content="${esc(alt)}"><meta property="product:price:currency" content="TRY">${p.price!==null?'<meta property="product:price:amount" content="'+Number(p.price)+'">':''}<link rel="preconnect" href="https://api.onlinegiftis.com"><link rel="stylesheet" href="/assets/store-fonts.css"><link rel="stylesheet" href="/assets/product-page.css?v=20261008-catalog1"><link rel="stylesheet" href="/assets/themes.css?v=20261010-colors1"><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261013-banner-fit1"><script type="application/ld+json">${schemaFor(p)}</script><script type="application/ld+json">${webPageSchemaFor(p)}</script><link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script></head><body data-product-id="${p.id}" data-product-categories="${esc(JSON.stringify(categoryList(p)))}"><script src="/assets/boutique-presentation.js?v=20261012-desktop2"></script><script src="/assets/themes.js?v=20261010-colors1"></script><header class="header"><div class="container nav"><a class="brand" href="/"><img src="/assets/brand-logo.webp" alt="Online Gifts"><div><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></div></a><div class="nav-actions"><a class="store" href="/products/"><i class="fa-solid fa-store"></i> كل المنتجات</a><a class="wa" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> واتساب</a></div></div></header><main><div class="container crumb"><a href="/">الرئيسية</a> / <a href="/products/">المنتجات</a> / ${esc(p.name)}</div><section class="product"><div class="container product-grid"><div class="media">${p.seoImage?'<img src="'+image+'" alt="'+esc(alt)+'" itemprop="image" decoding="async" fetchpriority="high">':'<div class="no-image"><i class="fa-solid fa-gift"></i></div>'}</div><article class="info">${p.isFeatured?'<span class="badge">الأكثر طلباً</span>':''}<h1>${esc(p.name)}</h1><div class="sku">SKU: ${esc(p.sku||String(p.id))}</div><p class="desc">${esc(clean(p.description)||'منتج من Online Gifts يمكن طلبه حسب حالة المخزون وخيارات التخصيص المتاحة.')}</p><div class="price" id="livePrice">${price}</div><div class="stock" id="liveStock">${stock}</div><div class="product-options"><a href="/products/?category=${encodeURIComponent(productCategory(p))}">${esc(themeInfo(productCategory(p)).ar)}</a><span data-ar="${esc((p.requiresCustomizationText?'نص مخصص · ':'')+(p.requiresCustomizationImage?'صورة مخصصة · ':'')+(p.requiresDesignInput?'تفاصيل تصميم · ':'')+(p.requiresPrepayment||p.paymentPolicy==='prepaid_only'?'دفع مسبق بالتحويل البنكي':'الدفع عند الاستلام أو التحويل البنكي'))}" data-tr="${esc((p.requiresCustomizationText?'Özel metin · ':'')+(p.requiresCustomizationImage?'Özel görsel · ':'')+(p.requiresDesignInput?'Tasarım detayları · ':'')+(p.requiresPrepayment||p.paymentPolicy==='prepaid_only'?'Banka havalesi ile ön ödeme':'Kapıda ödeme veya banka havalesi'))}">${esc((p.requiresCustomizationText?'نص مخصص · ':'')+(p.requiresCustomizationImage?'صورة مخصصة · ':'')+(p.requiresDesignInput?'تفاصيل تصميم · ':'')+(p.requiresPrepayment||p.paymentPolicy==='prepaid_only'?'دفع مسبق بالتحويل البنكي':'الدفع عند الاستلام أو التحويل البنكي'))}</span></div><div class="actions"><button class="buy" id="buyBtn" type="button" ${p.orderable?'':'disabled'}>${p.orderable?'<i class="fa-solid fa-bag-shopping"></i> اطلب المنتج':'غير متاح للطلب المباشر'}</button><a class="whatsapp" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i></a></div><div class="trust"><div><i class="fa-solid fa-palette"></i>تنفيذ حسب الطلب</div><div><i class="fa-solid fa-box"></i>تغليف مرتب</div><div><i class="fa-solid fa-truck-fast"></i>التوصيل برسوم داخل تركيا</div></div></article></div></section><section class="copy"><div class="container copy-grid"><article class="panel"><h2>عن هذا المنتج</h2><p>${esc(clean(p.description)||p.name)}</p><p>السعر والمخزون الظاهرين يتم تحديثهما من نظام Online Gifts. المنتجات المخصصة يمكن إدخال النص أو رفع الصورة والملف المطلوب من داخل سلة المتجر قبل تثبيت الطلب.</p></article><article class="panel"><h2>${ARABIC_BRAND} · Online Gifts منذ 2016</h2><ul><li>تصميم وطباعة وتجهيز حسب نوع المنتج.</li><li>طباعة حرارية، حفر ليزر، طباعة 3D ومنتجات NFC.</li><li>تجهيز الطلبات والتوصيل برسوم داخل تركيا.</li><li>يمكن رفع ملفات التخصيص وإشعار التحويل مباشرة من المتجر، وللكميات الخاصة يمكن التواصل عبر واتساب.</li></ul></article></div></section></main><footer class="footer"><div class="container"><span>© ${ARABIC_BRAND} · Online Gifts — منذ 2016</span><span><a href="/gifts-istanbul/">هدايا في إسطنبول</a> · <a href="/custom-gifts-turkey/">هدايا مخصصة في تركيا</a></span></div></footer><script src="/assets/image-manifest.js" defer></script><script src="/assets/responsive-images.js?v=20261010-product-images1" defer></script><script src="/assets/product-design.js?v=20261008-designer1" defer></script><script src="/assets/product-page.js?v=20261014-brand-images1" defer></script><script src="/assets/boutique-commerce.js?v=20261012-desktop2" defer></script></body></html>`;
 }
 
 const res=await fetch(API,{headers:{accept:'application/json'},signal:AbortSignal.timeout(30000)});
@@ -159,10 +183,7 @@ const staticUrls=[
   [SITE+'/marketer.html',0.4,'monthly']
 ];
 const productSitemapRows=products.filter(p=>p.storefront?.indexable!==false&&p.storefront?.includeInSitemap!==false).map(p=>{
-  const image=p.seoImage?.url;
-  const imageXml=image
-    ? '<image:image><image:loc>'+esc(image)+'</image:loc></image:image>'
-    : '';
+  const imageXml=productImagesFor(p).map(image=>'<image:image><image:loc>'+esc(image)+'</image:loc></image:image>').join('');
   return '  <url><loc>'+productUrl(p)+'</loc><lastmod>'+today+'</lastmod><changefreq>daily</changefreq><priority>0.8</priority>'+imageXml+'</url>';
 });
 const urls=[
@@ -171,8 +192,8 @@ const urls=[
 ];
 writeFileSync('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'+urls.join('\n')+'\n</urlset>\n');
 
-const imageRows=products.filter(p=>p.seoImage?.url&&p.storefront?.indexable!==false&&p.storefront?.includeInSitemap!==false).map(p=>
-  '  <url><loc>'+productUrl(p)+'</loc><image:image><image:loc>'+esc(p.seoImage.url)+'</image:loc></image:image></url>'
+const imageRows=products.filter(p=>productImagesFor(p).length&&p.storefront?.indexable!==false&&p.storefront?.includeInSitemap!==false).map(p=>
+  '  <url><loc>'+productUrl(p)+'</loc>'+productImagesFor(p).map(image=>'<image:image><image:loc>'+esc(image)+'</image:loc></image:image>').join('')+'</url>'
 );
 writeFileSync('image-sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'+imageRows.join('\n')+'\n</urlset>\n');
 
