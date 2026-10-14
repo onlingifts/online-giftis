@@ -184,6 +184,7 @@ const staticUrls=[
   [SITE+'/tr/gaziantep-hediye/',0.8,'weekly'],
   [SITE+'/tr/konya-hediye/',0.8,'weekly'],
   [SITE+'/tr/bursa-hediye/',0.8,'weekly'],
+  [SITE+'/en/send-gifts-turkey/',0.8,'weekly'],
   [SITE+'/custom-gifts-turkey/',0.9,'weekly'],
   [SITE+'/tr/istanbul-hediye/',0.9,'weekly'],
   [SITE+'/tr/kisiye-ozel-hediye/',0.9,'weekly'],
