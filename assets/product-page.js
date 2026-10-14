@@ -52,7 +52,7 @@
     const h=panels[1].querySelector('h2');if(h)h.textContent='Online Gifts · 2016’dan beri';
     const ul=panels[1].querySelector('ul');if(ul)ul.innerHTML='<li>Ürüne göre kişiye özel tasarım, baskı ve hazırlık.</li><li>Transfer baskı, lazer kazıma, 3D baskı ve NFC ürünleri.</li><li>Türkiye genelinde ücretsiz teslimat.</li><li>Özel adet ve tasarımlar için WhatsApp desteği.</li>'
    }
-   const footer=document.querySelector('.footer .container');if(footer)footer.innerHTML='<span>© Online Gifts — 2016’dan beri</span><span><a href="/tr/istanbul-hediye/">İstanbul hediyeleri</a> · <a href="/tr/kisiye-ozel-hediye/">Kişiye özel hediyeler</a></span>';
+   const footer=document.querySelector('.footer .container');if(footer)footer.innerHTML='<span>© Online Gifts — 2016’dan beri</span><span><a href="/tr/istanbul-hediye/">İstanbul hediyeleri</a> · <a href="/tr/kisiye-ozel-hediye/">Kişiye özel hediyeler</a> · <a href="/tr/returns/">İade ve değişim politikası</a></span>';
   }
   if(currentLang==='ar'){
    const s=p.storefront||{},brand='اونلاين للهدايا';
