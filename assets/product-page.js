@@ -54,6 +54,15 @@
    }
    const footer=document.querySelector('.footer .container');if(footer)footer.innerHTML='<span>© Online Gifts — 2016’dan beri</span><span><a href="/tr/istanbul-hediye/">İstanbul hediyeleri</a> · <a href="/tr/kisiye-ozel-hediye/">Kişiye özel hediyeler</a></span>';
   }
+  if(currentLang==='ar'){
+   const s=p.storefront||{},brand='اونلاين للهدايا';
+   const rawTitle=String(s.seoTitleAr||name||'تفاصيل المنتج').replace(/Online Gifts(?: Türkiye)?/gi,brand).replace(/أونلاين للهدايا|اون لاين للهدايا/g,brand);
+   document.title=rawTitle.includes(brand)?rawTitle:rawTitle+' | '+brand;
+   const rawDescription=s.metaDescriptionAr||description||name;
+   const brandedDescription=String(rawDescription).includes(brand)?rawDescription:brand+': '+rawDescription;
+   for(const selector of ['meta[name="description"]','meta[property="og:description"]','meta[name="twitter:description"]']){const meta=document.querySelector(selector);if(meta)meta.content=brandedDescription;}
+   for(const selector of ['meta[property="og:title"]','meta[name="twitter:title"]']){const meta=document.querySelector(selector);if(meta)meta.content=document.title;}
+  }
   setText('.info h1',name);
   setText('.info .desc',description);const desc=document.querySelector('.info .desc');if(desc)desc.hidden=!description;
   const media=document.querySelector('.media img');if(media)media.alt=name;

@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#16110f">
-<title>منتجات Online Gifts | هدايا مخصصة في تركيا</title>
-<meta name="description" content="تصفح منتجات Online Gifts: هدايا مخصصة، طباعة، ليزر، 3D ومنتجات NFC مع أسعار ومخزون مباشر وطلب داخل تركيا.">
+<title>منتجات اونلاين للهدايا | هدايا مخصصة في تركيا</title>
+<meta name="description" content="اونلاين للهدايا: تصفح منتجات Online Gifts: هدايا مخصصة، طباعة، ليزر، 3D ومنتجات NFC مع أسعار ومخزون مباشر وطلب داخل تركيا.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://onlinegiftis.com/products/">
 <link rel="alternate" hreflang="ar-TR" href="https://onlinegiftis.com/">
 <link rel="alternate" hreflang="tr-TR" href="https://onlinegiftis.com/tr/">
 <link rel="alternate" hreflang="x-default" href="https://onlinegiftis.com/">
-<meta property="og:title" content="هدايا في تركيا وإسطنبول | Online Gifts">
-<meta property="og:description" content="هدايا مخصصة في إسطنبول وتركيا منذ 2016: طباعة، ليزر، 3D ومنتجات NFC مع تجهيز وشحن داخل تركيا.">
+<meta property="og:title" content="هدايا في تركيا وإسطنبول | اونلاين للهدايا">
+<meta property="og:description" content="اونلاين للهدايا: هدايا مخصصة في إسطنبول وتركيا منذ 2016: طباعة، ليزر، 3D ومنتجات NFC مع تجهيز وشحن داخل تركيا.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://onlinegiftis.com/products/">
 <meta property="og:image" content="https://onlinegiftis.com/assets/cover-new.webp">
@@ -1101,7 +1101,7 @@ function applyLanguage(l){
  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:productName(p)}:x});saveCart();
  refreshLocationLabels();
  renderCategories();renderProducts();renderCart();window.dispatchEvent(new CustomEvent('og-catalog-ready',{detail:{products:state.products,categories:Object.values(state.categoryMeta)}}));renderPayment();renderAccount()
- document.title=l==='tr'?'Ürünler | Online Gifts Türkiye':'منتجات Online Gifts | هدايا مخصصة في تركيا';
+ document.title=l==='tr'?'Ürünler | Online Gifts Türkiye':'منتجات اونلاين للهدايا | هدايا مخصصة في تركيا';
  $('navCart').setAttribute('aria-label',txt('سلة التسوق','Alışveriş sepeti'));
  document.querySelectorAll('.footer-links a').forEach(a=>{const href=a.getAttribute('href');if(href.startsWith('/track/'))a.href=l==='tr'?'/track/?lang=tr':'/track/';if(href.includes('#how-it-works'))a.href=l==='tr'?'/tr/#how-it-works':'/#how-it-works'});
 }
