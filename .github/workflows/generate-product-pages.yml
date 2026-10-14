@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - "scripts/generate-product-pages.mjs"
+      - "scripts/merchant-feed.mjs"
       - "assets/themes.js"
       - "assets/themes.css"
       - "assets/product-page.css"
@@ -47,6 +48,9 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Validate merchant feed
+        run: node --test scripts/check-merchant-feed.mjs
+
       - name: Generate product pages
         run: node scripts/generate-product-pages.mjs
 
@@ -59,7 +63,7 @@ jobs:
         run: |
           git config user.name "online-gifts-seo-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A products product-images assets/previews assets/image-manifest.js index.html sitemap.xml image-sitemap.xml
+          git add -A feeds products product-images assets/previews assets/image-manifest.js index.html sitemap.xml image-sitemap.xml
           if git diff --cached --quiet; then
             echo "No product SEO changes to commit."
             exit 0

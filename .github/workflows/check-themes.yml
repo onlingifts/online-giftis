@@ -20,6 +20,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '24'
+      - run: node --test scripts/check-merchant-feed.mjs
       - run: node scripts/check-themes.mjs
       - run: node scripts/check-wheel-static.mjs
       - run: node --test scripts/check-auth.mjs scripts/check-home-categories.mjs scripts/check-home-layout.mjs scripts/check-home-banners.mjs
