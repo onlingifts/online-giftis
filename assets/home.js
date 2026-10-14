@@ -7,7 +7,7 @@
  const txt=(ar,tr)=>language==='tr'?tr:ar;
  const name=p=>language==='tr'?(p.storefront?.nameTr||p.name):(p.storefront?.nameAr||p.name);
  const productImage=p=>language==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
- const href=id=>'/products/detail/?id='+id+(language==='tr'?'&lang=tr':'');
+ const href=id=>'/products/'+encodeURIComponent(String(id))+'/'+(language==='tr'?'?lang=tr':'');
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
  const colorKeys=['bg','surface','primary','secondary','text','muted','accent','onPrimary'];
