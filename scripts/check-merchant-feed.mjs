@@ -27,3 +27,19 @@ test('Turkish feed uses Turkish content, image and explicit language links',()=>
  assert.equal(merchantFeed([{...localized,imageUrlTr:null}],'tr').count,0);
  assert.equal(merchantFeed([{...localized,storefront:{nameAr:'أراكيل',nameTr:'Lüks ürün'}}],'tr').count,0);
 });
+
+test('exclude perfume and hookah category tags in both languages without relying on names',()=>{
+ const localized={...product,imageUrlTr:'/tr.webp',storefront:{nameAr:'منتج فاخر',descriptionAr:'وصف',nameTr:'Lüks ürün',descriptionTr:'Ürün açıklaması'}};
+ for(const lang of ['ar','tr']){
+  for(const fields of [{category:'perfumes_accessories'},{categories:['thermal']},{storefront:{...localized.storefront,storeCategories:['perfumes_accessories']}}]){
+   const r=merchantFeed([{...localized,...fields}],lang);assert.equal(r.count,0);assert.equal(r.skipped[0].reason,'excluded perfume or hookah');
+  }
+  const accessories=merchantFeed([{...localized,categories:['cat_bb6c6aa1-4628-457f-a482-639e011bc174']}],lang);assert.equal(accessories.count,1);
+ }
+});
+test('exclude newly named perfumes and incomplete Turkish descriptions',()=>{
+ const localized={...product,imageUrlTr:'/tr.webp',storefront:{nameAr:'هدية',descriptionAr:'وصف',nameTr:'Parfüm hediyesi',descriptionTr:'Ürün açıklaması'}};
+ for(const lang of ['ar','tr'])assert.equal(merchantFeed([localized],lang).count,0);
+ assert.equal(merchantFeed([{...localized,storefront:{nameAr:'هدية',descriptionAr:'وصف',nameTr:'Hediye'}}],'tr').count,0);
+ assert.equal(merchantFeed([{...product,stockQuantity:null}]).count,0);
+});

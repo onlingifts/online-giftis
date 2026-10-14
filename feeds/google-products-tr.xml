@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"><channel>
+<rss version="2.0" xml:lang="tr" xmlns:g="http://base.google.com/ns/1.0"><channel>
 <title>Online Gifts</title><link>https://onlinegiftis.com/</link><description>Türkiye için Türkçe mağaza ürünleri</description>
     <item>
       <g:id>110</g:id>
@@ -74,33 +74,6 @@
       <g:price>850.00 TRY</g:price>
     </item>
     <item>
-      <g:id>80</g:id>
-      <g:title>Exergov Accento</g:title>
-      <g:description>Exergov Accento</g:description>
-      <g:link>https://onlinegiftis.com/products/80/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=17&amp;v=2026-10-11%2023%3A16%3A17</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>96</g:id>
-      <g:title>Xerjoff Naxos</g:title>
-      <g:description>Xerjoff Naxos</g:description>
-      <g:link>https://onlinegiftis.com/products/96/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=33&amp;v=2026-10-11%2023%3A16%3A19</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>81</g:id>
-      <g:title>The Rebel from De Marly</g:title>
-      <g:description>The Rebel from De Marly</g:description>
-      <g:link>https://onlinegiftis.com/products/81/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=18&amp;v=2026-10-11%2023%3A16%3A17</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
       <g:id>124</g:id>
       <g:title>Kişiye Özel Fotoğraflı Puzzle kalp</g:title>
       <g:description>En güzel fotoğraflarınızı eğlenceli ve unutulmaz bir hediyeye dönüştürün! Kişiye özel fotoğraflı puzzle, seçtiğiniz fotoğrafın baskısıyla hazırlanan 240 parçalık özel bir yapbozdur. Sevdiklerinizle en güzel anılarınızı parça parça birleştirerek keyifli zaman geçirebilirsiniz. Ürün özellikleri: - İstediğiniz fotoğrafla kişiye özel baskı. - 240 parçadan oluşan puzzle. - Ölçü: 27 × 40 cm. - Sevgili, aile ve arkadaş fotoğraflarına özel tasarım. - Eğlenceli ve anlamlı hediye seçeneği. Sevgililer Günü, doğum günü, evlilik yıl dönümü, nişan, çocuklara hediye ve diğer özel günler için güzel bir tercihtir. En güzel fotoğrafınızı seçin, anılarınızı 240 parçalık özel bir hediyeye dönüştürün!</g:description>
@@ -108,15 +81,6 @@
       <g:image_link>https://api.onlinegiftis.com/api/store/products/image?id=124&amp;lang=tr&amp;v=2026-10-13T12%3A52%3A01.552Z</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>950.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>82</g:id>
-      <g:title>White Rouge Buffing Wheels</g:title>
-      <g:description>White Rouge Buffing Wheels</g:description>
-      <g:link>https://onlinegiftis.com/products/82/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=19&amp;v=2026-10-11%2023%3A16%3A17</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
     </item>
     <item>
       <g:id>104</g:id>
@@ -164,15 +128,6 @@
       <g:price>999.00 TRY</g:price>
     </item>
     <item>
-      <g:id>83</g:id>
-      <g:title>Bulgari Tygar</g:title>
-      <g:description>Bulgari Tygar</g:description>
-      <g:link>https://onlinegiftis.com/products/83/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=20&amp;v=2026-10-11%2023%3A16%3A17</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
       <g:id>99</g:id>
       <g:title>Aşk Dolu Evimiz Dekoratif Anahtarlık Askılığı</g:title>
       <g:description>Evinize sevgi ve şıklık katın! Arapça dua yazılı dekoratif duvar tipi anahtar askılığı, siyah zemin üzerine kırmızı kabartma detayları ve iki anahtarlık bölümüyle ev dekorasyonuna zarif bir dokunuş sunar. Yeni ev hediyesi, evlilik, nişan ve yıl dönümü gibi özel günler için anlamlı bir hediye seçeneğidir. Sevgi dolu evlere özel dekoratif ve kullanışlı bir hediye!</g:description>
@@ -180,24 +135,6 @@
       <g:image_link>https://api.onlinegiftis.com/api/store/products/image?id=99&amp;lang=tr&amp;v=2026-10-13T10%3A43%3A13.551Z</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>699.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>92</g:id>
-      <g:title>Tiziana Terenzi Tyl</g:title>
-      <g:description>Tiziana Terenzi Tyl</g:description>
-      <g:link>https://onlinegiftis.com/products/92/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=29&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>84</g:id>
-      <g:title>Tiziana Terenzi Halei</g:title>
-      <g:description>Tiziana Terenzi Halei</g:description>
-      <g:link>https://onlinegiftis.com/products/84/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=21&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
     </item>
     <item>
       <g:id>125</g:id>
@@ -218,24 +155,6 @@
       <g:price>845.00 TRY</g:price>
     </item>
     <item>
-      <g:id>85</g:id>
-      <g:title>Jean Paul Gaultier Le Elixir</g:title>
-      <g:description>Jean Paul Gaultier Le Elixir</g:description>
-      <g:link>https://onlinegiftis.com/products/85/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=22&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>86</g:id>
-      <g:title>Ganboul Lomal La Parfum</g:title>
-      <g:description>Ganboul Lomal La Parfum</g:description>
-      <g:link>https://onlinegiftis.com/products/86/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=23&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
       <g:id>105</g:id>
       <g:title>Kişiye Özel Yazılı Gümüş Yüzük</g:title>
       <g:description>İstediğiniz isim, özel söz veya anlamlı bir mesajla kişiselleştirebileceğiniz şık gümüş yüzük! Zarif işlemeleri ve özel yazı tasarımıyla dikkat çeken bu yüzük, sevdiklerinize unutulmaz bir hediye sunmanızı sağlar. Sevgi sözcükleri, isimler, dualar veya özel tarihlerle hazırlanabilen tasarımı sayesinde tamamen size özel bir hatıra oluşturabilirsiniz. Doğum günü, yıl dönümü, nişan ve özel günler için anlamlı bir hediye seçeneğidir. Kendi sözünüzü seçin, hikâyenizi yüzüğünüze taşıyın!</g:description>
@@ -245,24 +164,6 @@
       <g:price>2200.00 TRY</g:price>
     </item>
     <item>
-      <g:id>95</g:id>
-      <g:title>Delina Exclusif</g:title>
-      <g:description>Delina Exclusif</g:description>
-      <g:link>https://onlinegiftis.com/products/95/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=32&amp;v=2026-10-11%2023%3A16%3A19</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>93</g:id>
-      <g:title>So Scandal</g:title>
-      <g:description>So Scandal</g:description>
-      <g:link>https://onlinegiftis.com/products/93/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=30&amp;v=2026-10-11%2023%3A16%3A19</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
       <g:id>75</g:id>
       <g:title>Göz Gravürlü Gümüş Bileklik</g:title>
       <g:description>Sevdiğiniz kişinin gözlerini her zaman yanınızda taşıyın! Kişiye özel göz gravürlü gümüş bileklik, seçtiğiniz göz fotoğrafından ilham alınarak hazırlanan özel tasarımıyla anlamlı ve romantik bir hediye seçeneğidir. Sevdiğiniz kişinin gözlerinin detayları bilekliğe özel olarak işlenerek size ait unutulmaz bir hatıraya dönüşür. Sevgiliye, eşe, doğum günü, Sevgililer Günü, evlilik yıl dönümü ve özel günler için zarif bir hediye seçeneğidir. Bazı bakışlar unutulmaz… Sevdiğiniz gözleri her zaman yanınızda taşıyın!</g:description>
@@ -270,15 +171,6 @@
       <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=10&amp;v=2026-10-11%2023%3A16%3A17</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>2200.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>87</g:id>
-      <g:title>Sospiro Vibrato</g:title>
-      <g:description>Sospiro Vibrato</g:description>
-      <g:link>https://onlinegiftis.com/products/87/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=24&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
     </item>
     <item>
       <g:id>108</g:id>
@@ -299,15 +191,6 @@
       <g:price>1100.00 TRY</g:price>
     </item>
     <item>
-      <g:id>88</g:id>
-      <g:title>Karkah</g:title>
-      <g:description>Karkah</g:description>
-      <g:link>https://onlinegiftis.com/products/88/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=25&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
       <g:id>106</g:id>
       <g:title>iPhone&apos;a Özel Baskılı Telefon Kılıfı</g:title>
       <g:description>Sadece iPhone modelleri için mevcuttur. Online Giftis ile kendi telefon kılıfınızı tasarlayın! İstediğiniz fotoğraf, isim, logo, özel yazı veya tasarımı iPhone kılıfınıza bastırarak tamamen size özel bir ürün oluşturabilirsiniz. Sevdiklerinizin fotoğrafları, çiftlere özel tasarımlar, isimler, anlamlı sözler ve kişisel logolarla telefon kılıfınızı kişiselleştirin. Doğum günü, sevgiliye hediye, yıl dönümü ve özel günler için şık ve anlamlı bir hediye seçeneğidir. Tasarımınızı gönderin, size özel iPhone kılıfınızı hazırlayalım!</g:description>
@@ -315,42 +198,6 @@
       <g:image_link>https://api.onlinegiftis.com/api/store/products/image?id=106&amp;lang=tr&amp;v=2026-10-13T10%3A58%3A04.298Z</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>550.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>89</g:id>
-      <g:title>Louis Vuitton Imagination</g:title>
-      <g:description>Louis Vuitton Imagination</g:description>
-      <g:link>https://onlinegiftis.com/products/89/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=26&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>90</g:id>
-      <g:title>Layton by Parfums de Marly</g:title>
-      <g:description>Layton by Parfums de Marly</g:description>
-      <g:link>https://onlinegiftis.com/products/90/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=27&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>91</g:id>
-      <g:title>Marc-Antoine Barrois Encelade</g:title>
-      <g:description>Marc-Antoine Barrois Encelade</g:description>
-      <g:link>https://onlinegiftis.com/products/91/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=28&amp;v=2026-10-11%2023%3A16%3A18</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>94</g:id>
-      <g:title>Marc Jacobs Decadence</g:title>
-      <g:description>Marc Jacobs Decadence</g:description>
-      <g:link>https://onlinegiftis.com/products/94/?lang=tr</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/media?id=31&amp;v=2026-10-11%2023%3A16%3A19</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>2500.00 TRY</g:price>
     </item>
     <item>
       <g:id>117</g:id>
