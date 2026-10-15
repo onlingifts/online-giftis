@@ -427,7 +427,7 @@ img{max-width:100%}
    <span class="brand-copy"><strong>Online Gifts</strong><span>PERSONALIZED GIFTS</span></span>
   </a>
   <nav class="navlinks">
-   <a href="/products/" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/send-gifts-turkey/" lang="ar">إرسال هدايا إلى جميع مدن تركيا</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a>
+   <a href="/products/" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a>
    <a href="/#how-it-works" class="trn" data-ar="طريقة الطلب" data-tr="Nasıl sipariş verilir">خدماتنا</a>
    <a href="/#about" class="trn" data-ar="عن الشركة" data-tr="Hakkımızda">عن الشركة</a>
    <a href="https://bayi.onlinegiftis.com/" class="trn" data-ar="اعمل معنا" data-tr="Bizimle çalış">اعمل معنا</a>
@@ -469,7 +469,7 @@ img{max-width:100%}
      <a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
     </div>
    </div>
-   <div><h4 class="trn" data-ar="روابط سريعة" data-tr="Hızlı bağlantılar">روابط سريعة</h4><div class="footer-links"><a href="#products" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a><a href="/#how-it-works" class="trn" data-ar="طريقة الطلب" data-tr="Nasıl sipariş verilir">خدماتنا</a><a href="https://bayi.onlinegiftis.com/" class="trn" data-ar="العمل معنا" data-tr="Bizimle çalış">العمل معنا</a><a href="/about/" class="trn" data-ar="من نحن" data-tr="Hakkımızda">من نحن</a><a href="/send-gifts-turkey/" class="trn" data-ar="إرسال الهدايا إلى جميع أنحاء تركيا" data-tr="Türkiye geneli hediye gönderimi">إرسال الهدايا إلى جميع أنحاء تركيا</a><a href="/returns/">سياسة الإرجاع والاستبدال</a><a href="/tr/returns/">İade ve değişim politikası</a><a href="/contact.vcf" download="Online-Gifts.vcf" class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişiyi kaydet">حفظ جهة الاتصال</a></div></div>
+   <div><h4 class="trn" data-ar="روابط سريعة" data-tr="Hızlı bağlantılar">روابط سريعة</h4><div class="footer-links"><a href="#products" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a><a href="/#how-it-works" class="trn" data-ar="طريقة الطلب" data-tr="Nasıl sipariş verilir">خدماتنا</a><a href="https://bayi.onlinegiftis.com/" class="trn" data-ar="العمل معنا" data-tr="Bizimle çalış">العمل معنا</a><a href="/about/" class="trn" data-ar="من نحن" data-tr="Hakkımızda" data-href-ar="/about/" data-href-tr="/tr/about/">من نحن</a><a href="/send-gifts-turkey/" class="trn" data-ar="إرسال الهدايا إلى جميع أنحاء تركيا" data-tr="Türkiye geneli hediye gönderimi">إرسال الهدايا إلى جميع أنحاء تركيا</a><a href="/returns/">سياسة الإرجاع والاستبدال</a><a href="/tr/returns/">İade ve değişim politikası</a><a href="/contact.vcf" download="Online-Gifts.vcf" class="trn" data-ar="حفظ جهة الاتصال" data-tr="Kişiyi kaydet">حفظ جهة الاتصال</a></div></div>
    <div><h4 class="trn" data-ar="تواصل معنا" data-tr="İletişim">تواصل معنا</h4><div class="footer-links"><a href="https://wa.me/message/LR3NY7SMCEM3B1/" target="_blank" rel="noopener">WhatsApp</a><a href="https://whatsapp.com/channel/0029VaaNlxi2UPBBkc38612Z" target="_blank" rel="noopener" class="trn" data-ar="قناة واتساب" data-tr="WhatsApp Kanalı">قناة واتساب</a><a href="https://g.page/r/CRAfNQ9SrlvSEAE/review" target="_blank" rel="noopener">Google Maps</a></div></div>
   </div>
   <div class="copyright"><span>© <span id="year"></span> Online Gifts</span><span class="trn" data-ar="جميع الحقوق محفوظة" data-tr="Tüm hakları saklıdır">جميع الحقوق محفوظة</span></div>
@@ -1096,6 +1096,7 @@ function applyLanguage(l){
  const nav=[...document.querySelectorAll('.navlinks a')];if(nav[0])nav[0].href=l==='tr'?'/products/?lang=tr':'/products/';if(nav[1])nav[1].href=l==='tr'?'/track/?lang=tr':'/track/';if(nav[2])nav[2].href=l==='tr'?'/tr/#how-it-works':'/#how-it-works';if(nav[3])nav[3].href=l==='tr'?'/tr/#about':'/#about';
  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
  document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
+ document.querySelectorAll('[data-href-ar][data-href-tr]').forEach(el=>{el.href=l==='tr'?el.dataset.hrefTr:el.dataset.hrefAr});
  document.querySelectorAll('.trn-placeholder').forEach(el=>{el.placeholder=el.dataset[l+'Placeholder']||el.placeholder});
  try{localStorage.setItem('og_lang',l)}catch{}
  state.cart=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return p?{...x,name:productName(p)}:x});saveCart();
