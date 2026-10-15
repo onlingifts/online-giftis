@@ -42,3 +42,57 @@
 @media(prefers-reduced-motion:reduce){.og-category-rail{scroll-behavior:auto}.og-moving-card{transition:none}}
 
 .home-all-categories .og-discount-shortcut{display:inline-flex;align-items:center;justify-content:center;color:#97264f!important;border:1px solid #db99b2;border-radius:999px;padding:7px 15px;background:#fff3f7;font-size:13px;font-weight:900;text-decoration:none}.home-all-categories .og-discount-shortcut:hover{background:#f9dbe6}.home-all-categories .pink-section-head{gap:12px;flex-wrap:wrap}@media(max-width:620px){.home-all-categories .og-discount-shortcut{font-size:11px;padding:6px 11px}}
+
+
+/* Portrait category advertising: composed from real, current product photos. No horizontal category art is reused. */
+html body.boutique-home .og-category-rail .og-moving-card.og-portrait-banner{
+ display:block!important;position:relative!important;isolation:isolate!important;
+ height:clamp(242px,24vw,292px)!important;
+ flex-basis:clamp(156px,16vw,199px)!important;
+ background:linear-gradient(148deg,#faeff0,#e7d3c1)!important;
+ border:1px solid #edd8d4!important;border-radius:18px!important;
+ box-shadow:0 10px 30px rgba(70,33,53,.12)!important;
+}
+html body.boutique-home .og-category-rail .og-portrait-banner[data-art-index="1"]{background:linear-gradient(150deg,#f9eef5,#ead9ea)!important}
+html body.boutique-home .og-category-rail .og-portrait-banner[data-art-index="2"]{background:linear-gradient(150deg,#fdf3e9,#e9d4be)!important}
+html body.boutique-home .og-category-rail .og-portrait-banner[data-art-index="3"]{background:linear-gradient(150deg,#e8eef6,#d0dae9)!important}
+html body.boutique-home .og-category-rail .og-portrait-banner[data-art-index="4"]{background:linear-gradient(150deg,#f8edee,#e6cdd4)!important}
+html body.boutique-home .og-category-rail .og-moving-card .og-portrait-art{
+ position:absolute!important;inset:0!important;display:block!important;overflow:hidden!important;
+ background:transparent!important;min-height:0!important;padding:0!important;
+ border-radius:inherit!important;z-index:0!important;
+}
+html body.boutique-home .og-category-rail .og-portrait-art:before{
+ content:"";position:absolute;width:154%;height:65%;top:-19%;inset-inline-start:-30%;
+ background:radial-gradient(ellipse,rgba(255,255,255,.7),rgba(255,255,255,0) 70%);z-index:0
+}
+html body.boutique-home .og-category-rail .og-portrait-art .og-portrait-product{
+ position:absolute!important;display:block!important;width:77%!important;height:62%!important;
+ top:12%!important;left:11%!important;right:auto!important;bottom:auto!important;
+ object-fit:contain!important;background:rgba(255,255,255,.58)!important;
+ border-radius:22px!important;padding:8px!important;
+ box-shadow:0 10px 22px rgba(74,34,51,.11)!important;
+ transform:rotate(-3deg)!important;
+}
+html body.boutique-home .og-category-rail .og-portrait-art .og-portrait-product-1{
+ width:43%!important;height:31%!important;top:8%!important;left:54%!important;
+ transform:rotate(8deg)!important;border-radius:14px!important;padding:4px!important;
+ border:2px solid rgba(255,255,255,.72)!important
+}
+html body.boutique-home .og-category-rail .og-portrait-art .og-portrait-product-2{
+ width:39%!important;height:29%!important;top:43%!important;left:0%!important;
+ transform:rotate(-10deg)!important;border-radius:14px!important;padding:4px!important;
+ border:2px solid rgba(255,255,255,.72)!important
+}
+html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title{
+ position:absolute!important;inset:auto 0 0!important;display:flex!important;align-items:end!important;
+ justify-content:center!important;z-index:2!important;
+ min-height:88px!important;width:100%!important;padding:30px 9px 13px!important;
+ background:linear-gradient(to top,rgba(46,23,39,.94),rgba(46,23,39,.67) 58%,transparent)!important;
+ color:#fff!important;font:800 clamp(12px,1.2vw,15px)/1.5 "Cairo",Arial,sans-serif!important;
+ text-align:center!important;text-shadow:0 1px 3px #0005!important;
+}
+@media(max-width:620px){
+ html body.boutique-home .og-category-rail .og-portrait-banner{height:220px!important;flex-basis:144px!important}
+ html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title{font-size:12px!important;min-height:78px!important}
+}
