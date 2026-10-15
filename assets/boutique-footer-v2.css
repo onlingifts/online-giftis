@@ -1,0 +1,82 @@
+/* Dedicated independent company footer, reset against the legacy 4-column footer. */
+html body.boutique-home footer.pink-footer.og-info-footer{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ width:min(1180px,calc(100% - 28px))!important;max-width:1180px!important;
+ margin:34px auto 24px!important;padding:clamp(24px,4vw,46px)!important;
+ background:linear-gradient(135deg,#38202d,#271927)!important;color:#fffbfd!important;
+ border:1px solid rgba(255,255,255,.12)!important;border-radius:25px!important;
+ box-shadow:0 16px 40px rgba(50,19,35,.14)!important;
+ text-align:start!important;gap:0!important;
+ grid-template-columns:none!important;grid-template-rows:none!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-brand{
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;
+ width:100%!important;min-width:0!important;margin:0 0 29px!important;
+ padding:0 0 23px!important;text-align:start!important;border-bottom:1px solid rgba(255,255,255,.17)!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-brand strong{
+ display:block!important;color:#fff9fc!important;
+ font:800 clamp(23px,2.6vw,34px)/1.45 "Cairo",Arial,sans-serif!important;letter-spacing:0!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-brand span{
+ display:block!important;margin:7px 0 0!important;color:#f1c6d5!important;
+ font:500 16px/1.9 "Cairo",Arial,sans-serif!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-brand small{
+ display:block!important;margin:3px 0 0!important;color:#dcc3cf!important;
+ font:400 13px/1.85 "Cairo",Arial,sans-serif!important;
+}
+html body.boutique-home footer.og-info-footer .og-footer-groups{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:clamp(22px,4vw,56px)!important;width:100%!important;max-width:none!important;
+ margin:0!important;padding:0!important;align-items:start!important;min-width:0!important;
+}
+html body.boutique-home footer.og-info-footer .og-footer-groups nav{
+ display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:flex-start!important;
+ justify-content:flex-start!important;gap:10px!important;
+ width:100%!important;max-width:none!important;min-width:0!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;background:transparent!important;text-align:start!important;
+}
+html body.boutique-home footer.og-info-footer .og-footer-groups nav strong{
+ display:block!important;margin:0 0 8px!important;padding:0 0 10px!important;
+ width:100%!important;color:#ffafc9!important;border-bottom:1px solid rgba(255,255,255,.18)!important;
+ font:800 clamp(16px,1.4vw,19px)/1.6 "Cairo",Arial,sans-serif!important;
+}
+html body.boutique-home footer.og-info-footer .og-footer-groups nav a{
+ display:block!important;width:auto!important;max-width:100%!important;margin:0!important;padding:2px 0!important;
+ color:#fff5f9!important;text-align:start!important;word-break:normal!important;
+ overflow-wrap:break-word!important;white-space:normal!important;
+ font:600 14px/1.75 "Cairo",Arial,sans-serif!important;text-decoration:none!important;
+}
+html body.boutique-home footer.og-info-footer .og-footer-groups nav a:hover{
+ color:#ffb0ca!important;text-decoration:underline!important;text-underline-offset:4px!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-note{
+ display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:space-between!important;
+ gap:10px 25px!important;min-width:0!important;width:100%!important;
+ padding:22px 0 0!important;margin:27px 0 0!important;
+ border-top:1px solid rgba(255,255,255,.17)!important;text-align:start!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-note strong{
+ display:block!important;color:#f9d8e4!important;font:800 15px/1.6 "Cairo",Arial,sans-serif!important;
+}
+html body.boutique-home footer.og-info-footer .boutique-footer-note p,
+html body.boutique-home footer.og-info-footer .boutique-footer-note small,
+html body.boutique-home footer.og-info-footer .boutique-footer-note span{
+ display:inline!important;margin:0!important;color:#e9d0dc!important;
+ font:500 12px/1.75 "Cairo",Arial,sans-serif!important;
+}
+@media(max-width:760px){
+ html body.boutique-home footer.pink-footer.og-info-footer{padding:25px 22px 26px!important;border-radius:19px!important;margin-bottom:94px!important}
+ html body.boutique-home footer.og-info-footer .og-footer-groups{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:28px 20px!important
+ }
+ html body.boutique-home footer.og-info-footer .og-footer-groups nav:last-child{grid-column:1/-1!important}
+ html body.boutique-home footer.og-info-footer .boutique-footer-brand span{font-size:14px!important}
+ html body.boutique-home footer.og-info-footer .boutique-footer-note{justify-content:flex-start!important}
+}
+@media(max-width:460px){
+ html body.boutique-home footer.og-info-footer .og-footer-groups{grid-template-columns:1fr!important;gap:24px!important}
+ html body.boutique-home footer.og-info-footer .og-footer-groups nav:last-child{grid-column:auto!important}
+}
