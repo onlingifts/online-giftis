@@ -133,3 +133,21 @@ html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title
 @media(prefers-reduced-motion:reduce){
  html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-main-photo{transition:none!important}
 }
+
+/* The artwork already includes the Arabic headline. No duplicate text overlay. */
+html body.boutique-home .og-category-rail .og-curated-banner{
+ height:clamp(270px,27vw,335px)!important;
+ flex-basis:clamp(162px,16vw,202px)!important;
+ background:#f9e8ec!important;
+}
+html body.boutique-home .og-category-rail .og-curated-banner .og-portrait-title{
+ display:none!important;
+}
+html body.boutique-home .og-category-rail .og-curated-banner .og-portrait-main-photo{
+ object-fit:cover!important;object-position:center!important;
+}
+@media(max-width:620px){
+ html body.boutique-home .og-category-rail .og-curated-banner{
+ height:250px!important;flex-basis:150px!important;
+ }
+}
