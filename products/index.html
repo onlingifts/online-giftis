@@ -852,7 +852,7 @@ function renderAccount(){
  $('weeklyItemsBar').style.width=(itemCount*20)+'%';
  renderMemberNotices();
  const gift=$('weeklyGiftState');
- gift.textContent=weekly.giftEarned?txt('الهدية صارت إلك ✓','Hediyen hazır ✓'):txt('قيد التقدم','Devam ediyor');
+ gift.textContent=weekly.giftEarned?txt('أصبحت الهدية متاحة لك ✓','Hediyen hazır ✓'):txt('قيد التقدم','Devam ediyor');
  gift.classList.toggle('earned',Boolean(weekly.giftEarned));
  if(!$('checkoutName').value&&customer.displayName)$('checkoutName').value=customer.displayName;
  if(!$('checkoutPhone').value&&customer.phone)$('checkoutPhone').value=customer.phone;
@@ -882,7 +882,7 @@ async function submitAccount(){
  const button=$('accountSubmit');button.disabled=true;accountMessage(txt('جاري التحقق...','Kontrol ediliyor...'));
  try{
   if(state.accountMode==='register'){
-   if(password.length<8)throw new Error(txt('كلمة المرور لازم تكون 8 أحرف على الأقل.','Şifre en az 8 karakter olmalı.'));
+   if(password.length<8)throw new Error(txt('يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.','Şifre en az 8 karakter olmalı.'));
    const fullName=$('accountFullName').value.trim(),phone=$('accountPhone').value.trim();
    if(fullName.length<2||phone.replace(/\D/g,'').length<7)throw new Error(txt('أدخل الاسم الكامل ورقم هاتف صحيح.','Ad soyad ve geçerli telefon numarası girin.'));
    const result=await OGCustomerAuth.signUp({email,password,fullName,phone});
@@ -1066,7 +1066,7 @@ async function checkout(){
   result.className='checkout-result show ok';
   let success=txt('تم تثبيت طلبك بنجاح. رقم الطلب: ','Siparişiniz başarıyla oluşturuldu. Sipariş no: ')+esc(d.order.orderNumber);
   if(Number(d.order.discountAmount||0)>0)success+='<br><strong>'+(String(d.order.discountCode||'').startsWith('WHEEL:')?txt('تم تطبيق خصم العجلة: ','Çark indirimi uygulandı: '):txt('تم تطبيق خصم العضوية: ','Üyelik indirimi uygulandı: '))+esc(money(d.order.discountAmount))+'</strong>';
-  if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 مبروك! صار إلك هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
+  if(d.weeklyGiftNewlyEarned)success+='<br><strong>'+txt('🎁 تهانينا! حصلت على هدية من متجرنا لهذا الأسبوع.','🎁 Tebrikler! Bu hafta mağazamızdan bir hediye kazandın.')+'</strong>';
   result.innerHTML=success+'<br><a href="'+(lang()==='tr'?'/track/?lang=tr':'/track/')+'" style="text-decoration:underline;font-weight:900">'+txt('تتبع الطلب','Siparişi takip et')+'</a>';
   $('orderSuccessTitle').textContent=txt('تم تثبيت الطلب بنجاح','Siparişiniz başarıyla alındı');
   $('orderSuccessDetails').textContent=txt('تم تسجيل طلبك في Online Gifts. احتفظ برقم الطلب لتتبعه.','Siparişin kaydedildi. Takip için sipariş numaranı sakla.');
