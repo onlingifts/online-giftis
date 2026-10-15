@@ -71,7 +71,7 @@
   try{
    const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
    if(!r.ok||!Array.isArray(d.products))throw new Error('products');
-   const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);catalogue=products;renderCollections();renderCategoryDrawer();window.OGHomeDiscovery?.mountProducts(products);
+   const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);catalogue=products;renderCollections();renderCategoryDrawer();window.OGHomeDiscovery?.mountProducts(products);if(categoryRows.length)window.OGHomeDiscovery?.mountCategories({categories:categoryRows},products);
 
 
 
@@ -81,7 +81,7 @@
   }
  }
  async function loadCategories(){
-  try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))throw Error('categories');categoryRows=data.categories;homeLayout=data.storefront||null;renderCollections();window.OGHomeDiscovery?.mountCategories(data);
+  try{const response=await fetch(API+'/api/store/categories?ts='+Date.now(),{cache:'no-store'}),data=await response.json();if(!response.ok||!Array.isArray(data.categories))throw Error('categories');categoryRows=data.categories;homeLayout=data.storefront||null;renderCollections();window.OGHomeDiscovery?.mountCategories(data,catalogue);
    const all=data.categories.find(c=>c.key==='all'),main=data.homeBanner;applyHomeColors(main);
    window.OGHomeBanners?.mountHero(data,document.querySelector('.pink-hero'));
    const shortcutCategory={love:data.categories.find(c=>/ورود|بوكيه|çiçek/i.test(c.nameAr+' '+(c.nameTr||''))),gifts:data.categories.find(c=>c.key==='personalized')||data.categories.find(c=>c.key==='gifts'),drinkware:data.categories.find(c=>c.key==='assorted')||data.categories.find(c=>c.key==='drinkware')};
