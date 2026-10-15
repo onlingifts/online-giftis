@@ -22,17 +22,20 @@
   const section=document.getElementById('ogMovingCategories'),rail=document.getElementById('ogMovingCategoriesRail');
   if(!section||!rail||!window.OGBoutique)return;
   categoriesStop();categoriesStop=()=>{};
-  // Purpose-built vertical photo collages use current catalogue photography,
-  // never the existing horizontal banners assigned to the Categories section.
+  // One distinct, relevant product photograph per vertical category banner.
+  // Horizontal admin category banners remain in their original category section.
   const available=(Array.isArray(products)?products:[]).filter(p=>p?.hasImage&&p.orderable!==false&&picture(p));
+  const usedPhotos=new Set(),usedProducts=new Set();
   const choices=(data.categories||[]).filter(c=>c.key!=='all'&&c.isActive!==false)
    .slice().sort((a,b)=>(a.sortOrder??0)-(b.sortOrder??0))
    .map(c=>{
-    const selection=available.filter(p=>categories(p).includes(c.key)).slice(0,3);
-    if(!selection.length)return null; // no mismatched image for a category without products
-    const href=shop+'category='+encodeURIComponent(c.key);
+    const matches=available.filter(p=>categories(p).includes(c.key))
+      .sort((a,b)=>categories(a).length-categories(b).length||Number(a.id)-Number(b.id));
+    const picked=matches.find(p=>!usedProducts.has(String(p.id))&&!usedPhotos.has(picture(p)));
+    if(!picked)return null;
+    usedProducts.add(String(picked.id));usedPhotos.add(picture(picked));
     const name=tr?(c.nameTr||c.nameAr):(c.nameAr||c.nameTr);
-    return {href,name,selection};
+    return {href:shop+'category='+encodeURIComponent(c.key),name,product:picked};
    }).filter(Boolean);
   rail.replaceChildren();
   choices.forEach((c,i)=>{
@@ -40,11 +43,9 @@
    link.setAttribute('aria-label',c.name);
    link.dataset.artIndex=String(i%5);
    const media=document.createElement('span');media.className='og-portrait-art';
-   c.selection.forEach((p,index)=>{
-    const img=document.createElement('img');img.className='og-portrait-product og-portrait-product-'+index;
-    img.src=picture(p);img.alt=index===0?itemName(p):'';img.loading=i<4?'eager':'lazy';img.decoding='async';
-    media.append(img);
-   });
+   const img=document.createElement('img');img.className='og-portrait-main-photo';
+   img.src=picture(c.product);img.alt=c.name;img.loading=i<4?'eager':'lazy';img.decoding='async';
+   media.append(img);
    const label=document.createElement('span');label.className='og-portrait-title';label.textContent=c.name;
    link.append(media,label);rail.append(link);
   });
@@ -100,14 +101,19 @@
   const men=document.getElementById('ogGiftsForHim'),menGrid=document.getElementById('ogGiftsForHimProducts'),deals=document.getElementById('ogRealDiscounts'),dealGrid=document.getElementById('ogRealDiscountProducts');
   const records=(products||[]).filter(eligible);
   if(men&&menGrid){
-   const male=records.filter(p=>categories(p).includes('men')||/(رجالي|للرجال|لرجل|erkek|babaya|boyfriend)/i.test([itemName(p),p.storefront?.nameAr,p.storefront?.nameTr].filter(Boolean).join(' ')));
+   // Exclude feminine and ambiguous merchandise; only explicitly male gifts belong here.
+   // Never infer a product's recipient from the model in its photo or a broad category tag.
+   const names=p=>[p.storefront?.shortNameAr,p.storefront?.nameAr,p.storefront?.shortNameTr,p.storefront?.nameTr,p.name].filter(Boolean).join(' ');
+   const femaleWords=/(?:نسائي|نسائية|للسيدات|للبنات|للفتيات|للمرأة|للعروس|kadın|bayan|kız|women|ladies|female|girl|tesettür)/i;
+   const maleWords=/(?:رجالي|رجالية|للرجال|للرجل|للزوج|للأب|للأخ|للشاب|شبابي|erkek|babaya|babalar|baba için|for men|menswear|boyfriend|for him)/i;
+   const male=records.filter(p=>maleWords.test(names(p))&&!femaleWords.test(names(p)));
    menGrid.innerHTML=male.slice(0,4).map(p=>card(p)).join('');
+   // Keep a consistent gifts photograph instead of automatically promoting any product image.
    const hero=men.querySelector('[data-og-him-image]');
-   const first=male.find(p=>picture(p));if(hero&&first){hero.src=picture(first);hero.alt=itemName(first);}
-   else if(hero){hero.src='/assets/boutique-gifts.webp';hero.alt=t('صناديق هدايا متنوعة','Hediye kutuları');}
-   const button=men.querySelector('[data-og-him-all]');if(button)button.href=shop+(male.some(p=>categories(p).includes('men'))?'category=men':'q='+encodeURIComponent(tr?'erkek':'رجالي'));
-   // The curated banner remains available; product cards only appear for qualifying records.
-   men.hidden=false;
+   if(hero){hero.src='/assets/boutique-gifts.webp';hero.alt=t('هدايا متنوعة','Hediye seçenekleri');}
+   const buttons=men.querySelectorAll('[data-og-him-all]');
+   buttons.forEach(button=>{button.href=shop+'q='+encodeURIComponent(tr?'erkek':'رجالي')});
+   men.hidden=male.length===0;
   }
   if(deals&&dealGrid){
    const sale=records.filter(p=>Boolean(offer(p))).sort((a,b)=>(offer(b).pct-offer(a).pct)||Number(a.id)-Number(b.id));
