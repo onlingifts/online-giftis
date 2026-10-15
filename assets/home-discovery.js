@@ -20,7 +20,7 @@
  let categoriesStop=()=>{};
  function mountCategories(data,products=[]){
   const section=document.getElementById('ogMovingCategories'),rail=document.getElementById('ogMovingCategoriesRail');
-  if(!section||!rail||!window.OGBoutique)return;
+  if(!section||!rail)return;
   categoriesStop();categoriesStop=()=>{};
   // One distinct, relevant product photograph per vertical category banner.
   // Horizontal admin category banners remain in their original category section.
