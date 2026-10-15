@@ -596,7 +596,7 @@ img{max-width:100%}
 (()=>{
 const API='https://api.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',saleOnly:new URLSearchParams(location.search).get('sale')==='1',config:null,configLoaded:false,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false,notifications:[],notificationUnread:0};
+const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',saleOnly:new URLSearchParams(location.search).get('sale')==='1',bestsellersOnly:new URLSearchParams(location.search).get('bestseller')==='1',config:null,configLoaded:false,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false,notifications:[],notificationUnread:0};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -674,7 +674,7 @@ function visibleProducts(){
  const q=state.search.toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar'),fav=favoriteIds();
  return state.products.filter(p=>{
   const hay=(productName(p)+' '+productDescription(p)+' '+String(p.storefront?.searchTerms||'')+' '+String(p.storefront?.searchSynonyms||'')+' '+categoryList(p).join(' ')).toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar');
-  return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))&&(!state.favoritesOnly||fav.has(String(p.id)))&&(!state.saleOnly||isSale(p))
+  return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))&&(!state.favoritesOnly||fav.has(String(p.id)))&&(!state.saleOnly||isSale(p))&&(!state.bestsellersOnly||Boolean(p.storefront?.isBestseller))
  })
 }
 const categoryCampaigns={
@@ -717,23 +717,24 @@ function renderCategories(){
  OGBoutique.applyPalette(meta);
  const theme=OGThemes.apply(state.category,meta?.customColors?meta.colors:null);
  const hero=document.querySelector('#products .section-head');
- const mobileTitle=$('catalogMobileTitle');if(mobileTitle)mobileTitle.textContent=state.saleOnly?txt('التخفيضات','İndirimler'):state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
- hero.querySelector('h1').textContent=state.saleOnly?txt('التخفيضات','İndirimler'):state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
- hero.querySelector('p').textContent=state.saleOnly?txt('منتجات خُفض سعرها مقارنةً بسعرها السابق في المتجر.','Mağazamızda önceki fiyatına göre indirimli ürünler.'):state.favoritesOnly?txt('المنتجات التي حفظتها في المفضلة.','Favorilerine kaydettiğin ürünler.'):categoryDescription(state.category);
+ const mobileTitle=$('catalogMobileTitle');if(mobileTitle)mobileTitle.textContent=state.bestsellersOnly?txt('المنتجات الأكثر طلباً','Çok satanlar'):state.saleOnly?txt('التخفيضات','İndirimler'):state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
+ hero.querySelector('h1').textContent=state.bestsellersOnly?txt('المنتجات الأكثر طلباً','Çok satanlar'):state.saleOnly?txt('التخفيضات','İndirimler'):state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
+ hero.querySelector('p').textContent=state.bestsellersOnly?txt('المنتجات التي اختارها متجرنا ضمن الأكثر طلباً.','Mağazamızda çok satan olarak işaretlenmiş ürünler.'):state.saleOnly?txt('منتجات خُفض سعرها مقارنةً بسعرها السابق في المتجر.','Mağazamızda önceki fiyatına göre indirimli ürünler.'):state.favoritesOnly?txt('المنتجات التي حفظتها في المفضلة.','Favorilerine kaydettiğin ürünler.'):categoryDescription(state.category);
  let icon=hero.querySelector('.theme-icon');if(!icon){icon=document.createElement('i');hero.firstElementChild.prepend(icon)}icon.className='theme-icon fa-solid fa-'+theme.icon;icon.setAttribute('aria-hidden','true');
  const set=[];
  state.categoryOrder.forEach(c=>{if(c!=='all'&&!set.includes(c))set.push(c)});
  state.products.forEach(p=>categoryList(p).forEach(c=>{if(!set.includes(c)&&(!Object.keys(state.categoryMeta).length||state.categoryMeta[c]))set.push(c)}));
- categories.innerHTML='<button class="cat-btn '+(state.saleOnly?'active':'')+'" data-sales="1"><i class="fa-solid fa-tags"></i> '+txt('التخفيضات','İndirimler')+'</button><button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&!state.saleOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+esc(categoryLabel('all'))+'</button>'+
-  set.map(c=>'<button class="cat-btn '+(!state.favoritesOnly&&state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
- categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.favoritesOnly=false;state.saleOnly=false;state.category=b.dataset.cat;const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('sale');if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}));categories.querySelector('[data-favorites]')?.addEventListener('click',()=>{state.favoritesOnly=true;state.saleOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('category');url.searchParams.delete('sale');url.searchParams.set('favorites','1');history.pushState({},'',url);renderCategories();renderProducts()})
- categories.querySelector('[data-sales]')?.addEventListener('click',()=>{state.saleOnly=true;state.favoritesOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('category');url.searchParams.set('sale','1');history.pushState({},'',url);renderCategories();renderProducts()});
+ categories.innerHTML='<button class="cat-btn '+(state.bestsellersOnly?'active':'')+'" data-bestsellers="1"><i class="fa-solid fa-fire"></i> '+txt('الأكثر طلباً','Çok satanlar')+'</button><button class="cat-btn '+(state.saleOnly?'active':'')+'" data-sales="1"><i class="fa-solid fa-tags"></i> '+txt('التخفيضات','İndirimler')+'</button><button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&!state.saleOnly&&!state.bestsellersOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+esc(categoryLabel('all'))+'</button>'+
+  set.map(c=>'<button class="cat-btn '+(!state.favoritesOnly&&!state.saleOnly&&!state.bestsellersOnly&&state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
+ categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.favoritesOnly=false;state.saleOnly=false;state.bestsellersOnly=false;state.category=b.dataset.cat;const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('sale');url.searchParams.delete('bestseller');if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}));categories.querySelector('[data-favorites]')?.addEventListener('click',()=>{state.favoritesOnly=true;state.saleOnly=false;state.bestsellersOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('category');url.searchParams.delete('sale');url.searchParams.delete('bestseller');url.searchParams.set('favorites','1');history.pushState({},'',url);renderCategories();renderProducts()})
+ categories.querySelector('[data-sales]')?.addEventListener('click',()=>{state.saleOnly=true;state.favoritesOnly=false;state.bestsellersOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('category');url.searchParams.delete('bestseller');url.searchParams.set('sale','1');history.pushState({},'',url);renderCategories();renderProducts()});
+ categories.querySelector('[data-bestsellers]')?.addEventListener('click',()=>{state.bestsellersOnly=true;state.saleOnly=false;state.favoritesOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('sale');url.searchParams.delete('category');url.searchParams.set('bestseller','1');history.pushState({},'',url);renderCategories();renderProducts()});
  renderCategoryCampaign()
  renderCategoryVisual()
 }
 function renderProducts(){
  const list=visibleProducts(),fav=favoriteIds();
- if(!list.length){grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-'+(state.favoritesOnly?'solid fa-heart':'solid fa-box-open')+'"></i></div>'+ (state.saleOnly?txt('لا توجد منتجات مخفّضة متاحة حالياً.','Şu anda indirimli ürün bulunmuyor.'):state.favoritesOnly?txt('لا توجد منتجات في المفضلة بعد.','Henüz favori ürünün yok'):txt('لم نعثر على منتجات مطابقة.','Eşleşen ürün bulunamadı'))+'</div>';return}
+ if(!list.length){grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-'+(state.favoritesOnly?'solid fa-heart':'solid fa-box-open')+'"></i></div>'+ (state.bestsellersOnly?txt('لا توجد منتجات موسومة بالأكثر طلباً حالياً.','Şu anda çok satan olarak işaretlenmiş ürün yok.'):state.saleOnly?txt('لا توجد منتجات مخفّضة متاحة حالياً.','Şu anda indirimli ürün bulunmuyor.'):state.favoritesOnly?txt('لا توجد منتجات في المفضلة بعد.','Henüz favori ürünün yok'):txt('لم نعثر على منتجات مطابقة.','Eşleşen ürün bulunamadı'))+'</div>';return}
  grid.innerHTML=list.map(p=>{
   const name=OGBoutique.shortName(p),description=productDescription(p);
   const imageUrl=lang()==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
@@ -1133,7 +1134,7 @@ document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventLi
 $('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();
-window.addEventListener('popstate',()=>{const q=new URLSearchParams(location.search);state.category=q.get('category')||'all';state.favoritesOnly=q.get('favorites')==='1';state.saleOnly=q.get('sale')==='1';renderCategories();renderProducts()});
+window.addEventListener('popstate',()=>{const q=new URLSearchParams(location.search);state.category=q.get('category')||'all';state.favoritesOnly=q.get('favorites')==='1';state.saleOnly=q.get('sale')==='1';state.bestsellersOnly=q.get('bestseller')==='1';renderCategories();renderProducts()});
 restoreCart();
 const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=(()=>{try{return localStorage.getItem('og_lang')}catch{return null}})();if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
 setAccountMode('login');
