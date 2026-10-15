@@ -41,9 +41,16 @@
   function schedule(){stop();if(!manualPaused&&!hovered&&!focused&&!document.hidden&&!reduced.matches)timer=setTimeout(()=>show(active+1),Math.max(3000,Math.min(15000,config.interval||6000)));}
   function show(index){active=(index+rows.length)%rows.length;links.forEach((link,i)=>{link.classList.toggle('is-active',i===active);link.inert=i!==active;link.setAttribute('aria-hidden',String(i!==active));if(i===active)link.querySelector('img').loading='eager';});dotButtons.forEach((dot,i)=>dot.setAttribute('aria-current',String(i===active)));schedule();}
   prev.onclick=()=>show(active-1);next.onclick=()=>show(active+1);pause.onclick=()=>{manualPaused=!manualPaused;pause.textContent=manualPaused?'▶':'Ⅱ';pause.setAttribute('aria-label',manualPaused?t('تشغيل الحركة','Otomatik geçişi başlat'):t('إيقاف الحركة','Otomatik geçişi durdur'));schedule();};
+  // Swipe between saved hero slides without opening a product link accidentally.
+  let swipeX=null,swipeY=null,suppressClick=false;
+  const onTouchStart=e=>{if(e.touches.length!==1)return;swipeX=e.touches[0].clientX;swipeY=e.touches[0].clientY;stop();};
+  const onTouchEnd=e=>{if(swipeX===null||!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-swipeX,dy=e.changedTouches[0].clientY-swipeY;swipeX=swipeY=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.3){suppressClick=true;show(active+(dx<0?1:-1));setTimeout(()=>{suppressClick=false},400);}else schedule();};
+  const onSlideClick=e=>{if(suppressClick&&e.target.closest('.hero-slide')){e.preventDefault();e.stopPropagation();suppressClick=false;}};
+  hero.addEventListener('touchstart',onTouchStart,{passive:true});hero.addEventListener('touchend',onTouchEnd,{passive:true});
+  hero.addEventListener('click',onSlideClick,true);
   hero.onmouseenter=()=>{hovered=true;stop();};hero.onmouseleave=()=>{hovered=false;schedule();};hero.onfocusin=()=>{focused=true;stop();};hero.onfocusout=event=>{if(!hero.contains(event.relatedTarget)){focused=false;schedule();}};
   const visibility=()=>schedule(),motion=()=>schedule();document.addEventListener('visibilitychange',visibility);reduced.addEventListener('change',motion);pause.textContent=manualPaused?'▶':'Ⅱ';show(0);
-  destroy=()=>{stop();document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',motion);hero.onmouseenter=hero.onmouseleave=hero.onfocusin=hero.onfocusout=null;};
+  destroy=()=>{stop();document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',motion);hero.removeEventListener('touchstart',onTouchStart);hero.removeEventListener('touchend',onTouchEnd);hero.removeEventListener('click',onSlideClick,true);hero.onmouseenter=hero.onmouseleave=hero.onfocusin=hero.onfocusout=null;};
  }
  window.OGHomeBanners={library,picks,heroRows,mountHero};
 })();
