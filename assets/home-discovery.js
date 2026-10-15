@@ -42,26 +42,27 @@
   });
   section.hidden=choices.length===0;
   if(choices.length<2)return;
-  let current=0,paused=false,onscreen=false,timer=0;
+  let current=0,paused=false,onscreen=false,timer=0,resumeTimer=0;
   const show=(i,smooth=true)=>{
    current=(i+choices.length)%choices.length;
    const target=rail.children[current];if(!target)return;
    const left=target.offsetLeft-rail.children[0].offsetLeft;
-   const leftValue=tr?left:-left;
-   rail.scrollTo({left:leftValue,behavior:smooth&&!reduced?.matches?'smooth':'instant'});
+   const leftValue=left; // offsetLeft differences already match LTR or RTL scroll direction.
+   rail.scrollTo({left:leftValue,behavior:smooth&&!reduced?.matches?'smooth':'auto'});
   };
   function stop(){clearTimeout(timer);timer=0}
-  function schedule(){stop();if(!paused&&onscreen&&!document.hidden&&!reduced?.matches)timer=setTimeout(()=>{show(current+1);schedule()},4800)}
+  function schedule(){stop();if(!paused&&onscreen&&!document.hidden&&!reduced?.matches)timer=setTimeout(()=>{show(current+1,current+1<choices.length);schedule()},4800)}
   const markPause=()=>{paused=true;stop()};
-  const resume=()=>{paused=false;schedule()};
+  const resume=()=>{clearTimeout(resumeTimer);paused=false;schedule()};
+  const resumeLater=()=>{clearTimeout(resumeTimer);resumeTimer=setTimeout(resume,7500)};
   const prev=section.querySelector('[data-og-category-prev]'),next=section.querySelector('[data-og-category-next]');
-  const prevClick=()=>{markPause();show(current-1);setTimeout(resume,7500)};
-  const nextClick=()=>{markPause();show(current+1);setTimeout(resume,7500)};
+  const prevClick=()=>{markPause();show(current-1);resumeLater()};
+  const nextClick=()=>{markPause();show(current+1);resumeLater()};
   prev?.addEventListener('click',prevClick);next?.addEventListener('click',nextClick);
   const observer=new IntersectionObserver(entries=>{onscreen=entries.some(e=>e.isIntersecting);schedule()},{threshold:.1});
   observer.observe(section);
   rail.addEventListener('pointerdown',markPause,{passive:true});
-  rail.addEventListener('pointerup',resume,{passive:true});
+  rail.addEventListener('pointerup',resumeLater,{passive:true});
   rail.addEventListener('mouseenter',markPause);
   rail.addEventListener('mouseleave',resume);
   rail.addEventListener('focusin',markPause);
@@ -76,7 +77,7 @@
    current=nearest;
   };
   rail.addEventListener('scroll',onScroll,{passive:true});
-  categoriesStop=()=>{stop();observer.disconnect();prev?.removeEventListener('click',prevClick);next?.removeEventListener('click',nextClick);document.removeEventListener('visibilitychange',schedule);reduced?.removeEventListener?.('change',schedule);rail.removeEventListener('scroll',onScroll)};
+  categoriesStop=()=>{stop();clearTimeout(resumeTimer);observer.disconnect();prev?.removeEventListener('click',prevClick);next?.removeEventListener('click',nextClick);document.removeEventListener('visibilitychange',schedule);reduced?.removeEventListener?.('change',schedule);rail.removeEventListener('scroll',onScroll);rail.removeEventListener('pointerdown',markPause);rail.removeEventListener('pointerup',resumeLater);rail.removeEventListener('mouseenter',markPause);rail.removeEventListener('mouseleave',resume);rail.removeEventListener('focusin',markPause);rail.removeEventListener('focusout',resume)};
  }
  function card(p,withOld=false){
   const discount=withOld?offer(p):null,img=picture(p);
