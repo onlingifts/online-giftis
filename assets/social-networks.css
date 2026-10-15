@@ -1,0 +1,11 @@
+/* Official social profiles: one language-specific set per storefront, isolated from legacy footer grids. */
+.og-social-networks{box-sizing:border-box;width:100%;max-width:100%;margin:24px 0 0;padding:20px 0 0;border-top:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:space-between;gap:12px 25px;flex-wrap:wrap}
+.og-social-networks>*{box-sizing:border-box}
+.og-social-networks strong{font:800 15px/1.65 "Cairo",Arial,sans-serif;color:inherit}
+.og-social-networks-links{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.og-social-networks-links a{display:inline-flex!important;align-items:center;justify-content:center;gap:8px!important;min-width:110px;min-height:43px;border:1px solid rgba(255,255,255,.28)!important;border-radius:999px!important;background:rgba(255,255,255,.09)!important;padding:9px 13px!important;text-decoration:none!important;color:inherit!important;font:700 13px/1.5 "Cairo",Arial,sans-serif!important;white-space:nowrap!important}
+.og-social-networks-links a:hover{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.5)!important}
+.og-social-networks-links a:focus-visible{outline:3px solid #ffa8c6;outline-offset:2px}
+.og-social-networks-links svg{display:block;width:20px;height:20px;flex:0 0 20px}
+.footer .og-social-networks{color:#fff7fa}
+@media(max-width:650px){.og-social-networks{align-items:flex-start;flex-direction:column;gap:12px}.og-social-networks-links{width:100%;gap:8px}.og-social-networks-links a{min-width:0;flex:1 1 94px;padding:9px!important;font-size:12px!important}}
