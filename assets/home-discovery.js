@@ -18,27 +18,35 @@
  function picture(p){if(!p.hasImage)return '';const src=tr?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);if(!src)return '';try{const dest=new URL(src,api);if(dest.protocol!=='https:')return '';return dest.href}catch{return ''}}
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)');
  let categoriesStop=()=>{};
- function mountCategories(data){
+ function mountCategories(data,products=[]){
   const section=document.getElementById('ogMovingCategories'),rail=document.getElementById('ogMovingCategoriesRail');
   if(!section||!rail||!window.OGBoutique)return;
   categoriesStop();categoriesStop=()=>{};
+  // Purpose-built vertical photo collages use current catalogue photography,
+  // never the existing horizontal banners assigned to the Categories section.
+  const available=(Array.isArray(products)?products:[]).filter(p=>p?.hasImage&&p.orderable!==false&&picture(p));
   const choices=(data.categories||[]).filter(c=>c.key!=='all'&&c.isActive!==false)
-   .slice().sort((a,b)=>(a.sortOrder??0)-(b.sortOrder??0)).map(c=>{
-    const art=window.OGBoutique.campaign(c);
-    const lang=tr?'Tr':'Ar';
-    const source=Object.prototype.hasOwnProperty.call(c,'effectiveBannerUrl'+lang)?c['effectiveBannerUrl'+lang]:undefined;
-    if(source===null||source==='')return null;
-    if(!art.asset)return null;
+   .slice().sort((a,b)=>(a.sortOrder??0)-(b.sortOrder??0))
+   .map(c=>{
+    const selection=available.filter(p=>categories(p).includes(c.key)).slice(0,3);
+    if(!selection.length)return null; // no mismatched image for a category without products
     const href=shop+'category='+encodeURIComponent(c.key);
     const name=tr?(c.nameTr||c.nameAr):(c.nameAr||c.nameTr);
-    return {href,src:art.asset,name};
+    return {href,name,selection};
    }).filter(Boolean);
   rail.replaceChildren();
   choices.forEach((c,i)=>{
-   const link=document.createElement('a');link.className='og-moving-card';link.href=c.href;
+   const link=document.createElement('a');link.className='og-moving-card og-portrait-banner';link.href=c.href;
    link.setAttribute('aria-label',c.name);
-   const img=document.createElement('img');img.src=c.src;img.alt=c.name;img.loading=i<5?'eager':'lazy';img.decoding='async';
-   const label=document.createElement('span');label.textContent=c.name;link.append(img,label);rail.append(link);
+   link.dataset.artIndex=String(i%5);
+   const media=document.createElement('span');media.className='og-portrait-art';
+   c.selection.forEach((p,index)=>{
+    const img=document.createElement('img');img.className='og-portrait-product og-portrait-product-'+index;
+    img.src=picture(p);img.alt=index===0?itemName(p):'';img.loading=i<4?'eager':'lazy';img.decoding='async';
+    media.append(img);
+   });
+   const label=document.createElement('span');label.className='og-portrait-title';label.textContent=c.name;
+   link.append(media,label);rail.append(link);
   });
   section.hidden=choices.length===0;
   if(choices.length<2)return;
