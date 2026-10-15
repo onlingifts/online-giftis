@@ -7,7 +7,7 @@
  const txt=(ar,tr)=>language==='tr'?tr:ar;
  const name=p=>language==='tr'?(p.storefront?.nameTr||p.name):(p.storefront?.nameAr||p.name);
  const productImage=p=>language==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
- const href=id=>'/products/'+encodeURIComponent(String(id))+'/'+(language==='tr'?'?lang=tr':'');
+ const href=id=>{const p=catalogue.find(p=>String(p.id)===String(id)),translated=p?.storefront?.nameTr&&(p.storefront.descriptionTr||p.storefront.shortDescriptionTr);return (language==='tr'&&translated?'/tr':'')+'/products/'+encodeURIComponent(String(id))+'/'+(language==='tr'&&!translated?'?lang=tr':'')};
  const $=id=>document.getElementById(id);
  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
  const colorKeys=['bg','surface','primary','secondary','text','muted','accent','onPrimary'];
@@ -39,7 +39,7 @@
    '<a class="pink-product-link" href="'+href(id)+'">'+
     '<span class="pink-product-media">'+(image?'<img '+OGImages.product(p,'(max-width: 900px) calc((100vw - 34px) / 2), (max-width: 1208px) calc((100vw - 67px) / 4), 282px')+' alt="'+esc(window.OGBoutique?.shortName(p)||name(p))+'" loading="lazy" decoding="async">':'<span class="pink-empty">'+txt('بدون صورة','Görsel yok')+'</span>')+'</span>'+
     '<span class="pink-product-body"><strong class="pink-product-name">'+esc(window.OGBoutique?.shortName(p)||name(p))+'</strong>'+(window.OGBoutique?.rating(p)||'')+'<span class="pink-product-bottom"><b class="pink-product-price">'+esc(price)+'</b><span class="pink-product-open" aria-hidden="true"><i class="fa-solid fa-cart-shopping"></i></span></span></span>'+
-   '</a><a class="pink-product-quick" href="'+href(id)+'&intent=add" aria-label="'+txt('إضافة للسلة: ','Sepete ekle: ')+esc(name(p))+'"><i class="fa-solid fa-cart-shopping"></i></a></article>'
+   '</a><a class="pink-product-quick" href="'+href(id)+(href(id).includes('?')?'&':'?')+'intent=add" aria-label="'+txt('إضافة للسلة: ','Sepete ekle: ')+esc(name(p))+'"><i class="fa-solid fa-cart-shopping"></i></a></article>'
  }
  function pickByCategory(products,key){return products.find(p=>p.orderable!==false&&p.hasImage&&categories(p).includes(key))}
  function applyOccasionImages(products){

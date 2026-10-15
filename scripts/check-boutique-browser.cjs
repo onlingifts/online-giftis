@@ -13,8 +13,10 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.OG_BROWSER_PATH?{executablePath:process.env.OG_BROWSER_PATH,args:['--no-sandbox']}: {})});
  async function newPage(language='ar',width=390){
-  const context=await browser.newContext({viewport:{width,height:844},reducedMotion:'reduce',locale:language==='tr'?'tr-TR':'ar'});
+  const context=await browser.newContext({viewport:{width,height:844},reducedMotion:'reduce',locale:language==='tr'?'tr-TR':'ar',serviceWorkers:'block'});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+  // Supply generated shells for the synthetic product used in purchase tests.
+  await page.route(/http:\/\/localhost:8765\/(?:tr\/)?products\/9001\//,r=>r.fulfill({contentType:'text/html',body:fs.readFileSync('products/detail/index.html','utf8').replace('<body>','<body data-product-id="9001">')}));
   // Every remote request is intercepted: screenshots and purchase/auth tests cannot touch production data.
   await page.route('https://**/*',async route=>{
    const req=route.request(),url=new URL(req.url());

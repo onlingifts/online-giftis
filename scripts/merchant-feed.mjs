@@ -31,7 +31,7 @@ export function merchantFeed(products, lang = 'ar') {
     const image = new URL(rawImage, API).href;
     if (!/^https?:\/\//.test(image)) { skipped.push({id:p.id,reason:'invalid image URL'}); continue; }
     seen.add(id);
-    const fields = {id:String(id),title:title.slice(0,150),description:description.slice(0,5000),link:SITE+'/products/'+id+'/?lang='+lang,image_link:image,availability:stock>0?'in_stock':'out_of_stock',price:price.toFixed(2)+' TRY'};
+    const fields = {id:String(id),title:title.slice(0,150),description:description.slice(0,5000),link:SITE+(turkish?'/tr':'')+'/products/'+id+'/'+(turkish?'':'?lang=ar'),image_link:image,availability:stock>0?'in_stock':'out_of_stock',price:price.toFixed(2)+' TRY'};
     // Do not fabricate GTIN/MPN/brand or claim identifier_exists=no for resale goods.
     items.push('    <item>\n'+Object.entries(fields).map(([key,value])=>'      <g:'+key+'>'+esc(value)+'</g:'+key+'>').join('\n')+'\n    </item>');
   }

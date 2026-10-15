@@ -1,8 +1,9 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
+const fs=require('node:fs');
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.OG_BROWSER_PATH?{executablePath:process.env.OG_BROWSER_PATH,args:['--no-sandbox']}: {})});
- const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const page=await browser.newPage({serviceWorkers:'block'});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const gift={id:9001,sku:'NEW-9001',name:'هدية اختبار',description:'هدية جديدة',price:500,stockQuantity:3,hasImage:true,imageUrl:'/api/store/products/media?id=9001&v=new',orderable:true,categories:['laser','gifts'],requiresDesignInput:true,storefront:{nameAr:'هدية اختبار',nameTr:'Yeni hediye',descriptionTr:'Yeni ürün',descriptionAr:'هدية جديدة',indexable:true}};
  let products=[gift];let categoryFailure=false;let orderCalls=0;
  await page.route('https://www.googletagmanager.com/**',r=>r.fulfill({body:''}));
@@ -23,6 +24,9 @@ const assert=require('node:assert/strict');
   if(url.pathname.includes('/media'))return r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="pink"/></svg>'});
   throw Error('Unexpected API route: '+url.pathname);
  });
+ // The synthetic catalogue item has no committed SEO page. Supply its generated
+ // product shell just as the API responses above supply its catalogue record.
+ await page.route('http://localhost:8765/products/9001/**',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync('products/detail/index.html','utf8').replace('<body>','<body data-product-id="9001">')}));
  const base='http://localhost:8765';
  for(const width of [320,360,390,430,768,1440]){
   await page.setViewportSize({width,height:900});
