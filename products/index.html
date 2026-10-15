@@ -429,7 +429,7 @@ img{max-width:100%}
   <nav class="navlinks">
    <a href="/products/" class="trn" data-ar="المنتجات" data-tr="Ürünler">المنتجات</a><a href="/track/" class="trn" data-ar="تتبع الطلب" data-tr="Sipariş takibi">تتبع الطلب</a>
    <a href="/#how-it-works" class="trn" data-ar="طريقة الطلب" data-tr="Nasıl sipariş verilir">خدماتنا</a>
-   <a href="/#about" class="trn" data-ar="عن الشركة" data-tr="Hakkımızda">عن الشركة</a>
+   <a href="/about/" class="trn" data-ar="من نحن" data-tr="Hakkımızda">من نحن</a>
    <a href="https://bayi.onlinegiftis.com/" class="trn" data-ar="اعمل معنا" data-tr="Bizimle çalış">اعمل معنا</a>
   </nav>
   <div class="nav-actions">
@@ -1093,7 +1093,7 @@ function applyLanguage(l){
  document.documentElement.lang=l;document.documentElement.dir=l==='tr'?'ltr':'rtl';
  const pageUrl=new URL(location.href);if(l==='tr')pageUrl.searchParams.set('lang','tr');else pageUrl.searchParams.delete('lang');history.replaceState({},'',pageUrl);
  const brand=document.querySelector('.brand');if(brand)brand.href=l==='tr'?'/tr/':'/';
- const nav=[...document.querySelectorAll('.navlinks a')];if(nav[0])nav[0].href=l==='tr'?'/products/?lang=tr':'/products/';if(nav[1])nav[1].href=l==='tr'?'/track/?lang=tr':'/track/';if(nav[2])nav[2].href=l==='tr'?'/tr/#how-it-works':'/#how-it-works';if(nav[3])nav[3].href=l==='tr'?'/tr/#about':'/#about';
+ const nav=[...document.querySelectorAll('.navlinks a')];if(nav[0])nav[0].href=l==='tr'?'/products/?lang=tr':'/products/';if(nav[1])nav[1].href=l==='tr'?'/track/?lang=tr':'/track/';if(nav[2])nav[2].href=l==='tr'?'/tr/#how-it-works':'/#how-it-works';if(nav[3])nav[3].href=l==='tr'?'/tr/about/':'/about/';
  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
  document.querySelectorAll('.trn').forEach(el=>{el.innerHTML=el.dataset[l]||el.innerHTML});
  document.querySelectorAll('[data-href-ar][data-href-tr]').forEach(el=>{el.href=l==='tr'?el.dataset.hrefTr:el.dataset.hrefAr});
