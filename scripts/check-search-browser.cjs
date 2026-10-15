@@ -8,7 +8,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
  const errors=[];
  try {
   for(const width of [390,1440]){
-   const page=await browser.newPage({viewport:{width,height:900}});
+   const page=await browser.newPage({viewport:{width,height:900},serviceWorkers:'block'});
    page.on('pageerror',e=>errors.push(e.message));
    let offline=false;
    await page.route('https://**/*',route=>{
@@ -35,6 +35,13 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
     assert.equal(await page.locator('h1').count(),1);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Guide overflow '+path);
    }
+   await page.evaluate(()=>localStorage.setItem('og_cart_v1','[]'));
+   await page.goto('http://localhost:8765/tr/');
+   const quick=page.locator('.pink-product-quick[href*="/112/"]').first();
+   await quick.waitFor();
+   assert.equal(new URL(await quick.getAttribute('href'),'http://localhost:8765').searchParams.get('intent'),'add');
+   await quick.click();await page.waitForURL(/cart=1/);
+   assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('og_cart_v1')).find(p=>Number(p.productId)===112)?.quantity),1,'Native Turkish quick-add reaches the cart once');
    offline=true;
    await page.goto('http://localhost:8765/tr/cicek-teslimati/');
    await page.waitForTimeout(150);
