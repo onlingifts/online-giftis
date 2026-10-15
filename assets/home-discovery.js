@@ -22,32 +22,68 @@
   const section=document.getElementById('ogMovingCategories'),rail=document.getElementById('ogMovingCategoriesRail');
   if(!section||!rail)return;
   categoriesStop();categoriesStop=()=>{};
-  // One distinct, relevant product photograph per vertical category banner.
-  // Horizontal admin category banners remain in their original category section.
-  const available=(Array.isArray(products)?products:[]).filter(p=>p?.hasImage&&p.orderable!==false&&picture(p));
-  const usedPhotos=new Set(),usedProducts=new Set();
-  const choices=(data.categories||[]).filter(c=>c.key!=='all'&&c.isActive!==false)
-   .slice().sort((a,b)=>(a.sortOrder??0)-(b.sortOrder??0))
-   .map(c=>{
-    const matches=available.filter(p=>categories(p).includes(c.key))
-      .sort((a,b)=>categories(a).length-categories(b).length||Number(a.id)-Number(b.id));
-    const picked=matches.find(p=>!usedProducts.has(String(p.id))&&!usedPhotos.has(picture(p)));
-    if(!picked)return null;
-    usedProducts.add(String(picked.id));usedPhotos.add(picture(picked));
-    const name=tr?(c.nameTr||c.nameAr):(c.nameAr||c.nameTr);
-    return {href:shop+'category='+encodeURIComponent(c.key),name,product:picked};
-   }).filter(Boolean);
+  // Only the narrow, moving category strip uses curated vertical artwork.
+  // Full-width category banners supplied through administration remain untouched.
+  const portraitBase='/assets/category-portrait-v1/';
+  const curated={
+    flowers:'flowers.avif',
+    jewelry:'jewelry.avif',
+    hookah:'hookah.avif',
+    perfume:'perfume.avif',
+    silver:'silver.avif',
+    photo:'photo.avif',
+    keychains:'keychains.avif'
+  };
+  const curatedOrder=['flowers','jewelry','hookah','perfume','silver','photo','keychains'];
+  const active=(data.categories||[]).filter(c=>c.key!=='all'&&c.isActive!==false)
+    .slice().sort((a,b)=>(a.sortOrder??0)-(b.sortOrder??0));
+  const choices=[];
+  if(!tr){
+    choices.push({name:'المنتجات الأكثر طلباً',href:shop+'bestseller=1',src:portraitBase+'best-sellers.avif',curated:true});
+    const byRole=new Map();
+    for(const c of active){
+      const role=window.OGBoutique?.role?.(c);
+      if(curated[role]&&!byRole.has(role))byRole.set(role,c);
+    }
+    for(const role of curatedOrder){
+      const c=byRole.get(role);
+      if(!c)continue;
+      choices.push({
+        href:shop+'category='+encodeURIComponent(c.key),
+        name:c.nameAr||c.nameTr||c.key,
+        src:portraitBase+curated[role],
+        curated:true
+      });
+    }
+  }else{
+    // Arabic text is baked into the new portraits. Do not show it in the Turkish store.
+    const available=(Array.isArray(products)?products:[]).filter(p=>p?.hasImage&&p.orderable!==false&&picture(p));
+    const used=new Set();
+    for(const c of active){
+      const p=available.find(p=>categories(p).includes(c.key)&&!used.has(picture(p)));
+      if(!p)continue;
+      used.add(picture(p));
+      choices.push({
+        href:shop+'category='+encodeURIComponent(c.key),
+        name:c.nameTr||c.nameAr||c.key,
+        src:picture(p),
+        curated:false
+      });
+    }
+  }
   rail.replaceChildren();
   choices.forEach((c,i)=>{
-   const link=document.createElement('a');link.className='og-moving-card og-portrait-banner';link.href=c.href;
-   link.setAttribute('aria-label',c.name);
-   link.dataset.artIndex=String(i%5);
-   const media=document.createElement('span');media.className='og-portrait-art';
-   const img=document.createElement('img');img.className='og-portrait-main-photo';
-   img.src=picture(c.product);img.alt=c.name;img.loading=i<4?'eager':'lazy';img.decoding='async';
-   media.append(img);
-   const label=document.createElement('span');label.className='og-portrait-title';label.textContent=c.name;
-   link.append(media,label);rail.append(link);
+    const link=document.createElement('a');
+    link.className='og-moving-card og-portrait-banner'+(c.curated?' og-curated-banner':'');
+    link.href=c.href;
+    link.setAttribute('aria-label',c.name);
+    link.dataset.artIndex=String(i%5);
+    const media=document.createElement('span');media.className='og-portrait-art';
+    const img=document.createElement('img');img.className='og-portrait-main-photo';
+    img.src=c.src;img.alt=c.name;img.loading=i<4?'eager':'lazy';img.decoding='async';
+    media.append(img);
+    const label=document.createElement('span');label.className='og-portrait-title';label.textContent=c.name;
+    link.append(media,label);rail.append(link);
   });
   section.hidden=choices.length===0;
   if(choices.length<2)return;
