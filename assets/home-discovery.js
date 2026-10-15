@@ -14,7 +14,7 @@
   const now=Number(p?.price),before=Number(p?.storefront?.compareAtPrice);
   return eligible(p)&&Number.isFinite(before)&&before>now&&now>0?{before,now,pct:Math.round((before-now)*100/before)}:null;
  }
- const url=p=>'/products/'+encodeURIComponent(String(p.id))+'/'+(tr?'?lang=tr':'');
+ const url=p=>(tr&&p.storefront?.nameTr&&(p.storefront?.descriptionTr||p.storefront?.shortDescriptionTr)?'/tr':'')+'/products/'+encodeURIComponent(String(p.id))+'/'+(tr&&!(p.storefront?.nameTr&&(p.storefront?.descriptionTr||p.storefront?.shortDescriptionTr))?'?lang=tr':'');
  function picture(p){if(!p.hasImage)return '';const src=tr?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);if(!src)return '';try{const dest=new URL(src,api);if(dest.protocol!=='https:')return '';return dest.href}catch{return ''}}
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)');
  let categoriesStop=()=>{};

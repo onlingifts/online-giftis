@@ -8,3 +8,6 @@
 .footer{background:var(--dark);color:#aaa097;padding:28px 0}.footer .container{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:9px}.footer a{color:#fff}
 @media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}.copy-grid{grid-template-columns:1fr}}
 @media(max-width:620px){.navlinks a:not(.cta){display:none}.hero{padding-top:18px}.hero-box{padding:30px 23px;border-radius:27px}.hero h1{font-size:35px}.grid{grid-template-columns:repeat(2,1fr);gap:9px}.panel{padding:22px}.section-head{display:block}.section-head p{margin-top:7px}.hero-actions{display:grid}.hero-actions a{width:100%;justify-content:center}}
+
+/* Readable destination guides share the storefront type and colors. */
+.search-landing .panel p,.search-landing .faq p{font-size:15px;line-height:1.9}.search-landing .faq summary,.search-landing .name{font-size:16px}.search-landing .navlinks a,.search-landing .hero-actions a,.search-landing .card a.view{font-size:13px}.search-landing .hero p{font-size:16px}.search-landing .body{padding:16px}.search-landing .footer .container{font-size:13px}.search-landing .copy:last-child{padding-bottom:40px}

@@ -10,11 +10,11 @@
  const $=x=>document.getElementById(x);
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
  const requested=params.get('lang');
- const currentLang=requested==='tr'||(!requested&&localStorage.getItem('og_lang')==='tr')?'tr':'ar';
+ const currentLang=requested==='tr'?'tr':requested==='ar'?'ar':document.body.dataset.renderedLang||(location.pathname.startsWith('/tr/')?'tr':localStorage.getItem('og_lang')==='tr'?'tr':'ar');
  const txt=(ar,tr)=>currentLang==='tr'?tr:ar;
  document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='tr'?'ltr':'rtl';
- const loadingCopy=document.querySelector('.copy');if(loadingCopy)loadingCopy.hidden=true;
- if(currentLang==='tr'){document.title='Ürün detayları | Online Gifts';const h=document.querySelector('.info h1');if(h)h.textContent='Ürün yükleniyor…';if($('buyBtn'))$('buyBtn').textContent='Yükleniyor…'}
+ const loadingCopy=document.querySelector('.copy');if(loadingCopy&&!document.body.dataset.renderedLang)loadingCopy.hidden=true;
+ if(currentLang==='tr'&&document.body.dataset.renderedLang!=='tr'){document.title='Ürün detayları | Online Gifts';const h=document.querySelector('.info h1');if(h)h.textContent='Ürün yükleniyor…';if($('buyBtn'))$('buyBtn').textContent='Yükleniyor…'}
  const localizedName=p=>{
   const s=p?.storefront||{};
   return currentLang==='tr'?(s.nameTr||p.name||''):(s.nameAr||p.name||'');
@@ -30,6 +30,8 @@
   document.documentElement.dir=currentLang==='tr'?'ltr':'rtl';
   localStorage.setItem('og_lang',currentLang);
   const name=localizedName(p),description=localizedDescription(p);
+  const localizedUrl=location.origin+(currentLang==='tr'&&p.storefront?.nameTr&&(p.storefront?.descriptionTr||p.storefront?.shortDescriptionTr)?'/tr':'')+'/products/'+id+'/';
+  const canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href=localizedUrl;
   if(currentLang==='tr'){
    const s=p.storefront||{};
    document.title=s.seoTitleTr||((name||'Ürün')+' | Online Gifts Türkiye');
@@ -42,7 +44,7 @@
    const trusts=document.querySelectorAll('.trust div');
    if(trusts[0])trusts[0].innerHTML='<i class="fa-solid fa-palette"></i>Kişiye özel üretim';
    if(trusts[1])trusts[1].innerHTML='<i class="fa-solid fa-box"></i>Özenli paketleme';
-   if(trusts[2])trusts[2].innerHTML='<i class="fa-solid fa-truck-fast"></i>Türkiye genelinde ücretsiz teslimat';
+   if(trusts[2])trusts[2].innerHTML='<i class="fa-solid fa-truck-fast"></i>Türkiye içi teslimat';
    const panels=document.querySelectorAll('.copy .panel');
    if(panels[0]){
     const h=panels[0].querySelector('h2');if(h)h.textContent='Bu ürün hakkında';
@@ -50,7 +52,7 @@
    }
    if(panels[1]){
     const h=panels[1].querySelector('h2');if(h)h.textContent='Online Gifts · 2016’dan beri';
-    const ul=panels[1].querySelector('ul');if(ul)ul.innerHTML='<li>Ürüne göre kişiye özel tasarım, baskı ve hazırlık.</li><li>Transfer baskı, lazer kazıma, 3D baskı ve NFC ürünleri.</li><li>Türkiye genelinde ücretsiz teslimat.</li><li>Özel adet ve tasarımlar için WhatsApp desteği.</li>'
+    const ul=panels[1].querySelector('ul');if(ul)ul.innerHTML='<li>Ürüne göre kişiye özel tasarım, baskı ve hazırlık.</li><li>Transfer baskı, lazer kazıma, 3D baskı ve NFC ürünleri.</li><li>Türkiye içi teslimat.</li><li>Özel adet ve tasarımlar için WhatsApp desteği.</li>'
    }
    const footer=document.querySelector('.footer .container');if(footer)footer.innerHTML='<span>© Online Gifts — 2016’dan beri</span><span><a href="/tr/istanbul-hediye/">İstanbul hediyeleri</a> · <a href="/tr/kisiye-ozel-hediye/">Kişiye özel hediyeler</a> · <a href="/tr/returns/">İade ve değişim politikası</a></span>';
   }
@@ -90,7 +92,7 @@
   if(trusts[1])trusts[1].textContent=txt('تغليف مرتب','Özenli paketleme');
   if(trusts[2])trusts[2].textContent=txt('توصيل داخل تركيا','Türkiye içi teslimat');
   const wa=document.querySelector('.actions .whatsapp');if(wa)wa.href=WA;
-  const actions=document.querySelector('.nav-actions');if(actions&&!actions.querySelector('.language-switch')){const link=document.createElement('a');link.className='language-switch';link.href='/products/'+encodeURIComponent(String(id))+'/?lang='+(currentLang==='tr'?'ar':'tr');link.textContent=currentLang==='tr'?'العربية':'Türkçe';actions.append(link)}
+  const actions=document.querySelector('.nav-actions');if(actions&&!actions.querySelector('.language-switch')){const link=document.createElement('a');link.className='language-switch';link.href=currentLang==='tr'?'/products/'+encodeURIComponent(String(id))+'/':p.storefront?.nameTr&&(p.storefront?.descriptionTr||p.storefront?.shortDescriptionTr)?'/tr/products/'+encodeURIComponent(String(id))+'/':'/products/'+encodeURIComponent(String(id))+'/?lang=tr';link.textContent=currentLang==='tr'?'العربية':'Türkçe';actions.append(link)}
  }
  function renderGallery(p){
   const media=document.querySelector('.media');if(!media)return;

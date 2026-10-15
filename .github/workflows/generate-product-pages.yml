@@ -10,6 +10,8 @@ on:
     paths:
       - "scripts/generate-product-pages.mjs"
       - "scripts/merchant-feed.mjs"
+      - "scripts/seo-localization.mjs"
+      - "scripts/search-landing-pages.mjs"
       - "assets/themes.js"
       - "assets/themes.css"
       - "assets/product-page.css"
@@ -54,6 +56,9 @@ jobs:
       - name: Generate product pages
         run: node scripts/generate-product-pages.mjs
 
+      - name: Validate search pages and language destinations
+        run: node --test scripts/check-search-seo.mjs
+
       - name: Build responsive storefront images
         run: |
           npm install --no-save --package-lock=false sharp@0.35.4
@@ -63,7 +68,7 @@ jobs:
         run: |
           git config user.name "online-gifts-seo-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A feeds products product-images assets/previews assets/image-manifest.js index.html sitemap.xml image-sitemap.xml
+          git add -A feeds products tr/products product-images assets/previews assets/image-manifest.js index.html sitemap.xml image-sitemap.xml flowers-turkey flower-delivery-istanbul flower-delivery-gaziantep tr/cicek-teslimati tr/istanbul-cicek tr/gaziantep-cicek en/flower-delivery-turkey en/flower-delivery-istanbul en/flower-delivery-gaziantep gifts-istanbul gifts-gaziantep gifts-konya gifts-bursa custom-gifts-turkey tr/istanbul-hediye tr/gaziantep-hediye tr/konya-hediye tr/bursa-hediye tr/kisiye-ozel-hediye
           if git diff --cached --quiet; then
             echo "No product SEO changes to commit."
             exit 0
