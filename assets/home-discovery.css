@@ -96,3 +96,40 @@ html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title
  html body.boutique-home .og-category-rail .og-portrait-banner{height:220px!important;flex-basis:144px!important}
  html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title{font-size:12px!important;min-height:78px!important}
 }
+
+
+/* 2026-10-15: clear full-bleed vertical category photography, no stacked thumbnails. */
+html body.boutique-home .og-category-rail .og-moving-card.og-portrait-banner{
+ height:clamp(254px,24vw,305px)!important;
+ flex-basis:clamp(162px,16vw,202px)!important;
+ border-radius:16px!important;background:#f5e7df!important;
+ border:1px solid #e7d4d4!important;
+}
+html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-art{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ display:block!important;overflow:hidden!important;padding:0!important;margin:0!important;
+ border-radius:inherit!important;background:#f5e7df!important;
+}
+html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-art:before{content:none!important}
+html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-main-photo{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ max-width:none!important;max-height:none!important;display:block!important;
+ object-fit:cover!important;object-position:center!important;
+ padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+ background:#f5e7df!important;box-shadow:none!important;transform:none!important;
+ transition:transform .35s ease!important;
+}
+html body.boutique-home .og-category-rail .og-portrait-banner:hover .og-portrait-main-photo{transform:scale(1.035)!important}
+html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title{
+ min-height:85px!important;align-items:flex-end!important;justify-content:center!important;
+ font:800 clamp(14px,1.2vw,17px)/1.5 "Cairo",Arial,sans-serif!important;
+ color:#fff!important;background:linear-gradient(0deg,rgba(43,20,34,.95) 0%,rgba(43,20,34,.78) 52%,transparent 100%)!important;
+ padding:28px 12px 15px!important;text-shadow:0 1px 5px rgba(0,0,0,.4)!important;
+}
+@media(max-width:620px){
+ html body.boutique-home .og-category-rail .og-moving-card.og-portrait-banner{height:226px!important;flex-basis:150px!important}
+ html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-title{font-size:13.5px!important;min-height:78px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html body.boutique-home .og-category-rail .og-portrait-banner .og-portrait-main-photo{transition:none!important}
+}
