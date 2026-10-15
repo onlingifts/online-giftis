@@ -405,7 +405,8 @@ img{max-width:100%}
 <link rel="stylesheet" href="/assets/themes.css?v=20261010-single-banner1">
 <script src="/assets/image-manifest.js"></script><script src="/assets/responsive-images.js?v=20261010-product-images1"></script><script src="/assets/boutique-presentation.js?v=20261012-desktop2"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
 <link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261013-banner-fit1">
-<link rel="stylesheet" href="/assets/wheel-checkout.css?v=20261013-wheel1"><script src="/assets/wheel-checkout.js?v=20261013-wheel1" defer></script></head>
+<link rel="stylesheet" href="/assets/wheel-checkout.css?v=20261013-wheel1"><script src="/assets/wheel-checkout.js?v=20261013-wheel1" defer></script><style id="og-sale-price-style">.og-old-price{display:inline-block;color:#8d7c81;font-size:12px;text-decoration:line-through;margin-inline-end:7px;font-weight:500}.product-price:has(.og-old-price){display:flex;align-items:center;gap:6px;flex-wrap:wrap}.cat-btn[data-sales="1"]{border:1px solid #dcaabb;color:#91234b}.cat-btn[data-sales="1"].active{background:#9d2453;color:white;border-color:#9d2453}</style>
+</head>
 <body>
 <div class="topbar">
  <div class="container">
@@ -595,7 +596,7 @@ img{max-width:100%}
 (()=>{
 const API='https://api.onlinegiftis.com';
 const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
-const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',config:null,configLoaded:false,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false,notifications:[],notificationUnread:0};
+const state={products:[],categoryMeta:{},categoryOrder:[],cart:[],search:new URLSearchParams(location.search).get('q')||'',category:new URLSearchParams(location.search).get('category')||'all',favoritesOnly:new URLSearchParams(location.search).get('favorites')==='1',saleOnly:new URLSearchParams(location.search).get('sale')==='1',config:null,configLoaded:false,uploads:new Map(),receipt:null,paymentMethod:'cod',customer:null,benefits:null,accountMode:'login',catalogLoaded:false,submitting:false,notifications:[],notificationUnread:0};
 const $=id=>document.getElementById(id);
 const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
 const lang=()=>document.documentElement.lang==='tr'?'tr':'ar';
@@ -668,11 +669,12 @@ function saveCart(){try{localStorage.setItem('og_cart_v1',JSON.stringify(state.c
 function restoreCart(){try{const c=JSON.parse(localStorage.getItem('og_cart_v1')||'[]');if(Array.isArray(c))state.cart=c}catch{}}
 function favoriteIds(){try{return new Set((JSON.parse(localStorage.getItem('og_favorites_v1')||'[]')||[]).map(String))}catch{return new Set()}}
 function saveFavoriteIds(set){try{localStorage.setItem('og_favorites_v1',JSON.stringify([...set]))}catch{}}
+function isSale(p){const current=Number(p?.price),old=Number(p?.storefront?.compareAtPrice);return p&&p.orderable!==false&&p.hasImage&&Number.isFinite(old)&&Number.isFinite(current)&&current>0&&old>current}
 function visibleProducts(){
  const q=state.search.toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar'),fav=favoriteIds();
  return state.products.filter(p=>{
   const hay=(productName(p)+' '+productDescription(p)+' '+String(p.storefront?.searchTerms||'')+' '+String(p.storefront?.searchSynonyms||'')+' '+categoryList(p).join(' ')).toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar');
-  return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))&&(!state.favoritesOnly||fav.has(String(p.id)))
+  return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))&&(!state.favoritesOnly||fav.has(String(p.id)))&&(!state.saleOnly||isSale(p))
  })
 }
 const categoryCampaigns={
@@ -688,7 +690,7 @@ const categoryCampaigns={
 function renderCategoryCampaign(){
  const link=$('categoryCampaign'),img=$('categoryCampaignImg');if(!link||!img)return;
  const meta=state.categoryMeta[state.category]||{key:state.category,nameAr:categoryLabel(state.category),nameTr:categoryLabel(state.category)};
- if(state.favoritesOnly||state.category==='all'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return;}
+ if(state.favoritesOnly||state.saleOnly||state.category==='all'){link.hidden=true;document.documentElement.removeAttribute('data-has-campaign');return;}
  const saved=lang()==='tr'?meta.bannerUrlTr:(meta.bannerUrlAr||meta.bannerUrl);
  const useSaved=Boolean(OGBoutique.savedAsset(meta));
  const art=OGBoutique.campaign(meta,visibleProducts().find(p=>p.hasImage));link.dataset.artRole=art.role;link.classList.toggle('boutique-category-campaign',!useSaved);
@@ -715,34 +717,35 @@ function renderCategories(){
  OGBoutique.applyPalette(meta);
  const theme=OGThemes.apply(state.category,meta?.customColors?meta.colors:null);
  const hero=document.querySelector('#products .section-head');
- const mobileTitle=$('catalogMobileTitle');if(mobileTitle)mobileTitle.textContent=state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
- hero.querySelector('h1').textContent=state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
- hero.querySelector('p').textContent=state.favoritesOnly?txt('المنتجات التي حفظتها في المفضلة.','Favorilerine kaydettiğin ürünler.'):categoryDescription(state.category);
+ const mobileTitle=$('catalogMobileTitle');if(mobileTitle)mobileTitle.textContent=state.saleOnly?txt('التخفيضات','İndirimler'):state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
+ hero.querySelector('h1').textContent=state.saleOnly?txt('التخفيضات','İndirimler'):state.favoritesOnly?txt('المفضلة','Favorilerim'):categoryLabel(state.category);
+ hero.querySelector('p').textContent=state.saleOnly?txt('منتجات خُفض سعرها مقارنةً بسعرها السابق في المتجر.','Mağazamızda önceki fiyatına göre indirimli ürünler.'):state.favoritesOnly?txt('المنتجات التي حفظتها في المفضلة.','Favorilerine kaydettiğin ürünler.'):categoryDescription(state.category);
  let icon=hero.querySelector('.theme-icon');if(!icon){icon=document.createElement('i');hero.firstElementChild.prepend(icon)}icon.className='theme-icon fa-solid fa-'+theme.icon;icon.setAttribute('aria-hidden','true');
  const set=[];
  state.categoryOrder.forEach(c=>{if(c!=='all'&&!set.includes(c))set.push(c)});
  state.products.forEach(p=>categoryList(p).forEach(c=>{if(!set.includes(c)&&(!Object.keys(state.categoryMeta).length||state.categoryMeta[c]))set.push(c)}));
- categories.innerHTML='<button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+esc(categoryLabel('all'))+'</button>'+
+ categories.innerHTML='<button class="cat-btn '+(state.saleOnly?'active':'')+'" data-sales="1"><i class="fa-solid fa-tags"></i> '+txt('التخفيضات','İndirimler')+'</button><button class="cat-btn '+(state.favoritesOnly?'active':'')+'" data-favorites="1"><i class="fa-solid fa-heart"></i> '+txt('المفضلة','Favoriler')+'</button><button class="cat-btn '+(!state.favoritesOnly&&!state.saleOnly&&state.category==='all'?'active':'')+'" data-cat="all">'+esc(categoryLabel('all'))+'</button>'+
   set.map(c=>'<button class="cat-btn '+(!state.favoritesOnly&&state.category===c?'active':'')+'" data-cat="'+esc(c)+'">'+esc(categoryLabel(c))+'</button>').join('');
- categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.favoritesOnly=false;state.category=b.dataset.cat;const url=new URL(location.href);url.searchParams.delete('favorites');if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}));categories.querySelector('[data-favorites]')?.addEventListener('click',()=>{state.favoritesOnly=true;state.category='all';const url=new URL(location.href);url.searchParams.delete('category');url.searchParams.set('favorites','1');history.pushState({},'',url);renderCategories();renderProducts()})
+ categories.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{state.favoritesOnly=false;state.saleOnly=false;state.category=b.dataset.cat;const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('sale');if(state.category==='all')url.searchParams.delete('category');else url.searchParams.set('category',state.category);history.pushState({},'',url);renderCategories();renderProducts()}));categories.querySelector('[data-favorites]')?.addEventListener('click',()=>{state.favoritesOnly=true;state.saleOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('category');url.searchParams.delete('sale');url.searchParams.set('favorites','1');history.pushState({},'',url);renderCategories();renderProducts()})
+ categories.querySelector('[data-sales]')?.addEventListener('click',()=>{state.saleOnly=true;state.favoritesOnly=false;state.category='all';const url=new URL(location.href);url.searchParams.delete('favorites');url.searchParams.delete('category');url.searchParams.set('sale','1');history.pushState({},'',url);renderCategories();renderProducts()});
  renderCategoryCampaign()
  renderCategoryVisual()
 }
 function renderProducts(){
  const list=visibleProducts(),fav=favoriteIds();
- if(!list.length){grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-'+(state.favoritesOnly?'solid fa-heart':'solid fa-box-open')+'"></i></div>'+ (state.favoritesOnly?txt('ما عندك منتجات بالمفضلة لسا','Henüz favori ürünün yok'):txt('ما لقينا منتجات مطابقة','Eşleşen ürün bulunamadı'))+'</div>';return}
+ if(!list.length){grid.innerHTML='<div class="products-state"><div class="empty-icon"><i class="fa-'+(state.favoritesOnly?'solid fa-heart':'solid fa-box-open')+'"></i></div>'+ (state.saleOnly?txt('لا توجد منتجات مخفّضة متاحة حالياً.','Şu anda indirimli ürün bulunmuyor.'):state.favoritesOnly?txt('لا توجد منتجات في المفضلة بعد.','Henüz favori ürünün yok'):txt('لم نعثر على منتجات مطابقة.','Eşleşen ürün bulunamadı'))+'</div>';return}
  grid.innerHTML=list.map(p=>{
   const name=OGBoutique.shortName(p),description=productDescription(p);
   const imageUrl=lang()==='tr'?(p.imageUrlTr!==undefined?p.imageUrlTr:p.imageUrl):(p.imageUrlAr!==undefined?p.imageUrlAr:p.imageUrl);
   const image=p.hasImage&&imageUrl?API+imageUrl:'';
-  const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');
+  const price=p.price!==null?money(p.price):txt('السعر عند الطلب','Fiyat için iletişime geçin');const isDiscounted=isSale(p);const oldPrice=isDiscounted?money(p.storefront.compareAtPrice):'';const discountPct=isDiscounted?Math.round((1-Number(p.price)/Number(p.storefront.compareAtPrice))*100):0;
   const cats=categoryList(p),flags=productFlags(p),liked=fav.has(String(p.id));
   const extraBadges=(flags.requiresPrepayment?'<span class="badge stock">'+txt('حوالة بنكية','Banka havalesi')+'</span>':'')+
    ((flags.requiresCustomizationImage||flags.requiresCustomizationText||flags.requiresDesignInput)?'<span class="badge stock">'+txt('مخصص','Kişiye özel')+'</span>':'');
   return '<div class="product-card-wrap"><button type="button" class="catalog-favorite '+(liked?'is-favorite':'')+'" data-fav="'+p.id+'" aria-label="'+txt('إضافة للمفضلة','Favorilere ekle')+'" aria-pressed="'+liked+'"><i class="'+(liked?'fa-solid':'fa-regular')+' fa-heart"></i></button>'+
    '<a class="product-card-link" href="'+productHref(p)+'" aria-label="'+txt('فتح المنتج: ','Ürünü aç: ')+esc(name)+'"><article class="product-card"><div class="product-media">'+
    (image?'<img '+OGImages.product(p,'(max-width: 760px) calc((100vw - 66px) / 2), (max-width: 1100px) 30vw, 260px')+' alt="'+esc(name)+'" loading="lazy" decoding="async">':'<div class="products-state" style="border:0;height:100%;display:grid;place-items:center">'+txt('بدون صورة','Görsel yok')+'</div>')+
-   '<div class="badges">'+(p.storefront?.isBestseller?'<span class="badge hot">'+txt('الأكثر طلباً','Çok satan')+'</span>':p.storefront?.isNew?'<span class="badge hot">'+txt('جديد','Yeni')+'</span>':p.isFeatured?'<span class="badge hot">'+txt('مميز','Öne çıkan')+'</span>':'')+(p.stockQuantity>0?'<span class="badge stock">'+txt('متوفر','Stokta')+'</span>':'')+extraBadges+'</div></div>'+
+   '<div class="badges">'+(p.storefront?.isBestseller?'<span class="badge hot">'+txt('الأكثر طلباً','Çok satan')+'</span>':p.storefront?.isNew?'<span class="badge hot">'+txt('جديد','Yeni')+'</span>':p.isFeatured?'<span class="badge hot">'+txt('مميز','Öne çıkan')+'</span>':'')+(p.stockQuantity>0?'<span class="badge stock">'+txt('متوفر','Stokta')+'</span>':'')+(isDiscounted?'<span class="badge hot">'+txt('خصم','İndirim')+' '+discountPct+'%</span>':'')+extraBadges+'</div></div>'+ 
    '<div class="product-body"><div class="product-category">'+esc(cats.slice(0,2).map(categoryLabel).join(' • ')||txt('هدايا','Hediye'))+'</div><div class="product-name">'+esc(name)+'</div><div class="product-desc">'+esc(description)+'</div>'+
    (OGBoutique.rating(p)||'')+'<div class="product-bottom"><div class="product-price">'+price+'</div><div class="product-actions"><span class="open-product"><i class="fa-solid fa-cart-shopping"></i>'+txt('عرض المنتج','Ürünü görüntüle')+'</span></div></div></div></article></a><button type="button" class="boutique-add" data-add-product="'+p.id+'" aria-label="'+txt('إضافة للسلة: ','Sepete ekle: ')+esc(name)+'" '+(p.orderable?'':'disabled')+'><i class="fa-solid fa-cart-shopping"></i></button></div>'
  }).join('');
@@ -1130,7 +1133,7 @@ document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventLi
 $('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();
-window.addEventListener('popstate',()=>{const q=new URLSearchParams(location.search);state.category=q.get('category')||'all';state.favoritesOnly=q.get('favorites')==='1';renderCategories();renderProducts()});
+window.addEventListener('popstate',()=>{const q=new URLSearchParams(location.search);state.category=q.get('category')||'all';state.favoritesOnly=q.get('favorites')==='1';state.saleOnly=q.get('sale')==='1';renderCategories();renderProducts()});
 restoreCart();
 const requestedLang=new URLSearchParams(location.search).get('lang');const savedLang=(()=>{try{return localStorage.getItem('og_lang')}catch{return null}})();if(requestedLang==='tr')applyLanguage('tr');else if(requestedLang==='ar')applyLanguage('ar');else if(savedLang==='tr')applyLanguage('tr');
 setAccountMode('login');
