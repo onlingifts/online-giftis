@@ -81,6 +81,7 @@
     const media=document.createElement('span');media.className='og-portrait-art';
     const img=document.createElement('img');img.className='og-portrait-main-photo';
     img.src=c.src;img.alt=c.name;img.loading=i<4?'eager':'lazy';img.decoding='async';
+    if(c.curated)img.addEventListener('error',()=>{link.classList.remove('og-curated-banner');img.src='/assets/boutique-gifts.webp';},{once:true});
     media.append(img);
     const label=document.createElement('span');label.className='og-portrait-title';label.textContent=c.name;
     link.append(media,label);rail.append(link);
