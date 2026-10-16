@@ -41,7 +41,8 @@ assert.match(presentation.card({...snapshot.banners[0],key:'personalized'},'/pro
   updated=true;await page.goto('http://localhost:8765/products/?lang='+lang+'&category=nfc');await page.waitForFunction(()=>document.getElementById('categoryCampaignImg').src.includes('admin-new-upload'));
   assert.equal(await page.locator('.boutique-category-campaign-copy').isVisible(),false);
   await page.screenshot({path:path.join(output,'admin-upload-category-'+lang+'-'+width+'.png')});
-  await page.goto('http://localhost:8765/'+(lang==='tr'?'tr/':''));await page.waitForFunction(()=>document.querySelector('.hero-image-only img')?.src.includes('admin-new-upload'));
+  await page.goto('http://localhost:8765/'+(lang==='tr'?'tr/':''));await page.waitForFunction(()=>document.querySelector('.hero-slide img')?.src.includes('admin-new-upload'));
+  assert.equal(await page.locator('.hero-slide .boutique-hero-copy').isVisible(),true,'Uploaded main artwork retains its heading and CTA');
   await page.locator('#homeAllCategories .boutique-saved-banner').first().waitFor();
   assert.equal(await page.locator('#homeAllCategories .boutique-section-card strong').first().textContent(),lang==='tr'?'Doğum günü':'أعياد الميلاد');
   await page.screenshot({path:path.join(output,'admin-upload-home-'+lang+'-'+width+'.png'),fullPage:true});await page.close();

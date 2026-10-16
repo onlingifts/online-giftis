@@ -5,9 +5,16 @@ const {chromium}=require('playwright'),fs=require('node:fs'),assert=require('nod
   const page=await browser.newPage({viewport:{width,height:950}});page.on('pageerror',error=>errors.push(error.message));const data=structuredClone(snapshot);
   for(const meta of [...data.categories,...data.banners,data.homeBanner])for(const suffix of ['Ar','Tr']){meta['effectiveBannerUrl'+suffix]='http://localhost:8765/assets/boutique-gifts.webp?locale='+suffix;meta['bannerSource'+suffix]='uploaded';}
   data.storefront={homeBanners:{limit:3,selected:['category:nfc','banner:birthday','category:assorted']},heroSlider:{autoplay:true,interval:3000,slides:[{source:'category:assorted',enabled:true,sortOrder:2},{source:'home',enabled:true,sortOrder:0},{source:'category:nfc',enabled:true,sortOrder:1},{source:'category:kids',enabled:false,sortOrder:3}]}};
+  data.storefront.hero={ar:{kicker:'هداياكم',heading:'نص البانر المحفوظ',description:'وصف الهدية المحفوظ',button:'تصفح الهدايا',link:'/products/?q=hero'},tr:{kicker:'Hediyeler',heading:'Kayıtlı banner başlığı',description:'Kayıtlı açıklama',button:'Hediyeleri keşfet',link:'/tr/products/?q=hero'}};
   await page.route('https://**/*',async route=>{assert.equal(route.request().method(),'GET');const url=new URL(route.request().url());if(url.pathname==='/api/store/categories')return route.fulfill({json:data});if(url.pathname==='/api/store/products')return route.fulfill({json:products});if(url.pathname==='/api/store/reviews')return route.fulfill({json:{summary:{count:0,average:null},reviews:[]}});return route.abort();});
   await page.goto('http://localhost:8765/'+(lang==='tr'?'tr/':''));await page.locator('.hero-slider-controls').waitFor();
   assert.equal(await page.locator('#homeAllCategories .boutique-section-card').count(),3);assert.deepEqual(await page.locator('#homeAllCategories .boutique-section-card').evaluateAll(cards=>cards.map(card=>card.dataset.categoryKey)),['nfc','birthday','assorted']);assert.equal(await page.locator('#occasions').isVisible(),false);
+  const mainCopy=page.locator('.hero-slide[data-slide-index="0"] .boutique-hero-copy');
+  assert.equal(await mainCopy.count(),1,'Adding slides must retain the main banner copy');
+  assert.equal(await mainCopy.isVisible(),true,'Main banner copy remains visible');
+  assert.equal(await mainCopy.locator('h1').textContent(),data.storefront.hero[lang].heading);
+  assert.equal(await mainCopy.locator('.boutique-cta').textContent(),data.storefront.hero[lang].button);
+  assert.equal(await mainCopy.locator('.boutique-cta').isVisible(),true);
   assert.equal(await page.locator('.hero-slide').count(),3);assert.equal(await page.locator('.hero-slide.is-active').getAttribute('data-slide-index'),'0');assert.match(await page.locator('.hero-slide.is-active img').getAttribute('src'),new RegExp('locale='+ (lang==='tr'?'Tr':'Ar')));
   await page.waitForFunction(()=>document.querySelector('.hero-slide.is-active')?.dataset.slideIndex==='1',{},{timeout:6000});
   await page.locator('.hero-slider-controls>button').last().click();await page.locator('.hero-slider-controls>button').nth(1).click();assert.equal(await page.locator('.hero-slide.is-active').getAttribute('data-slide-index'),'2');
