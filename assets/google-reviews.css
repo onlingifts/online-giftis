@@ -23,3 +23,9 @@
 .google-review-card{text-align:start}
 #reviews .google-review-intro{text-align:start}
 @media(max-width:600px){#reviews{padding:24px 14px;border-radius:20px}}
+
+/* Direct, verifiable source for selected Google customer review excerpts. */
+#reviews .google-review-direct-link{display:flex;justify-content:flex-start;margin:0 0 29px}
+#reviews .google-review-direct-link a{display:inline-flex;align-items:center;max-width:100%;min-height:44px;padding:10px 16px;border:1px solid #bd6788;border-radius:999px;background:#fff8fb;color:#832848;font:800 14px/1.7 inherit;text-decoration:none;transition:background .2s}
+#reviews .google-review-direct-link a:hover{background:#f4dce5}
+#reviews .google-review-direct-link a:focus-visible{outline:3px solid #832848;outline-offset:3px}
