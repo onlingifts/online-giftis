@@ -32,7 +32,7 @@
 - 54 ملف `products/<id>/index.html` و37 ملف `tr/products/<id>/index.html`: مخرجات مولدة من API المباشر.
 - `sitemap.xml` و`image-sitemap.xml`: 121 صفحة canonical، و91 صفحة منتجات في خريطة الصور.
 - `scripts/check-technical-seo.mjs` و`scripts/check-catalog-seo-browser.cjs`: تحقق شامل من الخرائط واللغات والكتالوج الأولي والأسعار.
-- `scripts/check-search-browser.cjs` و`scripts/check-boutique-browser.cjs`: توقع مسار الكتالوج التركي الجديد بدلاً من معامل اللغة بعد فتح السلة.
+- `scripts/check-search-browser.cjs` و`scripts/check-boutique-browser.cjs` و`scripts/check-themes-browser.cjs`: توقع مسار الكتالوج التركي الجديد بدلاً من معامل اللغة بعد فتح السلة.
 - `.github/workflows/generate-product-pages.yml` و`.github/workflows/check-themes.yml`: استمرار التوليد والفحوص تلقائياً.
 
 ## نتائج الاختبار قبل النشر
