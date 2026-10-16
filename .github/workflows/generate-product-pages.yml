@@ -59,6 +59,9 @@ jobs:
       - name: Validate search pages and language destinations
         run: node --test scripts/check-search-seo.mjs
 
+      - name: Validate official store identity and AI-search access
+        run: node --test scripts/check-brand-identity.mjs
+
       - name: Build responsive storefront images
         run: |
           npm install --no-save --package-lock=false sharp@0.35.4
