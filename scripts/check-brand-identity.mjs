@@ -7,7 +7,7 @@ const brand = 'Online Giftis';
 const url = 'https://onlinegiftis.com/';
 const social = [
   'https://www.instagram.com/onlinegiftis/',
-  'https://www.facebook.com/onlonlayinnayinn',
+  'https://www.facebook.com/onlayinn',
   'https://www.tiktok.com/@onlinegiftis',
   'https://www.instagram.com/online.giftis.tr/',
   'https://www.facebook.com/onlayinn.tr/',
