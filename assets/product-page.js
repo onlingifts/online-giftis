@@ -65,6 +65,11 @@
    for(const selector of ['meta[name="description"]','meta[property="og:description"]','meta[name="twitter:description"]']){const meta=document.querySelector(selector);if(meta)meta.content=brandedDescription;}
    for(const selector of ['meta[property="og:title"]','meta[name="twitter:title"]']){const meta=document.querySelector(selector);if(meta)meta.content=document.title;}
   }
+  const seoSku=document.body.dataset.seoSku;
+  if(seoSku){
+   document.title=document.title.replace(/Online Gifts/g,'Online Giftis')+' · '+seoSku;
+   const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=meta.content+' · '+seoSku;
+  }
   setText('.info h1',name);
   setText('.info .desc',description);const desc=document.querySelector('.info .desc');if(desc)desc.hidden=!description;
   const media=document.querySelector('.media img');if(media)media.alt=name;
@@ -137,6 +142,14 @@
  }
  function setProduct(p){
   product=p;
+  // Keep the existing Product node in sync when live price/stock changes.
+  document.querySelectorAll('script[type="application/ld+json"]').forEach(node=>{
+   let value;try{value=JSON.parse(node.textContent)}catch{return}
+   if(value['@type']!=='Product')return;
+   value.name=localizedName(p);value.description=localizedDescription(p)||value.name;
+   if(Number(p.price)>0){value.offers={...value.offers,'@type':'Offer',price:Number(p.price),priceCurrency:'TRY',availability:'https://schema.org/'+(p.stockQuantity>0?'InStock':'OutOfStock')};}else delete value.offers;
+   node.textContent=JSON.stringify(value).replace(/</g,'\\u003c');
+  });
   if(window.OGThemes){const key=OGThemes.productCategory(p,params.get('category')),meta=categoryMeta[key];window.OGBoutique?.applyPalette(meta);OGThemes.apply(key,meta?.customColors?meta.colors:null);}
   applyLanguageShell(p);
   renderProductContent(p);

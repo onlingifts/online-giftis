@@ -11,6 +11,8 @@ on:
       - "scripts/generate-product-pages.mjs"
       - "scripts/merchant-feed.mjs"
       - "scripts/seo-localization.mjs"
+      - "scripts/catalog-seo.mjs"
+      - "products/index.html"
       - "scripts/search-landing-pages.mjs"
       - "assets/themes.js"
       - "assets/themes.css"
@@ -57,7 +59,7 @@ jobs:
         run: node scripts/generate-product-pages.mjs
 
       - name: Validate search pages and language destinations
-        run: node --test scripts/check-search-seo.mjs
+        run: node --test scripts/check-search-seo.mjs scripts/check-technical-seo.mjs
 
       - name: Validate official store identity and AI-search access
         run: node --test scripts/check-brand-identity.mjs

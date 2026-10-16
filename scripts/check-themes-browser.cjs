@@ -26,7 +26,7 @@ const fs=require('node:fs');
  });
  // The synthetic catalogue item has no committed SEO page. Supply its generated
  // product shell just as the API responses above supply its catalogue record.
- await page.route('http://localhost:8765/products/9001/**',r=>r.fulfill({contentType:'text/html',body:fs.readFileSync('products/detail/index.html','utf8').replace('<body>','<body data-product-id="9001">')}));
+ await page.route(/http:\/\/localhost:8765\/(?:tr\/)?products\/9001\//,r=>r.fulfill({contentType:'text/html',body:fs.readFileSync('products/detail/index.html','utf8').replace('<body>','<body data-product-id="9001">')}));
  const base='http://localhost:8765';
  for(const width of [320,360,390,430,768,1440]){
   await page.setViewportSize({width,height:900});
@@ -36,7 +36,7 @@ const fs=require('node:fs');
   }
  }
  await page.goto(base+'/tr/');await page.locator('#homeSearch').fill('Yeni');await page.locator('.home-search button').click();
- await page.locator('.product-card-link').first().waitFor();assert.match(page.url(),/lang=tr/);assert.equal(await page.locator('#productSearch').inputValue(),'Yeni');
+ await page.locator('.product-card-link').first().waitFor();assert.equal(new URL(page.url()).pathname,'/tr/products/');assert.equal(await page.locator('#productSearch').inputValue(),'Yeni');
  assert.match(await page.locator('.product-name').first().innerText(),/Yeni hediye/);
  await page.locator('.product-card-link').first().click();await page.waitForFunction(()=>!document.getElementById('buyBtn').disabled);
  assert.equal(await page.locator('h1').innerText(),'Yeni hediye');assert.match(await page.locator('.media img').getAttribute('src'),/api\.onlinegiftis\.com/);
