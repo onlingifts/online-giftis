@@ -28,10 +28,13 @@
   const track=document.createElement('div');track.className='hero-slider-track';const links=rows.map((row,index)=>{
    const link=template.cloneNode(true);link.classList.add('hero-slide');link.dataset.slideIndex=index;link.href=row.href;
    const image=link.querySelector('img');image.src=row.asset;image.removeAttribute('srcset');image.removeAttribute('sizes');image.removeAttribute('style');image.alt=row.source==='home'?t('البانر الرئيسي — Online Giftis','Online Giftis ana banner'):window.OGBoutique.label(row.meta);image.loading=index===0?'eager':'lazy';image.setAttribute('fetchpriority',index===0?'high':'low');
-   if(rows.length>1||!row.isDefault){link.classList.add('hero-image-only');link.querySelector('.boutique-hero-copy')?.remove();link.querySelectorAll('picture source').forEach(source=>source.remove());}
+   // Keep the main banner's heading and CTA when additional slides are enabled.
+   if(row.source!=='home'){link.classList.add('hero-image-only');link.querySelector('.boutique-hero-copy')?.remove();}
+   if(!row.isDefault)link.querySelectorAll('picture source').forEach(source=>source.remove());
    track.append(link);return link;
   });hero.append(track);
-  if(rows.length===1){window.OGHomeLayout?.apply(data.storefront,document,language);return;}
+  window.OGHomeLayout?.apply(data.storefront,document,language);
+  if(rows.length===1)return;
   const controls=document.createElement('div');controls.className='hero-slider-controls';
   const button=(label,content)=>{const el=document.createElement('button');el.type='button';el.setAttribute('aria-label',label);el.textContent=content;return el;};
   const prev=button(t('البانر السابق','Önceki banner'),'‹'),next=button(t('البانر التالي','Sonraki banner'),'›'),pause=button(t('إيقاف الحركة','Otomatik geçişi durdur'),'Ⅱ');const dots=document.createElement('div');dots.className='hero-slider-dots';controls.append(prev,dots,next,pause);hero.append(controls);
