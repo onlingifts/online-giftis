@@ -28,7 +28,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'Turkish product overflow');
    await page.locator('#buyBtn').click();
    await page.waitForURL(/cart=1/);
-   assert.match(page.url(),/lang=tr/);
+   assert.equal(new URL(page.url()).pathname,'/tr/products/');
    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('og_cart_v1')).some(p=>Number(p.productId)===112)),true);
    for(const path of ['/flower-delivery-istanbul/','/tr/gaziantep-cicek/','/en/flower-delivery-istanbul/','/tr/turkiyeye-hediye-gonder/']){
     await page.goto('http://localhost:8765'+path);

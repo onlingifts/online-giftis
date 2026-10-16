@@ -72,7 +72,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
  mode='flow';
  // Image and cart controls are separate from navigation and never exceed current stock.
  {const {page,context}=await newPage('ar');await page.goto(base+'/products/?lang=ar');await page.locator('[data-add-product="9001"]').waitFor();await page.locator('[data-add-product="9001"]').click();await page.locator('#cartModal.open').waitFor();for(let i=0;i<4;i++)await page.locator('[data-plus]').click();assert.equal(await page.locator('.cart-item-actions strong').innerText(),'3');await context.close();}
- {const {page,context}=await newPage('tr');await page.goto(base+'/tr/');await page.locator('.pink-product-quick').first().click();await page.locator('#cartModal.open').waitFor();assert.equal(await page.locator('.cart-item-actions strong').innerText(),'1');assert.match(page.url(),/lang=tr/);await context.close();}
+ {const {page,context}=await newPage('tr');await page.goto(base+'/tr/');await page.locator('.pink-product-quick').first().click();await page.locator('#cartModal.open').waitFor();assert.equal(await page.locator('.cart-item-actions strong').innerText(),'1');assert.equal(new URL(page.url()).pathname,'/tr/products/');await context.close();}
 
  for(const language of ['ar','tr']){
   const {page,context}=await newPage(language);
