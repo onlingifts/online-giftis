@@ -1,3 +1,7 @@
+# OpenAI's search crawler for ChatGPT Search; this does not change training preferences.
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: *
 Allow: /
 
