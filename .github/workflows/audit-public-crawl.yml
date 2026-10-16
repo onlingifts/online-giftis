@@ -9,28 +9,25 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
-      - name: Check public DNS and HTTPS from an external runner
+      - name: Check DNS and HTTPS from GitHub runner
         shell: bash
         run: |
           set +e
-          echo "### DNS and HTTP diagnostic" >> "$GITHUB_STEP_SUMMARY"
-          echo 'Storefront: onlinegiftis.com' >> "$GITHUB_STEP_SUMMARY"
-          echo "```" >> "$GITHUB_STEP_SUMMARY"
-          echo "--- Name servers ---"
-          dig +time=3 +tries=1 onlinegiftis.com NS +short
-          echo "--- IPv4 ---"
-          dig +time=3 +tries=1 onlinegiftis.com A +short
-          echo "--- IPv6 ---"
-          dig +time=3 +tries=1 onlinegiftis.com AAAA +short
-          echo "--- github pages hostname ---"
-          dig +time=3 +tries=1 onlingifts.github.io A +short
+          echo 'Online Giftis public DNS and HTTP audit'
+          echo '--- Name servers ---'
+          dig +time=4 +tries=1 onlinegiftis.com NS +short
+          echo '--- IPv4 ---'
+          dig +time=4 +tries=1 onlinegiftis.com A +short
+          echo '--- IPv6 ---'
+          dig +time=4 +tries=1 onlinegiftis.com AAAA +short
+          echo '--- github pages IP ---'
+          dig +time=4 +tries=1 onlingifts.github.io A +short
           for target in https://onlinegiftis.com/ https://onlinegiftis.com/robots.txt https://onlinegiftis.com/sitemap.xml https://onlinegiftis.com/about/ https://onlinegiftis.com/tr/; do
             for agent in 'Mozilla/5.0' 'Googlebot' 'bingbot' 'OAI-SearchBot'; do
               echo "--- URL $target; agent $agent ---"
-              curl --location --silent --show-error --output /dev/null --connect-timeout 7 --max-time 17 \
-                --user-agent "$agent" --write-out 'http=%{http_code} final=%{url_effective} content_type=%{content_type} remote_ip=%{remote_ip} ssl_verify=%{ssl_verify_result} time=%{time_total}s\n' "$target"
+              curl --location --silent --show-error --output /dev/null --connect-timeout 7 --max-time 17 --user-agent "$agent" --write-out 'http=%{http_code} final=%{url_effective} content_type=%{content_type} remote_ip=%{remote_ip} ssl_verify=%{ssl_verify_result} time=%{time_total}s\n' "$target"
+              echo "curl exit code: $?"
             done
           done
-          echo "```" >> "$GITHUB_STEP_SUMMARY"
