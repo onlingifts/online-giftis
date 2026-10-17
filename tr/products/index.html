@@ -276,7 +276,7 @@ img{max-width:100%}
 .international-payment summary::-webkit-details-marker{display:none}
 .international-payment[open] summary{margin-bottom:10px}
 .international-payment p{font-size:11px;line-height:1.8;margin:0 0 10px}
-.international-payment-contact{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 14px;border-radius:12px;background:var(--red);color:#fff;font-size:11px;font-weight:800;text-align:center;line-height:1.8;overflow-wrap:anywhere}
+.international-payment-contact{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 14px;border-radius:12px;background:var(--lux-wine,var(--red));color:#fff;font-size:12px;font-weight:800;text-align:center;line-height:1.8;overflow-wrap:anywhere}
 .international-payment summary:focus-visible,.international-payment-contact:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 .bank-details{display:none;margin-top:10px;padding:11px;border-radius:12px;background:#f7f1e8;font-size:9.5px;line-height:1.8}
 .bank-details.show{display:block}
@@ -1175,6 +1175,7 @@ productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(
 accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal(cartModal);closeModal(productModal);closeModal(accountModal);closeModal($('orderSuccessModal'))}});
 document.querySelectorAll('input[name="paymentMethod"]').forEach(r=>r.addEventListener('change',()=>{state.paymentMethod=r.value;renderPayment()}));
+$('internationalPayment').addEventListener('toggle',event=>{if(event.target.open)event.target.querySelector('.international-payment-contact').scrollIntoView({block:'nearest'});});
 $('transferReceipt').addEventListener('change',e=>{const file=e.target.files?.[0]||null;if(file&&file.size>10*1024*1024){e.target.value='';state.receipt=null;checkoutError(txt('إشعار الحوالة أكبر من 10 MB.','Dekont 10 MB sınırını aşıyor.'));return}state.receipt=file});
 $('checkoutSubmit').addEventListener('click',checkout);
 $('year').textContent=new Date().getFullYear();

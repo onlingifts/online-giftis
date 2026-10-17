@@ -91,6 +91,7 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
    await page.setViewportSize({width:supportWidth,height:900});
    const support=page.locator('#internationalPayment');assert.equal(await support.getAttribute('open'),null);
    await support.locator('summary').click();assert.equal(await support.locator('a').isVisible(),true);
+   await support.locator('a').scrollIntoViewIfNeeded();
    const contact=new URL(await support.locator('a').getAttribute('href'));assert.equal(contact.hostname,'wa.me');assert.equal(contact.pathname,'/905349154274');
    assert.ok(contact.searchParams.get('text').includes(language==='tr'?'Türkiye dışından':'خارج تركيا'));
    assert.ok((await support.innerText()).includes(language==='tr'?'Yurt dışından ödeme':'تحويل أموال من خارج البلد'));
