@@ -36,13 +36,13 @@ jobs:
       - name: Verify mobile, tablet, desktop and category navigation
         run: |
           python3 -m http.server 8765 >/tmp/storefront-server.log 2>&1 &
+          node scripts/check-audit-followup-browser.cjs
           node scripts/check-merchant-language-browser.cjs
           node scripts/check-search-browser.cjs
           node scripts/check-catalog-seo-browser.cjs
           node scripts/check-home-banners-browser.cjs
           node scripts/check-themes-browser.cjs
           node scripts/check-boutique-browser.cjs
-          node scripts/check-audit-followup-browser.cjs
           node scripts/check-banner-management.cjs
           node scripts/check-home-layout-browser.cjs
           node scripts/check-desktop-followup.cjs
