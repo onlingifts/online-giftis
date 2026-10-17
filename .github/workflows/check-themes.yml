@@ -42,6 +42,7 @@ jobs:
           node scripts/check-home-banners-browser.cjs
           node scripts/check-themes-browser.cjs
           node scripts/check-boutique-browser.cjs
+          node scripts/check-audit-followup-browser.cjs
           node scripts/check-banner-management.cjs
           node scripts/check-home-layout-browser.cjs
           node scripts/check-desktop-followup.cjs

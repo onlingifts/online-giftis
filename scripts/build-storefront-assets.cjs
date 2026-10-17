@@ -8,7 +8,7 @@ const sharp = require('sharp');
 async function build() {
   const out = 'assets/previews';
   fs.mkdirSync(out, {recursive: true});
-  const manifest = {products: {}, assets: {}};
+  const manifest = {products: {}, productsTr: {}, assets: {}};
   const retained = new Set();
   async function preview(source, widths) {
     const bytes = fs.readFileSync(source);
@@ -37,6 +37,29 @@ async function build() {
     if (!id || !/\.(webp|jpg|jpeg|png|avif|gif)$/i.test(file)) continue;
     const entry = await preview('product-images/'+file, [160, 320, 480, 768]);
     if (entry) manifest.products[id] = {...entry,source:sources[id]||null};
+  }
+  // A Turkish photograph may differ from the Arabic one. Never reuse the wrong locale's art.
+  const localizedFile='product-images/.localized-sources.json';
+  if(fs.existsSync(localizedFile)){
+    const directory='product-images/localized-tr';fs.mkdirSync(directory,{recursive:true});
+    const cacheFile=directory+'/sources.json';
+    const cache=fs.existsSync(cacheFile)?JSON.parse(fs.readFileSync(cacheFile,'utf8')):{};
+    for(const [id,source] of Object.entries(JSON.parse(fs.readFileSync(localizedFile,'utf8')))){
+      if(!/^\d+$/.test(id))continue;
+      const file=directory+'/'+id+'-tr.webp';
+      try{
+        if(process.env.SEO_REUSE_IMAGES==='1'&&(cache[id]!==source||!fs.existsSync(file)))continue;
+        if(cache[id]!==source||!fs.existsSync(file)){
+          const response=await fetch(new URL(source,'https://api.onlinegiftis.com'),{signal:AbortSignal.timeout(20000)});
+          if(!response.ok)throw Error('HTTP '+response.status);
+          const bytes=Buffer.from(await response.arrayBuffer());
+          // Decode before replacing the cached original.
+          await sharp(bytes).rotate().webp({quality:90}).toFile(file+'.tmp');fs.renameSync(file+'.tmp',file);cache[id]=source;
+        }
+        const entry=await preview(file,[160,320,480,768]);if(entry)manifest.productsTr[id]={...entry,source};
+      }catch(error){console.warn('Turkish preview retained fallback for '+id+': '+error.message);}
+    }
+    fs.writeFileSync(cacheFile,JSON.stringify(cache));
   }
   for (const file of fs.readdirSync('assets').filter(x => /^(pink-hero-hq|campaign-|collection-).*\.webp$/.test(x))) {
     try {
@@ -76,6 +99,15 @@ async function build() {
     page = page.replace(/<img src="[^"]*\/product-images\/[^>]*>/, tag => tag.replace(/\s(?:srcset|sizes|width|height)="[^"]*"/g, '').replace(/>$/, ` srcset="${srcset}" sizes="${sizes}" width="${entry.width}" height="${entry.height}">`));
     page = page.replace(/<link rel="preload" as="image"[^>]*>/, `<link rel="preload" as="image" href="${source}" imagesrcset="${srcset}" imagesizes="${sizes}">`);
     fs.writeFileSync(file, page);
+  }
+  for(const [id,entry] of Object.entries({...manifest.products,...manifest.productsTr})){
+    const file=`tr/products/${id}/index.html`;if(!fs.existsSync(file))continue;
+    const html=fs.readFileSync(file,'utf8');
+    const sizes='(max-width:760px) calc(100vw - 50px), (max-width:1280px) 44vw, 520px';
+    const srcset=entry.variants.map(v=>v.url+' '+v.width+'w').join(', ');
+    const page=html.replace(/(<div class="media">)<img [^>]+>/,(_,start)=>start+`<img src="${entry.variants.find(v=>v.width>=320)?.url||entry.variants.at(-1).url}" srcset="${srcset}" sizes="${sizes}" width="${entry.width}" height="${entry.height}" alt="${html.match(/<h1>([^<]+)<\/h1>/)?.[1]||'Online Giftis'}" fetchpriority="high" decoding="async">`);
+    // Only use an Arabic entry when the source URL in the Turkish page matches.
+    if(manifest.productsTr[id]||html.includes('src="https://api.onlinegiftis.com'+String(entry.source||'').replace(/&/g,'&amp;')+'"'))fs.writeFileSync(file,page);
   }
   console.log(`Built ${retained.size} responsive previews; ${Object.keys(manifest.products).length} product images.`);
 }

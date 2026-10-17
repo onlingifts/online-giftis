@@ -60,6 +60,17 @@ async function signUp({email,password,fullName,phone}){
  if(session)write(session);
  return {session,user:data.user||session?.user||null,requiresEmailConfirmation:!session};
 }
+async function resetPassword(email){
+ const value=String(email||'').trim().toLowerCase();
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))throw new Error(t('أدخل بريداً إلكترونياً صحيحاً.','Geçerli bir e-posta girin.'));
+ return authFetch('/auth/v1/recover?redirect_to='+encodeURIComponent(authRedirect()),{method:'POST',body:JSON.stringify({email:value})});
+}
+async function updatePassword(password){
+ if(String(password||'').length<8)throw new Error(t('كلمة المرور يجب أن تكون 8 أحرف على الأقل.','Şifre en az 8 karakter olmalı.'));
+ const token=await getAccessToken();
+ if(!token)throw new Error(t('رابط الاستعادة منتهي أو غير صالح. اطلب رابطاً جديداً.','Sıfırlama bağlantısı geçersiz veya süresi dolmuş. Yeni bağlantı isteyin.'));
+ return authFetch('/auth/v1/user',{method:'PUT',headers:{Authorization:'Bearer '+token},body:JSON.stringify({password})});
+}
 async function signIn(email,password){
  const data=await authFetch('/auth/v1/token?grant_type=password',{
   method:'POST',
@@ -143,7 +154,7 @@ function consumeOAuthCallback(){
   });
   if(session)write(session);
   history.replaceState({},'',location.pathname+location.search);
-  return {ok:true};
+  return {ok:true,recovery:hash.get('type')==='recovery'};
  }
  const error=hash.get('error_description')||hash.get('error');
  if(error){
@@ -154,6 +165,8 @@ function consumeOAuthCallback(){
 }
 window.OGCustomerAuth={
  read,
+ resetPassword,
+ updatePassword,
  signUp,
  signIn,
  refresh,

@@ -71,7 +71,7 @@
   try{
    const r=await fetch(API+'/api/store/products',{cache:'no-store'}),d=await r.json();
    if(!r.ok||!Array.isArray(d.products))throw new Error('products');
-   const products=d.products.filter(p=>p&&p.orderable!==false&&p.hasImage);catalogue=products;renderCollections();renderCategoryDrawer();window.OGHomeDiscovery?.mountProducts(products);if(categoryRows.length)window.OGHomeDiscovery?.mountCategories({categories:categoryRows},products);
+   const products=(window.OGCatalogContent?.products(d.products)||d.products).filter(p=>p&&p.orderable!==false&&p.hasImage);catalogue=products;renderCollections();renderCategoryDrawer();window.OGHomeDiscovery?.mountProducts(products);if(categoryRows.length)window.OGHomeDiscovery?.mountCategories({categories:categoryRows},products);
 
 
 

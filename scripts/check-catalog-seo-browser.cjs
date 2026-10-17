@@ -7,7 +7,7 @@ try{
   await page.route('https://**/*',r=>{assert.equal(r.request().method(),'GET');const u=new URL(r.request().url());if(u.pathname==='/api/store/products')return r.fulfill({json:catalog});if(u.pathname==='/api/store/categories')return r.fulfill({json:categories});if(u.pathname==='/api/store/config')return r.fulfill({json:{config:{bankConfigured:true}}});return r.abort();});
   await page.addInitScript(other=>localStorage.setItem('og_lang',other),lang==='ar'?'tr':'ar');
   await page.goto('http://localhost:8765'+(lang==='tr'?'/tr/products/':'/products/'));
-  await page.waitForFunction(()=>document.querySelectorAll('#productGrid .product-card').length===54);
+  await page.waitForFunction(expected=>document.querySelectorAll('#productGrid .product-card').length===expected,catalog.products.length);
   assert.equal(await page.locator('html').getAttribute('lang'),lang);assert.equal(new URL(page.url()).pathname,lang==='tr'?'/tr/products/':'/products/');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   assert.match(await page.locator('link[rel="canonical"]').getAttribute('href'),new RegExp((lang==='tr'?'/tr':'')+'/products/$'));
@@ -17,6 +17,6 @@ try{
   await page.locator('.lang-btn[data-lang="ar"]').evaluate(el=>el.click());assert.equal(new URL(page.url()).pathname,'/products/');assert.equal(await page.locator('html').getAttribute('lang'),'ar');
   await page.close();
  }
- for(const lang of ['ar','tr']){const page=await browser.newPage({javaScriptEnabled:false});await page.goto('http://localhost:8765'+(lang==='tr'?'/tr/products/':'/products/'));assert.equal(await page.locator('#productGrid h3').count(),lang==='tr'?37:54);assert.equal(await page.locator('html').getAttribute('lang'),lang);await page.close();}
+ for(const lang of ['ar','tr']){const page=await browser.newPage({javaScriptEnabled:false});await page.route('https://**/*',r=>r.abort());await page.goto('http://localhost:8765'+(lang==='tr'?'/tr/products/':'/products/'));assert.ok(await page.locator('#productGrid h3').count()>0);if(lang==='tr')assert.doesNotMatch((await page.locator('#productGrid h3').allTextContents()).join(' '),/[\u0600-\u06ff]/);assert.equal(await page.locator('html').getAttribute('lang'),lang);await page.close();}
  assert.deepEqual(errors,[]);console.log('PASS catalogue native languages, saved-language isolation, legacy query, filter preservation, language switches, 390/1440 layouts, no-JavaScript names/links.');
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});

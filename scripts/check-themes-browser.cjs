@@ -21,7 +21,7 @@ const fs=require('node:fs');
    await new Promise(resolve=>setTimeout(resolve,150));
    return r.fulfill({json:{order:{orderNumber:'webTEST',saleTotal:500}}});
   }
-  if(url.pathname.includes('/media'))return r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="pink"/></svg>'});
+  if(url.pathname.includes('/media')||url.pathname==='/api/store/products/image')return r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="pink"/></svg>'});
   throw Error('Unexpected API route: '+url.pathname);
  });
  // The synthetic catalogue item has no committed SEO page. Supply its generated

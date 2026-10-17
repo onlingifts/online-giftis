@@ -4,6 +4,8 @@
  const params=new URLSearchParams(location.search);
  const id=Number(document.body.dataset.productId||params.get('id')||0);
  let product=null;
+ const initialBuy=document.getElementById('buyBtn');
+ if(initialBuy){initialBuy.disabled=true;initialBuy.setAttribute('aria-busy','true');}
  let selectedQuantity=1;
  let intentHandled=false;
  let categoryMeta={};
@@ -175,7 +177,7 @@
   const oldPrice=Number(p.storefront?.compareAtPrice);if(oldPrice>Number(p.price)&&p.price!==null){const el=document.createElement('del');el.className='compare-price';el.textContent=money(oldPrice);$('livePrice')?.after(el)}
   if($('liveStock'))$('liveStock').textContent=p.stockQuantity>0?txt('متوفر حالياً: ','Stokta: ')+p.stockQuantity:txt('غير متوفر حالياً','Şu anda stokta yok');
   const btn=$('buyBtn');
-  if(btn){btn.disabled=!p.orderable;btn.innerHTML=p.orderable?'<i class="fa-solid fa-bag-shopping"></i> '+txt('اطلب المنتج','Sipariş ver'):txt('غير متاح للطلب المباشر','Doğrudan siparişe kapalı')}
+  if(btn){btn.removeAttribute('aria-busy');btn.disabled=!p.orderable;btn.innerHTML=p.orderable?'<i class="fa-solid fa-bag-shopping"></i> '+txt('اطلب المنتج','Sipariş ver'):txt('غير متاح للطلب المباشر','Doğrudan siparişe kapalı')}
  }
  async function refresh(){
   try{
@@ -188,7 +190,7 @@
     if(main)main.innerHTML='<section class="copy"><div class="container"><article class="panel"><h2>'+txt('المنتج غير موجود','Ürün bulunamadı')+'</h2><p>'+txt('قد يكون المنتج محذوفاً أو غير منشور.','Ürün silinmiş veya yayından kaldırılmış olabilir.')+'</p></article></div></section>';
     return
    }
-   setProduct(p);
+   setProduct(window.OGCatalogContent?.product(p)||p);
    if(params.get('intent')==='add'&&!intentHandled&&p.orderable){intentHandled=true;add('',true,true);return;}
    if(document.body.dataset.dynamicProduct==='1'){
     const q=new URLSearchParams(location.search);
@@ -198,6 +200,7 @@
    }
   }catch(error){
    console.error('Product load failed',error);
+   if($('buyBtn')){$('buyBtn').disabled=true;$('buyBtn').removeAttribute('aria-busy');}
    if($('liveStock'))$('liveStock').textContent=txt('تعذر تحميل المنتج. حاول مجدداً.','Ürün yüklenemedi. Lütfen tekrar dene.');
    const info=document.querySelector('.info');if(info&&!info.querySelector('.retry-product')){const button=document.createElement('button');button.className='buy retry-product';button.textContent=txt('إعادة المحاولة','Tekrar dene');button.onclick=()=>{button.remove();refresh()};info.append(button)}
   }
