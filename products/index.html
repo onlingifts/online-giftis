@@ -271,6 +271,13 @@ img{max-width:100%}
 .payment-options{display:flex;gap:8px;flex-wrap:wrap}
 .payment-option{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:9.5px;font-weight:800;cursor:pointer}
 .payment-option input{margin:0}
+.international-payment{margin-top:10px;max-width:100%}
+.international-payment summary{display:inline-flex;min-height:44px;align-items:center;background:var(--surface);color:var(--ink);list-style:none}
+.international-payment summary::-webkit-details-marker{display:none}
+.international-payment[open] summary{margin-bottom:10px}
+.international-payment p{font-size:11px;line-height:1.8;margin:0 0 10px}
+.international-payment-contact{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:10px 14px;border-radius:12px;background:var(--red);color:#fff;font-size:11px;font-weight:800;text-align:center;line-height:1.8;overflow-wrap:anywhere}
+.international-payment summary:focus-visible,.international-payment-contact:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 .bank-details{display:none;margin-top:10px;padding:11px;border-radius:12px;background:#f7f1e8;font-size:9.5px;line-height:1.8}
 .bank-details.show{display:block}
 .bank-details strong{display:block;font-size:10.5px}
@@ -527,6 +534,11 @@ img{max-width:100%}
      <label class="payment-option"><input type="radio" name="paymentMethod" value="cod" id="payCod" checked><span class="trn" data-ar="الدفع عند الاستلام (+75₺)" data-tr="Kapıda ödeme (+75₺)">الدفع عند الاستلام (+75₺)</span></label>
      <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" id="payBank"><span class="trn" data-ar="تحويل بنكي مسبق" data-tr="Banka havalesi">تحويل بنكي مسبق</span></label>
     </div>
+    <details class="international-payment" id="internationalPayment">
+     <summary class="payment-option trn" data-ar="تحويل أموال من خارج البلد" data-tr="Yurt dışından ödeme">تحويل أموال من خارج البلد</summary>
+     <p class="trn" data-ar="تواصل مع فريقنا للحصول على معلومات الدفع من خارج تركيا قبل تأكيد الطلب." data-tr="Siparişi onaylamadan önce Türkiye dışından ödeme bilgileri için ekibimizle iletişime geçin.">تواصل مع فريقنا للحصول على معلومات الدفع من خارج تركيا قبل تأكيد الطلب.</p>
+     <a class="international-payment-contact trn" href="https://wa.me/905349154274?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D8%B9%D9%84%D9%88%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9%20%D9%85%D9%86%20%D8%AE%D8%A7%D8%B1%D8%AC%20%D8%AA%D8%B1%D9%83%D9%8A%D8%A7%20%D9%84%D9%85%D8%AA%D8%AC%D8%B1%20Online%20Giftis." data-href-ar="https://wa.me/905349154274?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D8%B9%D9%84%D9%88%D9%85%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AF%D9%81%D8%B9%20%D9%85%D9%86%20%D8%AE%D8%A7%D8%B1%D8%AC%20%D8%AA%D8%B1%D9%83%D9%8A%D8%A7%20%D9%84%D9%85%D8%AA%D8%AC%D8%B1%20Online%20Giftis." data-href-tr="https://wa.me/905349154274?text=Merhaba%2C%20Online%20Giftis%20ma%C4%9Fazas%C4%B1%20i%C3%A7in%20T%C3%BCrkiye%20d%C4%B1%C5%9F%C4%B1ndan%20%C3%B6deme%20bilgilerini%20%C3%B6%C4%9Frenmek%20istiyorum." target="_blank" rel="noopener noreferrer" data-ar="تواصل معنا عبر واتساب لطلب معلومات الدفع من خارج تركيا" data-tr="Türkiye dışından ödeme bilgileri için WhatsApp’tan bize ulaşın">تواصل معنا عبر واتساب لطلب معلومات الدفع من خارج تركيا</a>
+    </details>
     <div class="payment-warning" id="paymentWarning"></div>
     <div class="bank-details" id="bankDetails">
      <strong class="trn" data-ar="معلومات التحويل" data-tr="Havale bilgileri">معلومات التحويل</strong>
