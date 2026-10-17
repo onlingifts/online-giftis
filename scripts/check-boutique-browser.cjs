@@ -86,6 +86,21 @@ const errors=[];let orderCalls=0;let mode='visual';let authCalls=0;
   await page.locator('#checkoutNext').click();await page.locator('#checkoutNext').click();assert.equal(await page.locator('#cartModal').getAttribute('data-checkout-stage'),'1');assert.ok(await page.locator('#checkoutResult.err').isVisible());
   await page.locator('#checkoutName').fill('Preview Buyer');await page.locator('#checkoutPhone').fill('05340000000');await page.locator('#checkoutCity').selectOption({label:'İstanbul'});await page.locator('#checkoutDistrict').selectOption({label:'Kadıköy'});await page.locator('#checkoutAddress').fill('Preview address only');await screenshot(page,'address-390-'+language);
   await page.locator('#checkoutNext').click();await page.locator('#payBank').check();assert.equal(await page.locator('#checkoutGrandTotal').innerText(),'1.150 ₺');await screenshot(page,'payment-390-'+language);
+  const methodBefore=await page.locator('input[name="paymentMethod"]:checked').inputValue(),totalBefore=await page.locator('#checkoutGrandTotal').innerText();
+  for(const supportWidth of [390,1440]){
+   await page.setViewportSize({width:supportWidth,height:900});
+   const support=page.locator('#internationalPayment');assert.equal(await support.getAttribute('open'),null);
+   await support.locator('summary').click();assert.equal(await support.locator('a').isVisible(),true);
+   await support.locator('a').scrollIntoViewIfNeeded();
+   const contact=new URL(await support.locator('a').getAttribute('href'));assert.equal(contact.hostname,'wa.me');assert.equal(contact.pathname,'/905349154274');
+   assert.ok(contact.searchParams.get('text').includes(language==='tr'?'Türkiye dışından':'خارج تركيا'));
+   assert.ok((await support.innerText()).includes(language==='tr'?'Yurt dışından ödeme':'تحويل أموال من خارج البلد'));
+   assert.equal(await page.locator('input[name="paymentMethod"]').count(),2,'Contact assistance is not a new payment method');
+   assert.equal(await page.locator('input[name="paymentMethod"]:checked').inputValue(),methodBefore);assert.equal(await page.locator('#checkoutGrandTotal').innerText(),totalBefore);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+   await screenshot(page,'international-payment-'+language+'-'+supportWidth);await support.locator('summary').click();
+  }
+  await page.setViewportSize({width:390,height:844});
   await page.locator('#checkoutSubmit').click();assert.ok(await page.locator('#checkoutResult.err').isVisible());
   await page.locator('#transferReceipt').setInputFiles({name:'preview-receipt.pdf',mimeType:'application/pdf',buffer:Buffer.from('%PDF-1.4 preview fixture')});
   await page.locator('#checkoutSubmit').dblclick();await page.locator('#orderSuccessModal.open').waitFor();await screenshot(page,'success-390-'+language);assert.equal(orderCalls,language==='ar'?1:2);
