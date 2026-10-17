@@ -8,10 +8,11 @@ const sharp = require('sharp');
 async function build() {
   const out = 'assets/previews';
   fs.mkdirSync(out, {recursive: true});
-  const manifest = {products: {}, assets: {}};
+  const manifest = {products: {}, productsTr: {}, assets: {}};
+  const previousManifest=fs.existsSync('assets/image-manifest.js')?JSON.parse(fs.readFileSync('assets/image-manifest.js','utf8').replace(/^window\.OGImageManifest=/,'').trim().replace(/;$/,'')):{};
   const retained = new Set();
-  async function preview(source, widths) {
-    const bytes = fs.readFileSync(source);
+  async function preview(source, widths, suppliedBytes=null) {
+    const bytes = suppliedBytes||fs.readFileSync(source);
     const hash = crypto.createHash('sha256').update(bytes).digest('hex').slice(0, 16);
     const stem = path.basename(source, path.extname(source));
     const meta = await sharp(bytes).metadata();
@@ -38,6 +39,25 @@ async function build() {
     const entry = await preview('product-images/'+file, [160, 320, 480, 768]);
     if (entry) manifest.products[id] = {...entry,source:sources[id]||null};
   }
+  // A Turkish photograph may differ from the Arabic one. Never reuse the wrong locale's art.
+  const localizedFile='product-images/.localized-sources.json';
+  if(fs.existsSync(localizedFile)){
+    for(const [id,source] of Object.entries(JSON.parse(fs.readFileSync(localizedFile,'utf8')))){
+      if(!/^\d+$/.test(id))continue;
+      try{
+        const previous=previousManifest.productsTr?.[id];
+        if(previous?.source===source&&previous.variants?.length&&previous.variants.every(v=>v.url.startsWith('/assets/previews/')&&fs.existsSync(v.url.slice(1)))){
+          manifest.productsTr[id]=previous;for(const variant of previous.variants)retained.add(path.basename(variant.url));continue;
+        }
+        if(process.env.SEO_REUSE_IMAGES==='1')continue;
+        const remote=new URL(source,'https://api.onlinegiftis.com');if(remote.origin!=='https://api.onlinegiftis.com')throw Error('Untrusted image origin');
+        const response=await fetch(remote,{signal:AbortSignal.timeout(20000)});if(!response.ok)throw Error('HTTP '+response.status);
+        const entry=await preview(id+'-tr.webp',[160,320,480,768],Buffer.from(await response.arrayBuffer()));
+        if(entry)manifest.productsTr[id]={...entry,source};
+      }catch(error){console.warn('Turkish preview retained fallback for '+id+': '+error.message);}
+    }
+  }
+
   for (const file of fs.readdirSync('assets').filter(x => /^(pink-hero-hq|campaign-|collection-).*\.webp$/.test(x))) {
     try {
       const entry = await preview('assets/'+file, file.startsWith('pink-hero') || file.startsWith('campaign-') ? [320, 480, 768, 1200] : [160, 320, 480, 768]);
@@ -77,6 +97,15 @@ async function build() {
     page = page.replace(/<link rel="preload" as="image"[^>]*>/, `<link rel="preload" as="image" href="${source}" imagesrcset="${srcset}" imagesizes="${sizes}">`);
     fs.writeFileSync(file, page);
   }
-  console.log(`Built ${retained.size} responsive previews; ${Object.keys(manifest.products).length} product images.`);
+  for(const [id,entry] of Object.entries({...manifest.products,...manifest.productsTr})){
+    const file=`tr/products/${id}/index.html`;if(!fs.existsSync(file))continue;
+    const html=fs.readFileSync(file,'utf8');
+    const sizes='(max-width:760px) calc(100vw - 50px), (max-width:1280px) 44vw, 520px';
+    const srcset=entry.variants.map(v=>v.url+' '+v.width+'w').join(', ');
+    const page=html.replace(/(<div class="media">)<img [^>]+>/,(_,start)=>start+`<img src="${entry.variants.find(v=>v.width>=320)?.url||entry.variants.at(-1).url}" srcset="${srcset}" sizes="${sizes}" width="${entry.width}" height="${entry.height}" alt="${html.match(/<h1>([^<]+)<\/h1>/)?.[1]||'Online Giftis'}" fetchpriority="high" decoding="async">`);
+    // Only use an Arabic entry when the source URL in the Turkish page matches.
+    if(manifest.productsTr[id]||html.includes('src="https://api.onlinegiftis.com'+String(entry.source||'').replace(/&/g,'&amp;')+'"'))fs.writeFileSync(file,page);
+  }
+  console.log(`Built ${retained.size} responsive previews; ${Object.keys(manifest.products).length} product images; ${Object.keys(manifest.productsTr).length} independent Turkish previews.`);
 }
 build().catch(error => { console.error(error); process.exitCode = 1; });

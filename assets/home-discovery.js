@@ -67,7 +67,7 @@
         href:shop+'category='+encodeURIComponent(c.key),
         name:c.nameTr||c.nameAr||c.key,
         src:picture(p),
-        curated:false
+        curated:false,product:p
       });
     }
   }
@@ -80,7 +80,7 @@
     link.dataset.artIndex=String(i%5);
     const media=document.createElement('span');media.className='og-portrait-art';
     const img=document.createElement('img');img.className='og-portrait-main-photo';
-    img.src=c.src;img.alt=c.name;img.loading=i<4?'eager':'lazy';img.decoding='async';
+    if(c.product&&window.OGImages)OGImages.setProduct(img,c.product,'(max-width:900px) 160px, 192px');else img.src=c.src;img.alt=c.name;img.loading=i<4?'eager':'lazy';img.decoding='async';
     if(c.curated)img.addEventListener('error',()=>{link.classList.remove('og-curated-banner');img.src='/assets/boutique-gifts.webp';},{once:true});
     media.append(img);
     const label=document.createElement('span');label.className='og-portrait-title';label.textContent=c.name;
@@ -128,7 +128,7 @@
  function card(p,withOld=false){
   const discount=withOld?offer(p):null,img=picture(p);
   return '<a class="og-discovery-product" href="'+url(p)+'">'+
-   (img?'<img src="'+esc(img)+'" alt="'+esc(itemName(p))+'" loading="lazy" decoding="async">':'')+
+   (img?'<img '+(window.OGImages?OGImages.product(p,'(max-width:600px) calc((100vw - 40px) / 2), (max-width:900px) 22vw, 260px'):'src="'+esc(img)+'"')+' alt="'+esc(itemName(p))+'" loading="lazy" decoding="async">':'')+
    (discount?'<span class="og-discount-label">'+t('خصم','İndirim')+' '+discount.pct+'%</span>':'')+
    '<strong>'+esc(itemName(p))+'</strong><span class="og-discovery-price">'+
    (discount?'<del>'+money(discount.before)+'</del>':'')+

@@ -14,3 +14,13 @@ test('parallel callers share one rotating refresh request',async()=>{
 });
 test('network errors preserve the refresh token',async()=>{const {auth,values}=context(async()=>{throw Error('network')});values.set(key,JSON.stringify(old));await assert.rejects(auth.refresh());assert.equal(JSON.parse(values.get(key)).refreshToken,'refresh')});
 test('rejected refresh tokens clear the expired session',async()=>{const {auth,values}=context(async()=>Response.json({error:'invalid token'},{status:400}));values.set(key,JSON.stringify(old));assert.equal(await auth.refresh(),null);assert.equal(values.has(key),false)});
+test('password recovery validates email and sends an encoded same-origin callback',async()=>{
+ const calls=[];const {auth}=context(async(url,options)=>{calls.push({url,options});return Response.json({})});
+ await assert.rejects(auth.resetPassword('invalid'));
+ await auth.resetPassword(' Customer@Example.test ');assert.equal(calls.length,1);const call=calls[0],url=new URL(call.url);assert.equal(url.pathname,'/auth/v1/recover');assert.equal(url.searchParams.get('redirect_to'),'https://onlinegiftis.com/products/?account=1&lang=tr');assert.equal(call.options.method,'POST');assert.deepEqual(JSON.parse(call.options.body),{email:'customer@example.test'});
+});
+test('password updates require a session and use authenticated PUT',async()=>{
+ const calls=[];const {auth,values}=context(async(url,options)=>{calls.push({url,options});return Response.json({id:'preview'})});
+ await assert.rejects(auth.updatePassword('ValidNew!123'));assert.equal(calls.length,0);
+ values.set(key,JSON.stringify({accessToken:'preview',expiresAt:Date.now()+3600000}));await assert.rejects(auth.updatePassword('short'));await auth.updatePassword('ValidNew!123');assert.equal(calls.length,1);assert.equal(calls[0].options.method,'PUT');assert.equal(calls[0].options.headers.get('Authorization'),'Bearer preview');
+});
