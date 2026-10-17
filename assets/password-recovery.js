@@ -26,7 +26,7 @@
   let updating=false;
   function close(){if(busy)return;panel.hidden=true;$('accountGuestView').hidden=false;$('accountMemberView').hidden=true;password.value=confirm.value='';if(updating)location.href=(document.documentElement.lang==='tr'?'/tr':'')+'/products/?account=1';else trigger.focus()}
   function open(update){
-   updating=update;panel.hidden=false;$('accountGuestView').hidden=true;$('accountMemberView').hidden=true;
+   updating=update;panel.dataset.mode=update?'update':'request';panel.hidden=false;$('accountGuestView').hidden=true;$('accountMemberView').hidden=true;
    heading.textContent=update?t('تعيين كلمة مرور جديدة','Yeni şifre belirle'):t('استعادة كلمة المرور','Şifre sıfırlama');
    email.hidden=emailLabel.hidden=update;email.required=!update;
    for(const el of [password,passwordLabel,confirm,confirmLabel])el.hidden=!update;
@@ -46,10 +46,17 @@
    finally{busy=false;submit.disabled=false;back.disabled=false;}
   });
   window.OGPasswordRecovery={openUpdate:()=>{open(true);$('accountModal').classList.add('open');$('accountModal').setAttribute('aria-hidden','false');document.body.classList.add('modal-open');}};
-  window.addEventListener('hashchange',()=>{
-   if(new URLSearchParams(location.hash.slice(1)).get('type')!=='recovery')return;
-   const result=OGCustomerAuth.consumeOAuthCallback();if(result?.ok&&result.recovery)window.OGPasswordRecovery.openUpdate();
-  });
+
  }
+ window.addEventListener('hashchange',()=>{
+  if(new URLSearchParams(location.hash.slice(1)).get('type')!=='recovery')return;
+  const result=OGCustomerAuth.consumeOAuthCallback();if(result?.ok&&result.recovery)window.OGPasswordRecovery?.openUpdate();
+ });
+ new MutationObserver(()=>{
+  if(!panel||busy)return;
+  const open=!panel.hidden,update=panel.dataset.mode==='update';
+  panel.remove();panel=null;$('forgotPassword')?.remove();mount();
+  if(open&&update)window.OGPasswordRecovery.openUpdate();else if(open)$('forgotPassword').click();
+ }).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 })();

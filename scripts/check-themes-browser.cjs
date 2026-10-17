@@ -36,7 +36,7 @@ const fs=require('node:fs');
   }
  }
  await page.goto(base+'/tr/');await page.locator('#homeSearch').fill('Yeni');await page.locator('.home-search button').click();
- await page.locator('.product-card-link').first().waitFor();assert.equal(new URL(page.url()).pathname,'/tr/products/');assert.equal(await page.locator('#productSearch').inputValue(),'Yeni');
+ await page.locator('.product-card-link').first().waitFor();await page.waitForFunction(()=>document.querySelector('#productSearch')?.value==='Yeni'&&document.querySelector('.product-name'));assert.equal(new URL(page.url()).pathname,'/tr/products/');assert.equal(await page.locator('#productSearch').inputValue(),'Yeni');
  assert.match(await page.locator('.product-name').first().innerText(),/Yeni hediye/);
  await page.locator('.product-card-link').first().click();await page.waitForFunction(()=>!document.getElementById('buyBtn').disabled);
  assert.equal(await page.locator('h1').innerText(),'Yeni hediye');assert.match(await page.locator('.media img').getAttribute('src'),/api\.onlinegiftis\.com/);

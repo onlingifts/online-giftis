@@ -50,7 +50,8 @@ async function build() {
       try{
         if(process.env.SEO_REUSE_IMAGES==='1'&&(cache[id]!==source||!fs.existsSync(file)))continue;
         if(cache[id]!==source||!fs.existsSync(file)){
-          const response=await fetch(new URL(source,'https://api.onlinegiftis.com'),{signal:AbortSignal.timeout(20000)});
+          const remote=new URL(source,'https://api.onlinegiftis.com');if(remote.origin!=='https://api.onlinegiftis.com')throw Error('Untrusted image origin');
+          const response=await fetch(remote,{signal:AbortSignal.timeout(20000)});
           if(!response.ok)throw Error('HTTP '+response.status);
           const bytes=Buffer.from(await response.arrayBuffer());
           // Decode before replacing the cached original.
