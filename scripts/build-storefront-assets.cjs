@@ -58,9 +58,9 @@ async function build() {
     }
   }
 
-  for (const file of fs.readdirSync('assets').filter(x => /^(pink-hero-hq|campaign-|collection-).*\.webp$/.test(x))) {
+  for (const file of fs.readdirSync('assets').filter(x => /^(pink-hero-hq|campaign-|collection-|boutique-).*\.webp$/.test(x))) {
     try {
-      const entry = await preview('assets/'+file, file.startsWith('pink-hero') || file.startsWith('campaign-') ? [320, 480, 768, 1200] : [160, 320, 480, 768]);
+      const entry = await preview('assets/'+file, file.startsWith('boutique-') ? [320,480,768,1200,1600,2172] : file.startsWith('pink-hero') || file.startsWith('campaign-') ? [320, 480, 768, 1200] : [160, 320, 480, 768]);
       if (entry) manifest.assets['/assets/'+file] = entry;
     } catch (error) {
       // Keep the original URL when an older asset cannot be decoded by libvips.
@@ -70,18 +70,30 @@ async function build() {
   for (const file of fs.readdirSync(out)) if (!retained.has(file)) fs.unlinkSync(path.join(out, file));
   fs.writeFileSync('assets/image-manifest.js', 'window.OGImageManifest='+JSON.stringify(manifest)+';\n');
   const css = fs.readFileSync('assets/store-fonts.css','utf8')+'\n'+fs.readFileSync('assets/pink-home.css','utf8');
-  let html = fs.readFileSync('index.html','utf8');
+  for(const homeFile of ['index.html','tr/index.html']){
+  let html = fs.readFileSync(homeFile,'utf8');
   const style = '<!-- storefront-critical:start --><style>'+css+'</style><!-- storefront-critical:end -->';
   html = html.replace(/<!-- storefront-critical:start -->[\s\S]*?<!-- storefront-critical:end -->/, style);
+  html=html.replace(/<img\s[^>]*>/g,tag=>{
+    const source=tag.match(/\ssrc="([^"]+)"/)?.[1];if(!source)return tag;
+    const local=source.replace(/^https:\/\/onlinegiftis\.com/,'');
+    if(!manifest.assets[local])return tag;
+    tag=tag.replace(/\ssrc="[^"]+"/,' src="'+local+'"');
+    if(!tag.includes('data-responsive-asset'))tag=tag.replace(/>$/,' data-responsive-asset data-image-sizes="'+(tag.includes('data-og-him-image')?'(max-width:900px) 42vw, 260px':tag.includes('fetchpriority="high"')?'(max-width:760px) 100vw, 60vw':'(max-width:600px) calc(100vw - 28px), 46vw')+'">');
+    return tag;
+  });
+  const mobile=manifest.assets['/assets/boutique-hero-mobile.webp'];
+  if(mobile)html=html.replace(/<source[^>]*media="\(max-width:760px\)"[^>]*>/g,tag=>tag.includes('boutique-hero-mobile')?'<source media="(max-width:760px)" srcset="'+mobile.variants.map(v=>v.url+' '+v.width+'w').join(', ')+'" sizes="100vw" width="'+mobile.width+'" height="'+mobile.height+'">':tag);
   html = html.replace(/<img\s[^>]*data-responsive-asset[^>]*>/g, tag => {
-    const source = tag.match(/\ssrc="([^"]+)"/)?.[1];
+    const source = tag.match(/\sdata-original-asset="([^"]+)"/)?.[1]||tag.match(/\ssrc="([^"]+)"/)?.[1];
     const entry = manifest.assets[source];
     if (!entry) return tag;
     const sizes = tag.match(/data-image-sizes="([^"]+)"/)?.[1] || '100vw';
     tag = tag.replace(/\s(?:srcset|sizes|width|height)="[^"]*"/g, '');
     return tag.replace(/>$/, ` srcset="${entry.variants.map(v => v.url+' '+v.width+'w').join(', ')}" sizes="${sizes}" width="${entry.width}" height="${entry.height}">`);
   });
-  fs.writeFileSync('index.html', html);
+  fs.writeFileSync(homeFile, html);
+  }
   for (const id of fs.readdirSync('products').filter(x => /^\d+$/.test(x))) {
     const entry = manifest.products[id];
     if (!entry) continue;

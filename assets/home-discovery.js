@@ -147,7 +147,7 @@
    menGrid.innerHTML=male.slice(0,4).map(p=>card(p)).join('');
    // Keep a consistent gifts photograph instead of automatically promoting any product image.
    const hero=men.querySelector('[data-og-him-image]');
-   if(hero){hero.src='/assets/boutique-gifts.webp';hero.alt=t('هدايا متنوعة','Hediye seçenekleri');}
+   if(hero){if(window.OGImages)OGImages.setAsset(hero,'/assets/boutique-gifts.webp','(max-width:900px) 42vw, 260px');else hero.src='/assets/boutique-gifts.webp';hero.alt=t('هدايا متنوعة','Hediye seçenekleri');}
    const buttons=men.querySelectorAll('[data-og-him-all]');
    buttons.forEach(button=>{button.href=shop+'q='+encodeURIComponent(tr?'erkek':'رجالي')});
    men.hidden=male.length===0;

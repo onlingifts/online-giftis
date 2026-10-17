@@ -26,4 +26,3 @@ drop index if exists app_v2.audit_rep_product_prices_product_id_idx;
 drop index if exists app_v2.audit_shipment_notifications_order_id_idx;
 drop index if exists app_v2.audit_wallet_entries_referral_reward_id_idx;
 drop index if exists app_v2.audit_wallet_entries_order_id_idx;
-
