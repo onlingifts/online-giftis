@@ -22,13 +22,14 @@
    img.dataset.imageFallback=fallback;
    img.width=entry.width;img.height=entry.height;
    img.src=(entry.variants.find(v=>v.width>=320)||entry.variants.at(-1)).url;
-  }else{img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=fallback}
+  }else{delete img.dataset.imageFallback;img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=fallback}
  }
  document.addEventListener('error',e=>{
   const img=e.target;if(img.tagName!=='IMG'||!img.dataset.imageFallback)return;
   const fallback=img.dataset.imageFallback;delete img.dataset.imageFallback;
   img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=fallback;
  },true);
- window.OGImages={product,setProduct:(img,p,sizes)=>set(img,currentPreview(p),p.hasImage&&imageUrl(p)?new URL(imageUrl(p),'https://api.onlinegiftis.com').href:'',sizes),setAsset:(img,url,sizes)=>set(img,manifest.assets[url],url,sizes)};
+ function assetEntry(url){try{const parsed=new URL(url,location.origin);return (parsed.origin===location.origin||parsed.origin==='https://onlinegiftis.com')&&!parsed.search?manifest.assets[parsed.pathname]:null}catch{return null}}
+ window.OGImages={asset:(url,sizes)=>attrs(assetEntry(url),url,sizes),product,setProduct:(img,p,sizes)=>set(img,currentPreview(p),p.hasImage&&imageUrl(p)?new URL(imageUrl(p),'https://api.onlinegiftis.com').href:'',sizes),setAsset:(img,url,sizes)=>set(img,assetEntry(url),url,sizes)};
  document.querySelectorAll('img[data-responsive-asset]').forEach(img=>window.OGImages.setAsset(img,img.getAttribute('src'),img.dataset.imageSizes||'100vw'));
 })();

@@ -57,7 +57,7 @@
    const ids=hosts[section.key];if(!ids)continue;
    const host=$(ids[0]),el=$(ids[1]);if(!host||!el)continue;
    const products=OGHomeLayout.select(section,catalogue,categoryRows,c=>window.OGBoutique?.role(c));
-   el.hidden=section.enabled===false||!products.length;host.innerHTML=products.map(productCard).join('');bindFavoriteButtons(host);
+   el.hidden=section.enabled===false||!products.length;const cards=products.map(productCard).join('');if(host.innerHTML!==cards){host.innerHTML=cards;bindFavoriteButtons(host);}
    const link=el.querySelector('.pink-section-head a');if(link){const category=section.selection==='category'?section.categoryKey:section.selection==='flowers'?categoryRows.find(c=>window.OGBoutique?.role(c)==='flowers')?.key:null;link.href='/products/?'+(language==='tr'?'lang=tr&':'')+(category?'category='+encodeURIComponent(category):'');}
   }
   OGHomeLayout.apply(homeLayout,document,language);
@@ -88,7 +88,7 @@
    document.querySelectorAll('.boutique-category,.boutique-desktop-links a').forEach(link=>{const url=new URL(link.href);const original=url.searchParams.get('category');if(!original)return;const category=shortcutCategory[original]||data.categories.find(c=>c.key===original);if(!category){link.hidden=true;return;}url.searchParams.set('category',category.key);link.href=url.pathname+url.search;const art=window.OGBoutique?.campaign(category),photo=link.querySelector('.category-photo');if(photo&&art){photo.hidden=!art.asset;if(art.asset)photo.style.backgroundImage='url('+JSON.stringify(art.asset)+')';}const title=link.querySelector('strong');if(title)title.textContent=language==='tr'?(category.nameTr||category.nameAr):category.nameAr;const description=link.querySelector('p');if(description&&art)description.textContent=art.description;});
    const nav=document.querySelector('.pink-categories');if(nav){const icons={drinkware:'fa-mug-hot',nfc:'fa-wifi',family:'fa-people-roof',kids:'fa-child-reaching',love:'fa-heart',all:'fa-gift'};nav.innerHTML=data.categories.map(c=>'<a href="/products/?'+(language==='tr'?'lang=tr&':'')+(c.key==='all'?'':'category='+encodeURIComponent(c.key))+'"><span class="pink-cat-icon cat-gift"><i class="fa-solid '+(icons[c.key]||'fa-gift')+'"></i></span><strong>'+esc(language==='tr'?(c.nameTr||c.nameAr):c.nameAr)+'</strong></a>').join('')}
    renderCategoryDrawer();
-   const allCategories=$('homeAllCategories');if(allCategories&&window.OGBoutique){const chosen=window.OGHomeBanners?.picks(data)||[];allCategories.innerHTML=chosen.map(item=>OGBoutique.card(item.meta,item.href)).join('');allCategories.closest('section').hidden=!chosen.length;}
+   const allCategories=$('homeAllCategories');if(allCategories&&window.OGBoutique){const chosen=window.OGHomeBanners?.picks(data)||[];const cards=chosen.map(item=>OGBoutique.card(item.meta,item.href)).join('');if(allCategories.innerHTML!==cards)allCategories.innerHTML=cards;allCategories.closest('section').hidden=!chosen.length;}
    // All selected campaign cards now share one capped homepage collection.
    const bannerGrid=document.querySelector('.pink-occasion-grid');if(bannerGrid){bannerGrid.replaceChildren();bannerGrid.closest('section').hidden=true;}
    window.OGHomeLayout?.apply(homeLayout,document,language);

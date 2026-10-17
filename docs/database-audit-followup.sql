@@ -28,4 +28,3 @@ alter policy app_v2_order_items_read on app_v2.order_items using ((EXISTS ( SELE
 alter policy app_v2_orders_read on app_v2.orders using ((app_v2.is_admin() OR (rep_user_id = (select auth.uid())) OR (EXISTS ( SELECT 1
    FROM app_v2.customers c
   WHERE ((c.id = orders.customer_id) AND (c.auth_user_id = (select auth.uid())))))));
-

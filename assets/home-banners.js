@@ -27,7 +27,7 @@
   hero.classList.add('hero-slider');hero.setAttribute('aria-roledescription',t('عرض شرائح','slayt gösterisi'));hero.setAttribute('aria-label',t('بانرات المتجر','Mağaza bannerları'));
   const track=document.createElement('div');track.className='hero-slider-track';const links=rows.map((row,index)=>{
    const link=template.cloneNode(true);link.classList.add('hero-slide');link.dataset.slideIndex=index;link.href=row.href;
-   const image=link.querySelector('img');image.src=row.asset;image.removeAttribute('srcset');image.removeAttribute('sizes');image.removeAttribute('style');image.alt=row.source==='home'?t('البانر الرئيسي — Online Giftis','Online Giftis ana banner'):window.OGBoutique.label(row.meta);image.loading=index===0?'eager':'lazy';image.setAttribute('fetchpriority',index===0?'high':'low');
+   const image=link.querySelector('img');if(!row.isDefault){image.src=row.asset;image.removeAttribute('srcset');image.removeAttribute('sizes');}window.OGImages?.setAsset(image,row.asset,row.source==='home'&&row.isDefault?'(max-width:760px) 100vw, 60vw':'100vw');image.removeAttribute('style');image.alt=row.source==='home'?t('البانر الرئيسي — Online Giftis','Online Giftis ana banner'):window.OGBoutique.label(row.meta);image.loading=index===0?'eager':'lazy';image.setAttribute('fetchpriority',index===0?'high':'low');
    // Keep the main banner's heading and CTA when additional slides are enabled.
    if(row.source!=='home'){link.classList.add('hero-image-only');link.querySelector('.boutique-hero-copy')?.remove();}
    if(!row.isDefault)link.querySelectorAll('picture source').forEach(source=>source.remove());
