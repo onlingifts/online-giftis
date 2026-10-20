@@ -1,7 +1,7 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const base=process.env.OG_BASE_URL||'http://localhost:8765';
-const product={id:9001,sku:'WRAP-TEST',name:'هدية الاختبار',price:500,stockQuantity:5,hasImage:false,description:'Test gift',categories:['gifts'],storefront:{nameAr:'هدية الاختبار',nameTr:'Test hediyesi',descriptionAr:'هدية',descriptionTr:'Hediye'}};
+const product={id:9001,sku:'WRAP-TEST',name:'هدية الاختبار',price:500,stockQuantity:5,orderable:true,hasImage:false,description:'Test gift',categories:['gifts'],storefront:{nameAr:'هدية الاختبار',nameTr:'Test hediyesi',descriptionAr:'هدية',descriptionTr:'Hediye'}};
 (async()=>{
  const browser=await chromium.launch({headless:true});
  for(const language of ['ar','tr']){

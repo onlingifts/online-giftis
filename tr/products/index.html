@@ -1117,7 +1117,7 @@ async function checkout(){
  const form=new FormData();form.append('payload',JSON.stringify(payload));
  for(const x of state.cart){const file=state.uploads.get(x.productId);if(file)form.append('customization_'+x.productId,file)}
  if(state.paymentMethod==='bank_transfer'&&state.receipt)form.append('transferReceipt',state.receipt);
- const btn=$('checkoutSubmit');state.submitting=true;btn.disabled=true;
+ const btn=$('checkoutSubmit');state.submitting=true;btn.disabled=true;$('giftWrappingType').disabled=true;
  try{
   const token=window.OGCustomerAuth?await OGCustomerAuth.getAccessToken():null;
   const headers=token?{Authorization:'Bearer '+token}:undefined;
@@ -1136,7 +1136,7 @@ async function checkout(){
   $('orderSuccessTrack').href=lang()==='tr'?'/track/?lang=tr':'/track/';
   $('orderSuccessTrack').textContent=txt('تتبع طلبي','Siparişimi takip et');
   $('orderSuccessClose').textContent=txt('العودة للتسوق','Alışverişe devam et');
-  if(Number(d.order.giftWrappingFee)>0){const label=state.giftWrappingType==='vip'?txt('تغليف صندوق هدية مع ورد VIP','Çiçekli VIP hediye kutusu'):txt('تغليف ورق هدية','Hediye kâğıdı ile paketleme');$('orderSuccessExtras').textContent+=($('orderSuccessExtras').textContent?' · ':'')+label+': '+money(d.order.giftWrappingFee);}
+  if(Number(d.order.giftWrappingFee)>0){const label=d.order.giftWrappingType==='vip'?txt('تغليف صندوق هدية مع ورد VIP','Çiçekli VIP hediye kutusu'):txt('تغليف ورق هدية','Hediye kâğıdı ile paketleme');$('orderSuccessExtras').textContent+=($('orderSuccessExtras').textContent?' · ':'')+label+': '+money(d.order.giftWrappingFee);}
   if(payload.wheelCode)window.OGWheelCheckout?.consumed();
   closeModal(cartModal);
   openModal($('orderSuccessModal'));
@@ -1146,7 +1146,7 @@ async function checkout(){
   if(state.customer)await loadCustomerAccount();
   if(typeof gtag==='function')gtag('event','purchase',{transaction_id:d.order.orderNumber,value:d.order.saleTotal,currency:'TRY'})
  }catch(e){checkoutError(e.message||txt('تعذر تثبيت الطلب','Sipariş oluşturulamadı'))}
- finally{state.submitting=false;btn.disabled=!state.cart.length||Boolean(window.OGWheelCheckout?.blocked())}
+ finally{state.submitting=false;renderPayment()}
 }
 function openModal(el){el.classList.add('open');el.setAttribute('aria-hidden','false');document.body.classList.add('modal-open')}
 function closeModal(el){el.classList.remove('open');el.setAttribute('aria-hidden','true');if(!document.querySelector('.modal-backdrop.open'))document.body.classList.remove('modal-open')}
