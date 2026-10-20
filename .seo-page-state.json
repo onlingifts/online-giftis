@@ -1,0 +1,578 @@
+{
+  "https://onlinegiftis.com/products/100/": {
+    "hash": "84a78f9e23f7af88f126c809762f0722cf5f53d62eb65fe576a8421d44aa3878",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/100/": {
+    "hash": "080bd161ef185e8a4f5b976a868a2f3e9e10c26eae8ff9f89b3a23aba676d95b",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/102/": {
+    "hash": "d6e6de76bb72b311a1ad84c04513661e254b492d4631c12bb542c971efaddaf1",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/102/": {
+    "hash": "63f367d3cee8dc82f29720e27280660dcbf3b9bb1ecf45c69522af3fdcd8f198",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/110/": {
+    "hash": "87d49e90b0bef412a90c0897fc9dfe034b50c915d2f4c88f8bb40fad06d0cd8f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/110/": {
+    "hash": "6395383ac4a3381a74cebdab593f27da3b41eb064ed51dbb2993c628fe335aaa",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/112/": {
+    "hash": "270f8bcd8d6a4be5639a9220c1ce4f707a56b3a5198807ef4700cb030ddef54c",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/112/": {
+    "hash": "9cef475ba266502de440473a8368e3b914cff19887aa9c339ffc72e9c8adca18",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/119/": {
+    "hash": "e5ff95bb2316c8e3c1611d4504b9c3aef10b0e200b73d3cb62614284effb5c13",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/119/": {
+    "hash": "b9cda95c49b617b425781f3dd35d487ccc7142c46cc2990cea5befda4779da83",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/116/": {
+    "hash": "c59be3aabe3325645867a24a68176a7740aa41cfbbfe9573704111ff1aa4a8f5",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/116/": {
+    "hash": "69076b147cdb8a9d5b3d61ae2aa72d82227d0d02fae385333d6a0183e68fe0a9",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/97/": {
+    "hash": "b28dfff00195ebabb37f05f775d69ef812413a2fb46474ea7a45158755b68c5e",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/97/": {
+    "hash": "bbc809003d1872b5d42a53b873fb95bf8c74618897918b11af01443bbd12a70c",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/72/": {
+    "hash": "73534d0be7840243738aacf816d9bd190d83d0e9665985d935ee1abd9b76ac78",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/72/": {
+    "hash": "a7b2fd88e0fa20fce06e64b509436f1dd95159a9f51e7d114171eec0e8a274a4",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/129/": {
+    "hash": "091ddac79640701c5abf8a32b64198f7df6ca60ecf8a12b65da205bbe5188233",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/129/": {
+    "hash": "12dadc1080edc4fef5caae274f1b17c8f285b62b67a76286fb24eb4bcf82d36f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/98/": {
+    "hash": "d8edd74442720352a9676d42c0045d6ec9f3e405fec71efa3d83d564f7d05ea1",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/98/": {
+    "hash": "7ccbe001b1689abdb345dccbbc5807c25d37c2acdb74a9d78a320d5b3c930230",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/101/": {
+    "hash": "e4f6b11dcaceb4ec9439a3288439f5c730abfb7bec8bf362ad38600bbbda9fee",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/101/": {
+    "hash": "35c31da0ee8077709c393b64a04362400cf5dcda6ec67c2c9860f1d849d3dabe",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/109/": {
+    "hash": "6bb31f159563fcd09e5155cafc0d7582b4e93d237c048b0329b2742a54534b2a",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/109/": {
+    "hash": "b0ebb5fba228ae9f2364ad3f898c535b3b4c847c43e0b6c095b2b0ac77cc78bc",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/80/": {
+    "hash": "a18dc9f45a510aca2f008d5e026e4216bf0827fcd9dd52a79e75934d7533a7c1",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/80/": {
+    "hash": "5935439327c1f5b1ed15ee4fe5075832bd2fba63f0edbdf2ddc75473504b496f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/96/": {
+    "hash": "66e742dd7bf568271d54e42fc5de822d2002febdaeaaff354230426728772111",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/96/": {
+    "hash": "c91112988b0407e16e91ef609429300b11310fb395b1591d2514d56a261ac3a8",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/81/": {
+    "hash": "5ac2b24ab0a4cd3237ff0106607d1ea144e7301636c885fde375ccc8adce2350",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/81/": {
+    "hash": "eb8c3cca620f0fb09f85fdde261f58a7032ecceefb8891ea3657fcf23dab1344",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/124/": {
+    "hash": "3032cb15b9df863da10b5424abbaf7eb8c5f2c95690426964ed84d3789cb6af1",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/124/": {
+    "hash": "fe2dde45b456f7d150df2405d117c4337d61d09e7c40925f41f9f205ee10c746",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/82/": {
+    "hash": "f629f78b37f146992161f5ea6efd638fd45397af4a8535b6c04b5d9b45740b2f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/82/": {
+    "hash": "8e442a88a1fd4a219d2d8a75086e014aa1b89bc2fe2fdcf230184b5af3a9a3d5",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/104/": {
+    "hash": "ef3f352398721658bc0176ff2114684690fabede950aa7bce8414466272b9bdf",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/104/": {
+    "hash": "9db55459de50ef46d11c87b72102eaa236535b9572e536f21c866d8adac915bb",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/115/": {
+    "hash": "5492bdc2692866e250f746323159065ae1779600ba6058bf56750a6394254f5d",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/115/": {
+    "hash": "a6e680e32144b0b1565d2ca7ec5cced7d5e55adad451167c58c058a8c117d314",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/113/": {
+    "hash": "9c11114651a7f72d393a65b48a3236186480a768ccf06b3717f4dca42f16cb71",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/113/": {
+    "hash": "f35fb066c7a5f9de6d2f25debbc26400970386a9b67eee23e260140b003cbc6c",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/103/": {
+    "hash": "d2f38609de471bda11c6912ef56e7d56a78a81ad3e142536c80be3940fca56a9",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/103/": {
+    "hash": "6ce5eb0ae6269f4743a1e0d9c77c7b87a9296216e4beb911ee12a3d1a174987f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/120/": {
+    "hash": "6978c27e75796fffa682524082ae0ffa18592b1bec7f6c75ab4f4b5830ec1bd7",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/120/": {
+    "hash": "76e444ec0012732831058d200714ef22b24fe77e5d6c644fd6aa635e4f4501e1",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/83/": {
+    "hash": "0d4c56a8afdc8a6860286070b914075d4d08a2233fe9dde2237e8981dc21f657",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/83/": {
+    "hash": "94bcae62c145b63252f86c91689979772e2a8de88a884816898c84d641a048df",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/99/": {
+    "hash": "b950602dceb70bcffb7ac2bd3c9f4afcf158c316bd3862dc75dd9461bdcbeb59",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/99/": {
+    "hash": "5ce4de7c481b0fc9a87661cd4b21a5a5d5d34af6ed0535ef1f0bdf8a993d78ff",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/92/": {
+    "hash": "80a1d05e58f6729e8b644d88e6ba50f2dc5db1f3ea6de2b2defbb866adab7f78",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/92/": {
+    "hash": "1806dfa59947d55732d20b6b3b1497a972ac9768d67aaff5e82adf227ab676d1",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/84/": {
+    "hash": "0a6feada8e7583145550fff4cca4277e445782e3a774c4c5719427c20d50424e",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/84/": {
+    "hash": "7ca27f12e4500748d1ab75542c10745cdc426814ff4bd71ac76235b494113a71",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/125/": {
+    "hash": "a62b1d8928151a4de3ae280bccf088e2a1b2ef30acf5ec7c2095bf06d0f09744",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/125/": {
+    "hash": "b2ed0e20467f28453db6d4138d3f05a693f757b18fa577ba0fb9e40d7c815700",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/126/": {
+    "hash": "322ee3e134909ff954947af100dc6971920a70824a370551b39249239b787bc4",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/126/": {
+    "hash": "7fbff124e3a62431c0e3b275c4dace7fc2fe06ca33cdd84837541e3375c700a6",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/85/": {
+    "hash": "0092711b9047a92b369d1497a932082bbd0048aef1d03382c55dfbe37f2921a4",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/85/": {
+    "hash": "80cf6cee406af41123f5d8338516e704ba24d0f53a2c4625c3d3b0fe0c6a7400",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/86/": {
+    "hash": "1ba67b4395dc91fbfea7723aab726684c8818eaade9435f0ec6cbb655e3bac4a",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/86/": {
+    "hash": "ce95d59c6244d84b3754201a97130ebc1cfbc904cb8a88f4d380b149c01bb1f9",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/105/": {
+    "hash": "36300611e0addc5363f24adf6c37312a0981485ed52e5796e1fcc8f372115dfa",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/105/": {
+    "hash": "60d82b2419fc28f9e2d4d36eb6d0536ae1207bfee4d8d2e4f48de9f08a2d5c5c",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/95/": {
+    "hash": "501c621950f4dd9be7e679fd6294d85f31d35d3c36630e60c81d8eca398fb4e8",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/95/": {
+    "hash": "49bdffab3b93507aefd01520b92d4e876cae4f62650c7dde13915c3d9f49438e",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/130/": {
+    "hash": "89359256732367ef93db9c1de84aecf71bcfddeffa8cb72c5c655adc572c7430",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/130/": {
+    "hash": "d3702929f04964900e08e69554727b9075e0c7d476115dc19dba78d138b7ba8d",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/93/": {
+    "hash": "62d07038255405645428f5b6145b233d75f73af7b466f163e0ef5726342a8511",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/93/": {
+    "hash": "55cf7d83820d276ef4ba5b149c2a65cbeead64bb993fcd944db7416226eefb97",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/75/": {
+    "hash": "ecaf6b605e91af593e99aec3ee94404dbe2945dde5e8ccfcffbde207eb0835fa",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/75/": {
+    "hash": "9603ef10a643717d2d3bd918ce6216c98fcd2149cdb898657a49a8317ce4e931",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/87/": {
+    "hash": "9cb496762551516a0b238793de968b5953c534664a6d79a454885b9bf9a17459",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/87/": {
+    "hash": "7996e6c11b471e71551e63db0eb8be8da293fe09599acc8e7ffe8887e78f385a",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/111/": {
+    "hash": "d9607a94dab7dc95cae78dfa974216ed50385bebf8b33182604094411607d624",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/111/": {
+    "hash": "04c46dd2a1a78bcf9ac863cd54b100b2978b4af798e8d4a2e135c02ab71d2aa6",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/108/": {
+    "hash": "0531bd647364d730373a962c58a3ed22f0bf4e3e658518001120038c7cff3eb9",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/108/": {
+    "hash": "76a49e4c93f12d07fc3ebf561eb1f1e68cc5623ea2d956d5e78fbc72ef26aa0f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/118/": {
+    "hash": "28b2c863d13cdebdd74329328f5dd57ec9f19f3505c40e11f78a6c0d28a94003",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/118/": {
+    "hash": "d269525000d8ab336f7ee6d85f3b5ebc84a106c96d6557211e2b96f28fa0267e",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/88/": {
+    "hash": "5e70bf7fa173bdc3fa145753d191352ead750f3ff1b0d1ac0e944085292850c7",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/88/": {
+    "hash": "b2b6f536485c671bdd2e0442c5512c86a715b63e498105bc16b6065b140fd2ad",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/106/": {
+    "hash": "28ead6be8360c4c3932d758c2ccc2e38203a4515b2eb39130e6efd75951048de",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/106/": {
+    "hash": "23e026ad436ecea4900701260a17e9070dba1c46f556b2b22f68d63dc15487f9",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/89/": {
+    "hash": "5fa9c5c3b0204b9c8d6593e96aad18386549a2055bf485318d2966ff04de3f10",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/89/": {
+    "hash": "64868c8521f705ddc0e49ad050d9a084cf699625a3cb00a15164e837f5214b28",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/90/": {
+    "hash": "423da7397c6496722a3fe1d74e00fe6a1ffef953109c7108fd5a495f9d47a750",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/90/": {
+    "hash": "319b5d85fa720d0933a41ae6decd8d40d7bc082c4c5b53475274a6ba7bd0b642",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/91/": {
+    "hash": "1c3f496ec64d566f339e7a5b65b7e74cb79a688b924e3eacf02cbaf318416847",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/91/": {
+    "hash": "720b7b943b00fb851a28fa3deeb2a320fce85995ed9151d83ac19de879efa26f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/94/": {
+    "hash": "cddc42aee0b50719838cbfc2a0c79e2adbc832cee83f3d4fb3b8bbd1b13d0fe5",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/94/": {
+    "hash": "7c7ca5df334a184682358c3ad76788eeac60c3e091e273635b4dcd4a07d26d4a",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/117/": {
+    "hash": "721828731802858fd3885fb8b5daa99cb3d055d0385c50bee8672f3f553acc0e",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/117/": {
+    "hash": "9509348d8ba20a45f38fba2e22110ac8ea5a32db3bb6acee6e5acf91b555983b",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/127/": {
+    "hash": "24b1ebf50f85970b46272067cb59d8a73c607a5ec1c94902ad84cb3beeb4faaa",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/127/": {
+    "hash": "26c828d346c8d7ac7361eed6a4249d50ea8bb027a062d7d77597fb4681dacf9f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/121/": {
+    "hash": "4eccff0a1bfd82a55b68ebdace772cfba5bfb4c6b46d3abbbc3a004f700cf20c",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/121/": {
+    "hash": "0976afde60a9ea387568d62f1dd334e693d538713300e952b019cc8841dbda0e",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/122/": {
+    "hash": "9c7e6f28f747faf7df1bf2daeca0fad496dad2413221696b212c6c62f50ef11b",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/122/": {
+    "hash": "e74921502f802ae517d787b203635fe93569199a8f3beacfde0bdb249cc2ccce",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/76/": {
+    "hash": "d3c0a0c604315bf56aea5fbb27a61da444e7174045decf83e542322815c4cf03",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/76/": {
+    "hash": "dab8c8ca02cafd4fddd6b8dfacff2fd96a2077ed1f79d6b9c2eb3c90a7a6b00d",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/107/": {
+    "hash": "5bd1be45786510772802379d81e2cb8f49790635407fcc8e8fc59272f7c3d114",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/107/": {
+    "hash": "4e67c5c71c4d60c4602b43674d051e5d23412c512bb2549a5b286c8258525b6f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/74/": {
+    "hash": "efcd1aec0abc0860b972e7d8b7f96d39102eef87d591c373d414ad629ac23279",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/74/": {
+    "hash": "7b090ec85776b637dafe893ea5b512701559851816573e397571d6e02683d538",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/78/": {
+    "hash": "88f8c2b2881539bc79ae95c54d3eb6ba070fe80383b8e659af9ea3ea042cde35",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/78/": {
+    "hash": "be8cd2fab7390369ebca2a4ff38fecd3f6381b772e16079679e963e8a57a6f4c",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/123/": {
+    "hash": "3def31aee9a146ca972a7dec1e26132b6e2e27a8b20592e393ce4ddf70a895f2",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/123/": {
+    "hash": "55e883b4b5ad974f5a4a65c88a2e3a4f89f3755cc55708a046ad0a3098a44541",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/79/": {
+    "hash": "a50e6d9864f882135e1eadf22c26acb135e15bbb4ac473676d059f043b885214",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/79/": {
+    "hash": "24d27b110826d96c050434322ad9b7c22f24a4fa417ad2c241dea67806504793",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/73/": {
+    "hash": "a2f3185e1acc62c72ab8dbc713fbec61137f620cd8576d5bc8409436a179fe4d",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/tr/products/73/": {
+    "hash": "a0af7bd46dcaf97bd2d49dfdb0de4938e9130124412aebff9ae0a84c50f4214f",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/flowers-turkey/": {
+    "hash": "83f0ed8288af12d5fad90339f94aa77f14033422ee380e2a29592ccb75c8cfce",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/cicek-teslimati/": {
+    "hash": "3eb42704c4a3cefa3dbb229e8faac35eb8277b494bd2c1898efb5bb7eec46766",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/en/flower-delivery-turkey/": {
+    "hash": "c7b494dbb0ec3fea03dfaad2fc644f26f8245f5f88287a198d6b3e2fb7c38996",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/flower-delivery-istanbul/": {
+    "hash": "b75a228e45d8730d3ec348202b5f485556f3ecccb1d5cd3c003829c0eceaa716",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/istanbul-cicek/": {
+    "hash": "0734c266843e96c1eb1a62eaaa9715f4d8f3e150fe38b79f62916b5982215cd7",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/en/flower-delivery-istanbul/": {
+    "hash": "ba6b553502294efee07f979584d0a4a25f09f0cfecebfa610e71e1308410cd63",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/flower-delivery-gaziantep/": {
+    "hash": "47551f1a23899d4b0bdb2ff6f0e554f5bbffd6b0e22b99a676b83384a51d1d62",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/gaziantep-cicek/": {
+    "hash": "1f6943e8b278198cb82fad0aece4c63ad62b25a391e496674e85b4108b7d3854",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/en/flower-delivery-gaziantep/": {
+    "hash": "92cd3a73ca40a446b4a4e4de94a56fec8c78add2c5936cd513ed94a1e50763a4",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/": {
+    "hash": "c8c6979d3f9fc6152f918c5214e2526e785bd42b11c2c87e3a14ea13ad03b3b6",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/products/": {
+    "hash": "6c630ba7cdb9743d95b5bb198ba837a0fc88960b695fd0529b7646c1769c9171",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/products/": {
+    "hash": "59818a295ec18e9719b446df29a4239c2b745c5964c7c44ad8318917f7882efe",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/": {
+    "hash": "8151f6624a487b869aff55490e0f762ae91b0969fb086227227ad5ccb2dc0b81",
+    "lastmod": "2026-10-20"
+  },
+  "https://onlinegiftis.com/gifts-istanbul/": {
+    "hash": "ce99e0eb5abd1e0d63e9f29fc2a72cbb6c66315315c6b24551de056cbd16ae32",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/gifts-gaziantep/": {
+    "hash": "069a45e22da5f427051c18799ee097312ffe319897a1df53cd13ea331bad6c66",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/gifts-konya/": {
+    "hash": "1e91a97644cab44786bc4c3ea3f593d26c25943c008299047846d2b8e58f0a3b",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/gifts-bursa/": {
+    "hash": "3b8fc554fcf1e8c05b98fb9eb9a3b02a210b77acfab2bf53789278f39b2352dc",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/gaziantep-hediye/": {
+    "hash": "aca34bf9b2bb976124bf6927381be0ff6747ec388726cf293ba6aaa225821412",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/konya-hediye/": {
+    "hash": "20308d8c8df2803ba2914f6cef1f6b00ab34c79b13c407d4a7cd778c89bc2942",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/bursa-hediye/": {
+    "hash": "0152f92edacb92e7002ab8d43fb3fa084f843049d577c133e38c72313809630f",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/en/send-gifts-turkey/": {
+    "hash": "a3cf504bf87e40e6b38753ec23b42749072ef88206db236be286240b8388a08f",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/turkiyeye-hediye-gonder/": {
+    "hash": "2b2b6eb7b2af43d9df52e71e34e665454ecc33968336d797d4a409b2a7afe116",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/send-gifts-turkey/": {
+    "hash": "58d37b625e5a224ffb75da281f0a04fa8d923435251115d9f1b70103b772694d",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/about/": {
+    "hash": "483829053c3b39a52510b07d8cedcaf07ce0385980c64ae38cf0c5a6b5f21ad3",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/about/": {
+    "hash": "de91718b62813860cea8ae758003985d7edf984b7880336f124e49518d66e4a2",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/custom-gifts-turkey/": {
+    "hash": "d7e7ae9e39bf9530e3724b5fcdbcf2d064467928bedc101aaa266b49004c4e98",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/istanbul-hediye/": {
+    "hash": "b32b03ad2ef4d5f6222c1d33aa6e9275c98ca4f6d9a94a94a0f046c78c4d00c3",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/kisiye-ozel-hediye/": {
+    "hash": "10314110a9e3bec27b41d2b7e15a223611a4535ffa517d15dc68c8478663e30d",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/returns/": {
+    "hash": "cde43f1feb7c3e15825831726f91c74aba29a8944bca2f500928255a413713a8",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/returns/": {
+    "hash": "32402a04196147692a26a21783e746c76d52fc3beda803da17a882a60103c97e",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/privacy/": {
+    "hash": "97713c5346d19b1c56fa62a0b5f450081967515f36a94aab1044de44a0116b50",
+    "lastmod": null
+  },
+  "https://onlinegiftis.com/tr/privacy/": {
+    "hash": "d82bda24b79104e9e8cb3364c983b82543aac96cde4ee07a96fa6abbd3b112f5",
+    "lastmod": null
+  }
+}
