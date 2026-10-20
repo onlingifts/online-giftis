@@ -6,6 +6,7 @@ import {generateCatalog} from './catalog-seo.mjs';
 import {generateHomeSnapshot} from './home-snapshot.mjs';
 import {applyDocumentSecurity} from './site-security.mjs';
 import {generateSearchPages} from './search-landing-pages.mjs';
+import {createSitemapDates, relatedProductLinks} from './indexing-support.mjs';
 
 import '../assets/themes.js';
 import '../assets/catalog-content.js';
@@ -15,7 +16,7 @@ const SITE = 'https://onlinegiftis.com';
 const BACKEND = 'https://api.onlinegiftis.com';
 const IMAGE_DIR = 'product-images';
 const ARABIC_BRAND = 'اونلاين للهدايا';
-const today = new Date().toISOString().slice(0,10);
+const sitemapDates = createSitemapDates();
 // Product SEO pages always mirror the current independent retail catalog.
 
 function esc(v=''){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -186,10 +187,10 @@ for(const entry of readdirSync('tr/products',{withFileTypes:true}))if(entry.isDi
 for(const p of products){
   const dir=join('products',String(p.id));
   mkdirSync(dir,{recursive:true});
-  writeFileSync(join(dir,'index.html'),pageFor(p));
+  writeFileSync(join(dir,'index.html'),pageFor(p).replace('</main>',relatedProductLinks(p,products,'ar')+'</main>'));
   if(hasTurkish(p)){
     const trDir=join('tr/products',String(p.id));mkdirSync(trDir,{recursive:true});
-    writeFileSync(join(trDir,'index.html'),turkishProductPage(p,themeInfo(productCategory(p))));
+    writeFileSync(join(trDir,'index.html'),turkishProductPage(p,themeInfo(productCategory(p))).replace('</main>',relatedProductLinks(p,products,'tr')+'</main>'));
   }
 }
 
@@ -226,12 +227,14 @@ const staticUrls=[
   [SITE+'/tr/privacy/',0.4,'monthly'],
 
 ];
+// Hash the final published HTML, including security metadata.
+applyDocumentSecurity();
 const productSitemapRows=products.flatMap(p=>[p,...(hasTurkish(p)?[{...p,seoLanguage:'tr'}]:[])]).filter(p=>p.storefront?.indexable!==false&&p.storefront?.includeInSitemap!==false).map(p=>{
   const imageXml=productImagesFor(p).map(image=>'<image:image><image:loc>'+esc(image)+'</image:loc></image:image>').join('');
-  return '  <url><loc>'+SITE+productPath(p,p.seoLanguage||'ar')+'</loc><lastmod>'+today+'</lastmod><changefreq>daily</changefreq><priority>0.8</priority>'+imageXml+'</url>';
+  return '  <url><loc>'+SITE+productPath(p,p.seoLanguage||'ar')+'</loc>'+sitemapDates.tag(SITE+productPath(p,p.seoLanguage||'ar'))+'<changefreq>daily</changefreq><priority>0.8</priority>'+imageXml+'</url>';
 });
 const urls=[
-  ...staticUrls.map(([loc,priority,changefreq])=>'  <url><loc>'+loc+'</loc><lastmod>'+today+'</lastmod><changefreq>'+changefreq+'</changefreq><priority>'+priority+'</priority></url>'),
+  ...staticUrls.map(([loc,priority,changefreq])=>'  <url><loc>'+loc+'</loc>'+sitemapDates.tag(loc)+'<changefreq>'+changefreq+'</changefreq><priority>'+priority+'</priority></url>'),
   ...productSitemapRows
 ];
 writeFileSync('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'+urls.join('\n')+'\n</urlset>\n');
@@ -253,4 +256,4 @@ for (const lang of ['ar','tr']) {
   console.log('Merchant feed '+lang+': '+merchant.count+' products; skipped '+JSON.stringify(merchant.skipped));
 }
 
-applyDocumentSecurity();
+sitemapDates.save();
