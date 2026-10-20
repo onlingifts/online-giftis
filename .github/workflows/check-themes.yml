@@ -40,6 +40,7 @@ jobs:
           node scripts/check-merchant-language-browser.cjs
           node scripts/check-search-browser.cjs
           node scripts/check-catalog-seo-browser.cjs
+          node scripts/check-gift-wrapping-browser.cjs
           node scripts/check-home-banners-browser.cjs
           node scripts/check-themes-browser.cjs
           node scripts/check-boutique-browser.cjs
