@@ -2,7 +2,7 @@
  const API='https://api.onlinegiftis.com';
  const WA='https://wa.me/message/LR3NY7SMCEM3B1/';
  const params=new URLSearchParams(location.search);
- const id=Number(document.body.dataset.productId||params.get('id')||0);
+ const id=Number(document.body.dataset.productId)||Number(params.get('id'))||0;
  let product=null;
  const initialBuy=document.getElementById('buyBtn');
  if(initialBuy){initialBuy.disabled=true;initialBuy.setAttribute('aria-busy','true');}
@@ -39,9 +39,9 @@
    document.title=s.seoTitleTr||((name||'Ürün')+' | Online Gifts Türkiye');
    const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=s.metaDescriptionTr||description||'Online Gifts kişiye özel hediye ürünü.';
    setHref('.brand','/tr/');
-   setText('.nav-actions .store','Tüm ürünler');setHref('.nav-actions .store','/products/?lang=tr');
+   setText('.nav-actions .store','Tüm ürünler');setHref('.nav-actions .store','/tr/products/');
    setText('.nav-actions .wa','WhatsApp');
-   const crumb=document.querySelector('.crumb');if(crumb)crumb.innerHTML='<a href="/tr/">Ana sayfa</a> / <a href="/products/?lang=tr">Ürünler</a> / '+escapeHtml(name);
+   const crumb=document.querySelector('.crumb');if(crumb)crumb.innerHTML='<a href="/tr/">Ana sayfa</a> / <a href="/tr/products/">Ürünler</a> / '+escapeHtml(name);
    const badge=document.querySelector('.info .badge');if(badge)badge.textContent='Çok satan';
    const trusts=document.querySelectorAll('.trust div');
    if(trusts[0])trusts[0].innerHTML='<i class="fa-solid fa-palette"></i>Kişiye özel üretim';
@@ -76,7 +76,7 @@
   setText('.info .desc',description);const desc=document.querySelector('.info .desc');if(desc)desc.hidden=!description;
   const media=document.querySelector('.media img');if(media)media.alt=name;
   const cat=document.querySelector('.product-options a');
-  if(cat&&window.OGThemes){let key=OGThemes.productCategory(p,params.get('category'));if(Object.keys(categoryMeta).length&&!categoryMeta[key])key=OGThemes.list(p).find(c=>categoryMeta[c])||'all';const info=OGThemes.info(key);const meta=categoryMeta[key];cat.textContent=currentLang==='tr'?(meta?.nameTr||info.tr):(meta?.nameAr||info.ar);cat.href='/products/?'+(currentLang==='tr'?'lang=tr&':'')+'category='+encodeURIComponent(key)}
+  if(cat&&window.OGThemes){let key=OGThemes.productCategory(p,params.get('category'));if(Object.keys(categoryMeta).length&&!categoryMeta[key])key=OGThemes.list(p).find(c=>categoryMeta[c])||'all';const info=OGThemes.info(key);const meta=categoryMeta[key];cat.textContent=currentLang==='tr'?(meta?.nameTr||info.tr):(meta?.nameAr||info.ar);cat.href=(currentLang==='tr'?'/tr/products/?':'/products/?')+'category='+encodeURIComponent(key)}
   const options=document.querySelector('.product-options span');
   if(options)options.textContent=currentLang==='tr'?(options.dataset.tr||options.textContent):(options.dataset.ar||options.textContent);
   const wa=document.querySelector('.nav-actions .wa');if(wa){const message=txt('مرحبا، أريد طلب المنتج: ','Merhaba, şu ürünü sipariş etmek istiyorum: ')+name+' - '+location.href;wa.href=WA+(WA.includes('?')?'&':'?')+'text='+encodeURIComponent(message)}
@@ -99,7 +99,7 @@
   if(trusts[1])trusts[1].textContent=txt('تغليف مرتب','Özenli paketleme');
   if(trusts[2])trusts[2].textContent=txt('توصيل داخل تركيا','Türkiye içi teslimat');
   const wa=document.querySelector('.actions .whatsapp');if(wa)wa.href=WA;
-  const actions=document.querySelector('.nav-actions');if(actions&&!actions.querySelector('.language-switch')){const link=document.createElement('a');link.className='language-switch';link.href=currentLang==='tr'?'/products/'+encodeURIComponent(String(id))+'/':p.storefront?.nameTr&&(p.storefront?.descriptionTr||p.storefront?.shortDescriptionTr)?'/tr/products/'+encodeURIComponent(String(id))+'/':'/products/'+encodeURIComponent(String(id))+'/?lang=tr';link.textContent=currentLang==='tr'?'العربية':'Türkçe';actions.append(link)}
+  const actions=document.querySelector('.nav-actions');if(actions&&!actions.querySelector('.language-switch')){const link=document.createElement('a');link.className='language-switch';link.href=currentLang==='tr'?'/products/'+encodeURIComponent(String(id))+'/':p.storefront?.nameTr&&(p.storefront?.descriptionTr||p.storefront?.shortDescriptionTr)?'/tr/products/'+encodeURIComponent(String(id))+'/':'/tr/products/';link.textContent=currentLang==='tr'?'العربية':'Türkçe';actions.append(link)}
  }
  function renderGallery(p){
   const media=document.querySelector('.media');if(!media)return;
@@ -186,18 +186,24 @@
    if(!r.ok||!Array.isArray(d.products))throw new Error('products');
    const p=d.products.find(x=>Number(x.id)===id);
    if(!p){
+    // A stale static page must not remain indexable after catalogue removal.
+    for(const name of ['robots','googlebot']){let meta=document.querySelector('meta[name="'+name+'"]');if(!meta){meta=document.createElement('meta');meta.name=name;document.head.append(meta)}meta.content='noindex,follow';}
+    document.title=txt('المنتج غير موجود | Online Giftis','Ürün bulunamadı | Online Giftis');
     const main=document.querySelector('main');
     if(main)main.innerHTML='<section class="copy"><div class="container"><article class="panel"><h2>'+txt('المنتج غير موجود','Ürün bulunamadı')+'</h2><p>'+txt('قد يكون المنتج محذوفاً أو غير منشور.','Ürün silinmiş veya yayından kaldırılmış olabilir.')+'</p></article></div></section>';
     return
    }
+   // Load the native document, rather than masking a noindex fallback with history.
+   // Also normalize legacy language queries so HTML, schema and canonical agree.
+   const translated=p.storefront?.nameTr&&(p.storefront.descriptionTr||p.storefront.shortDescriptionTr);
+   const path=(currentLang==='tr'&&translated?'/tr':'')+'/products/'+id+'/';
+   if(location.pathname!==path||params.has('lang')){
+    const target=new URL(location.href);target.pathname=path;
+    target.searchParams.delete('id');target.searchParams.delete('lang');
+    location.replace(target.href);return;
+   }
    setProduct(window.OGCatalogContent?.product(p)||p);
    if(params.get('intent')==='add'&&!intentHandled&&p.orderable){intentHandled=true;add('',true,true);return;}
-   if(document.body.dataset.dynamicProduct==='1'){
-    const q=new URLSearchParams(location.search);
-    q.delete('id');
-    const suffix=q.toString()?'?'+q.toString():'';
-    history.replaceState({},'', '/products/'+id+'/'+suffix);
-   }
   }catch(error){
    console.error('Product load failed',error);
    if($('buyBtn')){$('buyBtn').disabled=true;$('buyBtn').removeAttribute('aria-busy');}
@@ -219,7 +225,7 @@
   if(existing){if(skipPrompt&&!forceIncrement){existing.customizationText=custom}else{if(existing.quantity+selectedQuantity<=product.stockQuantity)existing.quantity+=selectedQuantity;else return;if(custom)existing.customizationText=custom}}
   else cart.push({productId:id,name:localizedName(product),price:product.price,quantity:selectedQuantity,stock:product.stockQuantity,customizationText:custom});
   localStorage.setItem('og_cart_v1',JSON.stringify(cart));
-  location.href=currentLang==='tr'?'/products/?lang=tr&cart=1':'/products/?cart=1'
+  location.href=currentLang==='tr'?'/tr/products/?cart=1':'/products/?cart=1'
  }
  $('buyBtn')?.addEventListener('click',()=>add());
  refresh()

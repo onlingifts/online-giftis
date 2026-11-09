@@ -380,6 +380,15 @@
       <g:price>450.00 TRY</g:price>
     </item>
     <item>
+      <g:id>181</g:id>
+      <g:title>12 Güllü Buket</g:title>
+      <g:description>12 Güllü Buket, hediye ve günlük kullanım için sunulan şık bir üründür. Güncel stok ve ürün seçeneklerini sayfadan inceleyebilirsiniz.</g:description>
+      <g:link>https://onlinegiftis.com/tr/products/181/</g:link>
+      <g:image_link>https://api.onlinegiftis.com/api/store/products/image?id=181&amp;v=2026-11-09%2001%3A03%3A44</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>1000.00 TRY</g:price>
+    </item>
+    <item>
       <g:id>109</g:id>
       <g:title>Kişiye Özel Işıklı Fotoğraf Çerçevesi +12 foto</g:title>
       <g:description>En güzel anılarınızı ışıl ışıl bir hediyeye dönüştürün! Kişiye özel ışıklı fotoğraf çerçevesi, sevdiğiniz fotoğrafları dekoratif ışıklar ve renkli mandallarla sergilemenizi sağlayan romantik bir tasarıma sahiptir. Sevgilinizle, ailenizle veya arkadaşlarınızla çekildiğiniz en özel fotoğrafları bir araya getirerek tamamen size özel bir anı köşesi oluşturabilirsiniz. Doğum günü, Sevgililer Günü, evlilik yıl dönümü, nişan ve özel günler için anlamlı bir hediye seçeneğidir. Yatak odası ve ev dekorasyonuna da sıcak bir dokunuş katar. Fotoğraflarınızı seçin, en güzel anılarınızı ışıklarla süsleyin!</g:description>
@@ -684,15 +693,6 @@
       <g:image_link>https://api.onlinegiftis.com/api/store/products/image?id=76&amp;lang=tr&amp;v=2026-10-13T10%3A41%3A59.240Z</g:image_link>
       <g:availability>in_stock</g:availability>
       <g:price>2400.00 TRY</g:price>
-    </item>
-    <item>
-      <g:id>142</g:id>
-      <g:title>Kişiye Özel Anahtarlık</g:title>
-      <g:description>Kişiye Özel Anahtarlık, siparişinizde ilettiğiniz kişiselleştirme bilgilerine göre hazırlanır. Ürün görsellerini ve seçenekleri inceleyerek sipariş verebilirsiniz.</g:description>
-      <g:link>https://onlinegiftis.com/tr/products/142/</g:link>
-      <g:image_link>https://api.onlinegiftis.com/api/store/products/image?id=142&amp;v=2026-11-03%2016%3A23%3A00</g:image_link>
-      <g:availability>in_stock</g:availability>
-      <g:price>650.00 TRY</g:price>
     </item>
     <item>
       <g:id>155</g:id>
