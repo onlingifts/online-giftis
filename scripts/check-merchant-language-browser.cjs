@@ -18,6 +18,7 @@ const {chromium}=require('playwright'),fs=require('node:fs'),assert=require('nod
    await page.goto('http://localhost:8765/products/72/?lang='+lang);
    const expected=lang==='tr'?p.storefront.nameTr:p.storefront.nameAr;
    await page.waitForFunction(name=>document.querySelector('.info h1')?.textContent===name,expected);
+   await page.waitForFunction(()=>document.getElementById('buyBtn')&&!document.getElementById('buyBtn').disabled);
    assert.equal(await page.locator('html').getAttribute('lang'),lang);
    const image=lang==='tr'?p.imageUrlTr:p.imageUrlAr;
    assert.equal(await page.locator('.media img').first().getAttribute('src'),new URL(image,'https://api.onlinegiftis.com').href);
