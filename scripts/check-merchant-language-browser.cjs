@@ -18,11 +18,14 @@ const {chromium}=require('playwright'),fs=require('node:fs'),assert=require('nod
    await page.goto('http://localhost:8765/products/72/?lang='+lang);
    const expected=lang==='tr'?p.storefront.nameTr:p.storefront.nameAr;
    await page.waitForFunction(name=>document.querySelector('.info h1')?.textContent===name,expected);
+   await page.waitForFunction(()=>document.getElementById('buyBtn')&&!document.getElementById('buyBtn').disabled);
    assert.equal(await page.locator('html').getAttribute('lang'),lang);
    const image=lang==='tr'?p.imageUrlTr:p.imageUrlAr;
    assert.equal(await page.locator('.media img').first().getAttribute('src'),new URL(image,'https://api.onlinegiftis.com').href);
    assert.equal(await page.evaluate(()=>localStorage.getItem('og_lang')),lang);
-   if(lang==='tr')assert.match(await page.locator('.nav-actions .store').getAttribute('href'),/lang=tr/);
+   assert.equal(new URL(page.url()).pathname,(lang==='tr'?'/tr':'')+'/products/72/');
+   assert.equal(new URL(page.url()).searchParams.has('lang'),false);
+   if(lang==='tr')assert.equal(await page.locator('.nav-actions .store').getAttribute('href'),'/tr/products/');
    await page.close();
   }
   console.log('Arabic and Turkish feed links force matching product names, images and store language.');

@@ -10,6 +10,8 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
   for(const width of [390,1440]){
    const page=await browser.newPage({viewport:{width,height:900},serviceWorkers:'block'});
    page.on('pageerror',e=>errors.push(e.message));
+   // The live bouquet now requires custom text; exercise the real prompt before cart navigation.
+   page.on('dialog',dialog=>dialog.accept('Preview personalisation'));
    let offline=false;
    await page.route('https://**/*',route=>{
     const req=route.request(),url=new URL(req.url());

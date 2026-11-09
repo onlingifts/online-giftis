@@ -161,8 +161,10 @@ if(process.env.STOREFRONT_SNAPSHOT) {
   if(!res.ok) throw new Error('Storefront API failed: '+res.status);
   data=await res.json();
 }
-if(!Array.isArray(data.products)) throw new Error('Storefront API returned no products array');
+if(!Array.isArray(data.products)||data.products.length===0) throw new Error('Refusing to replace published SEO pages with an empty or invalid catalogue');
 const products=globalThis.OGCatalogContent.products(data.products).filter(p=>p&&Number.isInteger(Number(p.id))&&Number(p.id)>0).map(p=>({...p,name:p.storefront?.nameAr||p.name,description:p.storefront?.descriptionAr||p.description}));
+
+if(products.length!==data.products.length||new Set(products.map(p=>String(p.id))).size!==products.length) throw new Error('Refusing invalid or duplicate product IDs');
 
 mkdirSync('products',{recursive:true});
 mkdirSync(IMAGE_DIR,{recursive:true});

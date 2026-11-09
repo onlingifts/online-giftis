@@ -63,7 +63,7 @@ jobs:
         run: node scripts/generate-product-pages.mjs
 
       - name: Validate search pages and language destinations
-        run: node --test scripts/check-search-seo.mjs scripts/check-technical-seo.mjs scripts/check-indexing-support.mjs
+        run: node --test scripts/check-search-seo.mjs scripts/check-technical-seo.mjs scripts/check-indexing-support.mjs scripts/check-product-indexing.mjs
 
       - name: Validate official store identity and AI-search access
         run: node --test scripts/check-brand-identity.mjs
