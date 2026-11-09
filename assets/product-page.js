@@ -200,7 +200,10 @@
    if(location.pathname!==path||params.has('lang')){
     const target=new URL(location.href);target.pathname=path;
     target.searchParams.delete('id');target.searchParams.delete('lang');
-    location.replace(target.href);return;
+    // New products can reach the API before their static document is generated.
+    // Keep the functional noindex fallback until that document actually exists.
+    const native=await fetch(target.href,{method:'HEAD',signal:AbortSignal.timeout(8000)}).catch(()=>null);
+    if(native?.ok){location.replace(target.href);return;}
    }
    setProduct(window.OGCatalogContent?.product(p)||p);
    if(params.get('intent')==='add'&&!intentHandled&&p.orderable){intentHandled=true;add('',true,true);return;}

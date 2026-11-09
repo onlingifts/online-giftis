@@ -7,14 +7,14 @@ import {spawnSync} from 'node:child_process';
 import {runInNewContext} from 'node:vm';
 
 const source=readFileSync('assets/product-page.js','utf8');
-async function load(url,{dataset={productId:'0'},products=[{id:179,storefront:{nameTr:'Hediye',descriptionTr:'Özel hediye'}}],failed=false,saved='ar'}={}) {
+async function load(url,{dataset={productId:'0'},products=[{id:179,storefront:{nameTr:'Hediye',descriptionTr:'Özel hediye'}}],failed=false,saved='ar',nativeExists=true}={}) {
  const location=new URL(url), redirects=[],metas=[],errors=[];
  location.replace=target=>redirects.push(target);
  const document={body:{dataset},documentElement:{},head:{append:el=>metas.push(el)},
   querySelector:()=>null,querySelectorAll:()=>[],getElementById:()=>null,createElement:()=>({})};
  runInNewContext(source,{document,location,URL,URLSearchParams,AbortSignal,
   localStorage:{getItem:()=>saved,setItem:()=>{}},window:{},console:{error:e=>errors.push(e)},
-  fetch:async url=>{if(failed)throw Error('offline');return {ok:true,json:async()=>url.includes('categories')?{categories:[]}:{products}};}});
+  fetch:async (url,options)=>{if(options?.method==='HEAD')return {ok:nativeExists};if(failed)throw Error('offline');return {ok:true,json:async()=>url.includes('categories')?{categories:[]}:{products}};}});
  await new Promise(resolve=>setImmediate(resolve));
  return {redirects,metas,errors,document};
 }
@@ -31,6 +31,10 @@ test('language query goes to the matching native document, independent of saved 
   assert.deepEqual(result.errors,[]);
   assert.deepEqual(result.redirects,['https://onlinegiftis.com'+expected+'?intent=add']);
  }
+});
+test('new products keep their working fallback until the generated document is published',async()=>{
+ const result=await load('https://onlinegiftis.com/product.html?id=179',{nativeExists:false});
+ assert.deepEqual(result.redirects,[]);assert.deepEqual(result.errors,[]);
 });
 test('removed products are noindex while temporary API failures keep static SEO intact',async()=>{
  const removed=await load('https://onlinegiftis.com/products/142/',{dataset:{productId:'142',renderedLang:'ar'},products:[]});
