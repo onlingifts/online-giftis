@@ -12,7 +12,7 @@
  const $=x=>document.getElementById(x);
  const money=v=>new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(Number(v||0))+' ₺';
  const requested=params.get('lang');
- const currentLang=requested==='tr'?'tr':requested==='ar'?'ar':document.body.dataset.renderedLang||(location.pathname.startsWith('/tr/')?'tr':localStorage.getItem('og_lang')==='tr'?'tr':'ar');
+ const currentLang=requested==='tr'?'tr':requested==='ar'?'ar':document.body.dataset.renderedLang||(location.pathname.startsWith('/tr/')?'tr':/^\/products\/\d+\/?$/.test(location.pathname)?'ar':localStorage.getItem('og_lang')==='tr'?'tr':'ar');
  const txt=(ar,tr)=>currentLang==='tr'?tr:ar;
  document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='tr'?'ltr':'rtl';
  const loadingCopy=document.querySelector('.copy');if(loadingCopy&&!document.body.dataset.renderedLang)loadingCopy.hidden=true;

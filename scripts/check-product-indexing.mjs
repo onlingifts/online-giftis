@@ -32,6 +32,10 @@ test('language query goes to the matching native document, independent of saved 
   assert.deepEqual(result.redirects,['https://onlinegiftis.com'+expected+'?intent=add']);
  }
 });
+test('native Arabic URL never follows a saved Turkish preference',async()=>{
+ const result=await load('https://onlinegiftis.com/products/179/',{dataset:{productId:'179'},saved:'tr'});
+ assert.deepEqual(result.redirects,[]);assert.deepEqual(result.errors,[]);assert.equal(result.document.documentElement.lang,'ar');
+});
 test('new products keep their working fallback until the generated document is published',async()=>{
  const result=await load('https://onlinegiftis.com/product.html?id=179',{nativeExists:false});
  assert.deepEqual(result.redirects,[]);assert.deepEqual(result.errors,[]);
