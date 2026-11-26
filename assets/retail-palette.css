@@ -1,0 +1,17 @@
+:root{
+  --bg:#faf8f3;--paper:#fff;--ink:#1e1b16;--text:#1e1b16;--muted:#63594a;
+  --line:#e6ded0;--primary:#252016;--accent:#826233;--pink:#826233;
+}
+body, body[data-theme]{background:#faf8f3;color:#1e1b16}
+.pink-header,.boutique-header,.pink-section,.checkout-costs,.wheelless-coupon{border-color:#e6ded0}
+.pink-header,.boutique-header,.pink-bottom-nav,.boutique-bottom-nav{background:#fff}
+.pink-main{color:#1e1b16}
+.pink-section,.pink-how{margin-block:2.5rem}
+.pink-section h2,.pink-how h2{color:#252016}
+.pink-header button:focus-visible,.pink-header a:focus-visible,.retail-choice a:focus-visible{outline:2px solid #826233;outline-offset:3px}
+.retail-choice-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.retail-choice a{display:flex;align-items:center;justify-content:center;min-height:52px;padding:10px;text-align:center;color:#252016;background:#fff;border:1px solid #e6ded0;border-radius:12px;text-decoration:none;font-weight:700}
+.wheelless-coupon{padding:12px;border:1px solid #e6ded0;border-radius:12px;margin-block:10px}
+.wheelless-coupon input{min-height:40px;margin:6px;max-width:100%}
+@media(max-width:600px){.retail-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pink-section,.pink-how{margin-block:1.75rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
