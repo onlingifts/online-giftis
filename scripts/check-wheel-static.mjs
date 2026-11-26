@@ -1,3 +1,11 @@
-import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {Script} from 'node:vm';
-for(const path of ['gift/index.html','tr/gift/index.html']){const html=readFileSync(path,'utf8'),ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length);assert.match(html,/name="viewport"/);assert.match(html,/noindex,follow/);assert.match(html,/id="spinButton" disabled/);assert.match(html,/id="giftAuthForm"/);assert.doesNotMatch(html,/id="prizeList"/);assert.match(html,/id="giftReviewForm"/);assert.match(html,/customer-auth\.js/);assert.match(html,path.startsWith('tr/')?/lang="tr" dir="ltr"/:/lang="ar" dir="rtl"/);}
-for(const file of ['gift-wheel.js','wheel-checkout.js'])new Script(readFileSync('assets/'+file,'utf8'),{filename:file});console.log('AR/TR campaign routes, accessible controls, unique IDs, auth reuse, inactive initial spin and JS syntax passed.');
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+for (const prefix of ['', 'tr/']) {
+ const catalogue=readFileSync(prefix+'products/index.html','utf8');
+ assert.doesNotMatch(catalogue,/OGWheelCheckout|wheel-checkout\.js/);
+ assert.match(catalogue,/id="influencerCheckout"/);
+ const archived=readFileSync(prefix+'gift/index.html','utf8');
+ assert.match(archived,/http-equiv="refresh"/);
+ assert.doesNotMatch(archived,/<script|gift-wheel\.js/);
+}
+console.log('Archived campaign links redirect and independent coupons remain available.');
