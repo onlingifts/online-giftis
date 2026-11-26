@@ -435,7 +435,7 @@ img{max-width:100%}
 <link rel="stylesheet" href="/assets/themes.css?v=20261010-single-banner1">
 <script src="/assets/image-manifest.js?v=20261017-banners1"></script><script src="/assets/responsive-images.js?v=20261017-banners1"></script><script src="/assets/boutique-presentation.js?v=20261017-banners1"></script><script src="/assets/themes.js?v=20261010-colors1"></script>
 <link id="site-favicon" rel="icon" type="image/png" sizes="96x96" href="/favicon.png"><link rel="shortcut icon" href="/favicon.ico"><link id="site-touch-icon" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><script src="/assets/site-icons.js?v=20261010-gift1" defer></script><link rel="stylesheet" href="/assets/luxury-boutique-preview.css?v=20261013-banner-fit1">
-<link rel="stylesheet" href="/assets/wheel-checkout.css?v=20261013-wheel1"><script src="/assets/wheel-checkout.js?v=20261013-wheel1" defer></script><style id="og-sale-price-style">.og-old-price{display:inline-block;color:#8d7c81;font-size:12px;text-decoration:line-through;margin-inline-end:7px;font-weight:500}.product-price:has(.og-old-price){display:flex;align-items:center;gap:6px;flex-wrap:wrap}.cat-btn[data-sales="1"]{border:1px solid #dcaabb;color:#91234b}.cat-btn[data-sales="1"].active{background:#9d2453;color:white;border-color:#9d2453}</style>
+<link rel="stylesheet" href="/assets/retail-palette.css?v=1"><style id="og-sale-price-style">.og-old-price{display:inline-block;color:#8d7c81;font-size:12px;text-decoration:line-through;margin-inline-end:7px;font-weight:500}.product-price:has(.og-old-price){display:flex;align-items:center;gap:6px;flex-wrap:wrap}.cat-btn[data-sales="1"]{border:1px solid #dcaabb;color:#91234b}.cat-btn[data-sales="1"].active{background:#9d2453;color:white;border-color:#9d2453}</style>
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -493,7 +493,7 @@ img{max-width:100%}
    <div class="category-visual" id="categoryVisual" aria-hidden="true"><span class="visual-ring"></span><span class="visual-card visual-a"></span><span class="visual-card visual-b"></span><span class="visual-card visual-c"></span><span class="visual-sticker"><i class="fa-solid fa-gift"></i></span></div>
   </div>
   <div class="shop-tools">
-   <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="productSearch" class="trn-placeholder" data-ar-placeholder="Ürün ara..." data-tr-placeholder="Ürün ara..." placeholder="Ürün ara..."></div>
+   <datalist id="productSuggestions"></datalist><div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="productSearch" list="productSuggestions" autocomplete="off" class="trn-placeholder" data-ar-placeholder="Ürün ara..." data-tr-placeholder="Ürün ara..." placeholder="Ürün ara..."></div>
    <div class="categories" id="categories"></div>
   </div>
   <div class="shop-guidance"><i class="fa-solid fa-circle-info"></i><span class="trn" data-ar="اضغط على أي منتج لتفتح التفاصيل والتخصيص، وبعدها ثبّت الطلب من صفحة المنتج." data-tr="Detayları ve kişiselleştirmeyi görmek için ürüne dokun; siparişi ürün sayfasından tamamla.">Detayları ve kişiselleştirmeyi görmek için ürüne dokun; siparişi ürün sayfasından tamamla.</span></div>
@@ -535,7 +535,7 @@ img{max-width:100%}
     <option value="paper" class="trn" data-ar="تغليف ورق هدية (+90 ₺)" data-tr="Hediye kâğıdı ile paketleme (+90 ₺)">Hediye kâğıdı ile paketleme (+90 ₺)</option>
     <option value="vip" class="trn" data-ar="تغليف صندوق هدية مع ورد VIP (+490 ₺)" data-tr="Çiçekli VIP hediye kutusu (+490 ₺)">Çiçekli VIP hediye kutusu (+490 ₺)</option>
    </select><small class="trn" data-ar="أجرة التغليف تُضاف مرة واحدة للطلب." data-tr="Paketleme ücreti sipariş başına bir kez eklenir.">Paketleme ücreti sipariş başına bir kez eklenir.</small></div>
-   <section id="influencerCheckout" class="wheel-checkout">
+   <section id="influencerCheckout" class="wheelless-coupon">
     <label><span class="trn" data-ar="كوبون المشهور" data-tr="İçerik üreticisi kuponu">İçerik üreticisi kuponu</span>
      <input dir="ltr" maxlength="24" placeholder="LINA10" autocomplete="off"></label>
     <button type="button" class="trn" data-apply data-ar="تفعيل الكود" data-tr="Kodu uygula">Kodu uygula</button>
@@ -734,10 +734,21 @@ function restoreCart(){try{const c=JSON.parse(localStorage.getItem('og_cart_v1')
 function favoriteIds(){try{return new Set((JSON.parse(localStorage.getItem('og_favorites_v1')||'[]')||[]).map(String))}catch{return new Set()}}
 function saveFavoriteIds(set){try{localStorage.setItem('og_favorites_v1',JSON.stringify([...set]))}catch{}}
 function isSale(p){const current=Number(p?.price),old=Number(p?.storefront?.compareAtPrice);return p&&p.orderable!==false&&p.hasImage&&Number.isFinite(old)&&Number.isFinite(current)&&current>0&&old>current}
+function searchText(value){
+ return String(value||'').toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar').normalize('NFD')
+  .replace(/\p{M}|ـ/gu,'').replace(/ى/g,'ي').replace(/ı/g,'i');
+}
+function renderSearchSuggestions(){
+ const list=$('productSuggestions'),query=searchText(state.search);
+ const names=query.length<2?[]:[...new Set(state.products.map(productName).filter(name=>searchText(name).includes(query)))].slice(0,8);
+ list.replaceChildren(...names.map(name=>new Option(name,name)));
+}
 function visibleProducts(){
- const q=state.search.toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar'),fav=favoriteIds();
+ const maxPrice=Number(new URLSearchParams(location.search).get('maxPrice'));
+ const q=searchText(state.search),fav=favoriteIds();
  return state.products.filter(p=>{
-  const hay=(productName(p)+' '+productDescription(p)+' '+String(p.storefront?.searchTerms||'')+' '+String(p.storefront?.searchSynonyms||'')+' '+categoryList(p).join(' ')).toLocaleLowerCase(lang()==='tr'?'tr-TR':'ar');
+  if(maxPrice>0&&!(Number(p.price)>0&&Number(p.price)<=maxPrice))return false;
+  const hay=searchText(productName(p)+' '+productDescription(p)+' '+String(p.storefront?.searchTerms||'')+' '+String(p.storefront?.searchSynonyms||'')+' '+categoryList(p).join(' '));
   return (!q||hay.includes(q))&&(state.category==='all'||categoryList(p).includes(state.category))&&(!state.favoritesOnly||fav.has(String(p.id)))&&(!state.saleOnly||isSale(p))&&(!state.bestsellersOnly||Boolean(p.storefront?.isBestseller))
  })
 }
@@ -939,7 +950,7 @@ async function loadCustomerAccount(){
    if(r.status===401)await OGCustomerAuth.signOut();
    throw new Error(d.error||'account')
   }
-  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount();window.OGWheelCheckout?.awards();if(state.customer)window.OGWheelCheckout?.maybeReturnToWheel();
+  state.customer=d.customer||null;state.benefits=d.benefits||null;renderAccount();
   if(state.customer)await loadMemberNotifications()
  }catch{
   state.customer=null;state.benefits=null;renderAccount()
@@ -987,7 +998,7 @@ function cartImage(x){
  return p?.hasImage&&url?'<img class="cart-item-image" src="'+esc(new URL(url,API).href)+'" alt="'+esc(x.name)+'" loading="lazy">':'<span class="cart-item-image" aria-hidden="true"></span>';
 }
 function renderCart(){
- $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded||Boolean(window.OGWheelCheckout?.blocked()||window.OGInfluencers?.blocked());
+ $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded||Boolean(window.OGInfluencers?.blocked());
  state.cart=state.cart.filter(x=>!state.catalogLoaded||state.products.some(p=>p.id===x.productId));
  const count=state.cart.reduce((n,x)=>n+x.quantity,0);
  $('cartCount').textContent=count;$('navCartCount').textContent=count;$('cartFab').classList.toggle('show',count>0);
@@ -1042,18 +1053,18 @@ function renderPayment(){
  }
  const subtotal=state.cart.reduce((s,x)=>s+Number(x.price||0)*x.quantity,0);
  window.OGInfluencers?.refresh();
- const wheelQuote=window.OGWheelCheckout?.getQuote();
+
  const influencerQuote=window.OGInfluencers?.getQuote();
- const memberDiscount=wheelQuote?Number(wheelQuote.discountAmount||0):influencerQuote?Number(influencerQuote.discountAmount):state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
+ const memberDiscount=influencerQuote?Number(influencerQuote.discountAmount):state.customer&&state.benefits?.firstOrderDiscountAvailable?Math.min(200,subtotal):0;
  const hasItems=state.cart.some(item=>Number(item.quantity)>0);
- const deliveryFee=hasItems&&!wheelQuote?.freeDelivery&&!state.config?.freeDelivery?Math.max(0,Number(state.config?.deliveryFee||0)):0;
+ const deliveryFee=hasItems&&!state.config?.freeDelivery?Math.max(0,Number(state.config?.deliveryFee||0)):0;
  const codFee=hasItems&&state.paymentMethod==='cod'?Number(state.config?.codFee??75):0;
  const wrappingFee=hasItems?({none:0,paper:90,vip:490}[state.giftWrappingType]||0):0;
  const wrappingSelect=$('giftWrappingType');wrappingSelect.value=state.giftWrappingType;wrappingSelect.disabled=!hasItems||state.submitting;
  $('giftWrappingFeeRow').hidden=wrappingFee<=0;$('giftWrappingFeeAmount').textContent=money(wrappingFee);
  const grandTotal=Math.round((Math.max(0,subtotal-memberDiscount)+deliveryFee+codFee+wrappingFee)*100)/100;
  const discountRow=$('memberDiscountRow'),discountAmount=$('memberDiscountAmount');
- if(discountRow){discountRow.hidden=memberDiscount<=0;const label=discountRow.querySelector('.trn');if(label){label.dataset.ar=wheelQuote?'خصم جائزة العجلة':influencerQuote?'خصم كوبون المشهور':'خصم العضوية لأول طلب';label.dataset.tr=wheelQuote?'Çark ödülü indirimi':influencerQuote?'İçerik üreticisi indirimi':'Üyelik ilk sipariş indirimi';label.textContent=lang()==='tr'?label.dataset.tr:label.dataset.ar;}}
+ if(discountRow){discountRow.hidden=memberDiscount<=0;const label=discountRow.querySelector('.trn');if(label){label.dataset.ar=influencerQuote?'خصم كوبون المشهور':'خصم العضوية لأول طلب';label.dataset.tr=influencerQuote?'İçerik üreticisi indirimi':'Üyelik ilk sipariş indirimi';label.textContent=lang()==='tr'?label.dataset.tr:label.dataset.ar;}}
  if(discountAmount)discountAmount.textContent='-'+money(memberDiscount);
  const deliveryFeeAmount=$('deliveryFeeAmount');
  if(deliveryFeeAmount)deliveryFeeAmount.textContent=!state.configLoaded?'—':deliveryFee>0?money(deliveryFee):txt('مجاني','Ücretsiz');
@@ -1061,7 +1072,7 @@ function renderPayment(){
  if(codFeeRow)codFeeRow.style.display=hasItems&&state.paymentMethod==='cod'?'flex':'none';
  if(codFeeAmount)codFeeAmount.textContent=money(codFee);
  if(grandTotalEl)grandTotalEl.textContent=money(grandTotal);
- $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded||Boolean(window.OGWheelCheckout?.blocked()||window.OGInfluencers?.blocked());
+ $('checkoutSubmit').disabled=state.submitting||!state.cart.length||!state.catalogLoaded||!state.configLoaded||Boolean(window.OGInfluencers?.blocked());
  const label=$('checkoutSubmitLabel');
  if(label)label.textContent=state.paymentMethod==='bank_transfer'?txt('تثبيت الطلب بعد التحويل','Havale sonrası siparişi tamamla'):txt('تثبيت الطلب - الدفع عند الاستلام','Siparişi tamamla - Kapıda ödeme')
 }
@@ -1132,7 +1143,7 @@ async function checkout(){
   address:$('checkoutAddress').value.trim(),notes:$('checkoutNotes').value.trim(),
   paymentMethod:state.paymentMethod,giftWrappingType:state.giftWrappingType
  };
- try{Object.assign(payload,window.OGWheelCheckout?.orderFields(payload)||{},window.OGInfluencers?.orderFields(payload)||{});}catch(error){checkoutError(error.message);return;}
+ try{Object.assign(payload,window.OGInfluencers?.orderFields(payload)||{});}catch(error){checkoutError(error.message);return;}
  const form=new FormData();form.append('payload',JSON.stringify(payload));
  for(const x of state.cart){const file=state.uploads.get(x.productId);if(file)form.append('customization_'+x.productId,file)}
  if(state.paymentMethod==='bank_transfer'&&state.receipt)form.append('transferReceipt',state.receipt);
@@ -1156,7 +1167,7 @@ async function checkout(){
   $('orderSuccessTrack').textContent=txt('تتبع طلبي','Siparişimi takip et');
   $('orderSuccessClose').textContent=txt('العودة للتسوق','Alışverişe devam et');
   if(Number(d.order.giftWrappingFee)>0){const label=d.order.giftWrappingType==='vip'?txt('تغليف صندوق هدية مع ورد VIP','Çiçekli VIP hediye kutusu'):txt('تغليف ورق هدية','Hediye kâğıdı ile paketleme');$('orderSuccessExtras').textContent+=($('orderSuccessExtras').textContent?' · ':'')+label+': '+money(d.order.giftWrappingFee);}
-  if(payload.wheelCode)window.OGWheelCheckout?.consumed();
+
   window.OGInfluencers?.consumed();
   closeModal(cartModal);
   openModal($('orderSuccessModal'));
@@ -1192,7 +1203,7 @@ function applyLanguage(l){
 }
 document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>applyLanguage(b.dataset.lang)));
 $('productSearch').value=state.search;
-$('productSearch').addEventListener('input',e=>{state.search=e.target.value.trim();renderProducts()});
+$('productSearch').addEventListener('input',e=>{state.search=e.target.value.trim();renderSearchSuggestions();renderProducts()});
 $('cartFab').addEventListener('click',()=>openModal(cartModal));
 $('navCart').addEventListener('click',()=>openModal(cartModal));
 $('cartClose').addEventListener('click',()=>closeModal(cartModal));
@@ -1205,7 +1216,7 @@ $('memberNoticeRefresh').addEventListener('click',loadMemberNotifications);
 document.querySelectorAll('[data-account-mode]').forEach(b=>b.addEventListener('click',()=>setAccountMode(b.dataset.accountMode)));
 $('accountSubmit').addEventListener('click',submitAccount);
 $('googleLoginBtn').addEventListener('click',()=>OGCustomerAuth?.googleSignIn());
-$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();window.OGWheelCheckout?.clearSelection();state.customer=null;state.benefits=null;state.notifications=[];state.notificationUnread=0;renderAccount();setAccountMode('login')});
+$('accountLogout').addEventListener('click',async()=>{await OGCustomerAuth?.signOut();state.customer=null;state.benefits=null;state.notifications=[];state.notificationUnread=0;renderAccount();setAccountMode('login')});
 cartModal.addEventListener('click',e=>{if(e.target===cartModal)closeModal(cartModal)});
 productModal.addEventListener('click',e=>{if(e.target===productModal)closeModal(productModal)});
 accountModal.addEventListener('click',e=>{if(e.target===accountModal)closeModal(accountModal)});
@@ -1224,8 +1235,8 @@ setAccountMode('login');
 renderCart();
 document.addEventListener('DOMContentLoaded',()=>{
  const controls={cart:()=>state.cart,customer:()=>state.customer,update:renderPayment};
- window.OGWheelCheckout?.mount(controls);
- window.OGInfluencers?.mount({...controls,wheelSelected:()=>Boolean(window.OGWheelCheckout?.getQuote()||window.OGWheelCheckout?.blocked())});
+
+ window.OGInfluencers?.mount({...controls,wheelSelected:()=>false});
 });
 Promise.all([loadConfig(),loadProducts(),initCustomerAccount()]).then(()=>{const q=new URLSearchParams(location.search);if(q.get('cart')==='1')openModal(cartModal);if(q.get('account')==='1')openModal(accountModal)});
 })();
